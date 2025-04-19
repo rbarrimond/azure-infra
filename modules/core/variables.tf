@@ -11,3 +11,8 @@ variable "suffix" {
 variable "default_tags" {
   type = map(string)
 }
+
+variable "tenant_id" {
+  description = "The tenant ID for the Azure account"
+  type        = string
+}

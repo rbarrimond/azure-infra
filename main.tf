@@ -21,6 +21,7 @@ module "core" {
   source = "./modules/core"
 
   suffix        = local.suffix
+  tenant_id     = var.tenant_id
   region        = local.region
   default_tags  = local.default_tags
 }
