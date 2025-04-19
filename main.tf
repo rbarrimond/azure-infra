@@ -16,3 +16,11 @@ terraform {
 
   required_version = ">= 1.3.0"
 }
+
+module "core" {
+  source = "./modules/core"
+
+  suffix        = local.suffix
+  region        = local.region
+  default_tags  = local.default_tags
+}
