@@ -20,27 +20,22 @@ resource "azurerm_dns_zone" "core" {
 }
 
 resource "azurerm_key_vault" "core" {
-  name                        = "kv-${var.suffix}"
-  location                    = azurerm_resource_group.core.location
-  resource_group_name         = azurerm_resource_group.core.name
-  tenant_id                   = var.tenant_id
-  sku_name                    = "standard"
-  purge_protection_enabled    = true
-  soft_delete_retention_days  = 7
-  tags                        = var.default_tags
+  name                       = "kv-${var.suffix}"
+  location                   = azurerm_resource_group.core.location
+  resource_group_name        = azurerm_resource_group.core.name
+  tenant_id                  = var.tenant_id
+  sku_name                   = "standard"
+  purge_protection_enabled   = true
+  soft_delete_retention_days = 7
+  tags                       = var.default_tags
 }
 
-resource "azurerm_app_service_plan" "core" {
+resource "azurerm_service_plan" "core" {
   name                = "asp-${var.suffix}"
   location            = azurerm_resource_group.core.location
   resource_group_name = azurerm_resource_group.core.name
-  kind                = "FunctionApp"
-  reserved            = true
-
-  sku {
-    tier = "ElasticPremium"
-    size = "EP1"
-  }
+  os_type             = "Linux"
+  sku_name            = "Y1"
 
   tags = var.default_tags
 }
@@ -75,4 +70,8 @@ output "app_service_plan_id" {
 
 output "application_insights_connection_string" {
   value = azurerm_application_insights.core.connection_string
+}
+
+output "function_app_name" {
+  value = azurerm_linux_function_app.core.name
 }
