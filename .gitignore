@@ -29,6 +29,7 @@ terraform.rc
 
 # Ignore lock files
 *.tflock
+.terraform.lock.hcl
 
 # Ignore IDE specific files
 .vscode/
