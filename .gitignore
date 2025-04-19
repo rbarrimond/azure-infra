@@ -20,6 +20,7 @@ terraform.rc
 
 # Ignore sensitive variable files
 *.auto.tfvars
+*.tfvars
 
 # Ignore plan output files
 *.tfplan
