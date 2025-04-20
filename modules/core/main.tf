@@ -25,8 +25,7 @@ resource "azurerm_key_vault" "core" {
   resource_group_name        = azurerm_resource_group.core.name
   tenant_id                  = var.tenant_id
   sku_name                   = "standard"
-  purge_protection_enabled   = true
-  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
   tags                       = var.default_tags
 }
 
@@ -36,7 +35,6 @@ resource "azurerm_service_plan" "core" {
   resource_group_name = azurerm_resource_group.core.name
   os_type             = "Linux"
   sku_name            = "B1"
-
   tags = var.default_tags
 }
 
@@ -45,13 +43,12 @@ resource "azurerm_application_insights" "core" {
   location            = azurerm_resource_group.core.location
   resource_group_name = azurerm_resource_group.core.name
   application_type    = "web"
-  
-  lifecycle {
+  tags                = var.default_tags
+   lifecycle {
     ignore_changes = [
       workspace_id
     ]
   }
-  tags                = var.default_tags
 }
 
 output "resource_group_name" {
