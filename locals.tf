@@ -2,8 +2,8 @@
 locals {
   env     = "prod"
   project = "core"
-  region  = "eastus"
-  suffix  = "${local.project}-${local.env}"
+  region  = "eastus2"
+  suffix  = "${local.project}-${local.env}-rrb001"
   default_tags = {
     Project     = local.project
     Environment = local.env
