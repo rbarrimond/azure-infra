@@ -35,7 +35,7 @@ resource "azurerm_service_plan" "core" {
   location            = azurerm_resource_group.core.location
   resource_group_name = azurerm_resource_group.core.name
   os_type             = "Linux"
-  sku_name            = "Y1"
+  sku_name            = "B1"
 
   tags = var.default_tags
 }
@@ -45,6 +45,12 @@ resource "azurerm_application_insights" "core" {
   location            = azurerm_resource_group.core.location
   resource_group_name = azurerm_resource_group.core.name
   application_type    = "web"
+  
+  lifecycle {
+    ignore_changes = [
+      workspace_id
+    ]
+  }
   tags                = var.default_tags
 }
 
@@ -65,13 +71,9 @@ output "key_vault_name" {
 }
 
 output "app_service_plan_id" {
-  value = azurerm_app_service_plan.core.id
+  value = azurerm_service_plan.core.id
 }
 
 output "application_insights_connection_string" {
   value = azurerm_application_insights.core.connection_string
-}
-
-output "function_app_name" {
-  value = azurerm_linux_function_app.core.name
 }
