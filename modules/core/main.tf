@@ -59,8 +59,8 @@ output "storage_account_name" {
   value = azurerm_storage_account.core.name
 }
 
-output "dns_zone_name" {
-  value = azurerm_dns_zone.core.name
+output "dns_zone" {
+  value = azurerm_dns_zone.core
 }
 
 output "key_vault_name" {
