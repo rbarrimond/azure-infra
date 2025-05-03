@@ -43,10 +43,10 @@ module "core" {
 module "baldwin" {
   source              = "./modules/baldwin"
   suffix              = local.baldwin_suffix
-  location            = module.core.location
+  location            = var.region
   resource_group_name = module.core.resource_group_name
   zone_name           = module.core.dns_zone_name
-  service_plan_id     = module.core.service_plan_id
+  service_plan_id     = module.core.app_service_plan_id
   default_tags = {
     environment = local.env
     project     = "baldwin"
