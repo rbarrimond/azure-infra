@@ -64,16 +64,7 @@ resource "azurerm_linux_function_app" "baldwin_function" {
   }
 }
 
-resource "azurerm_dns_cname_record" "baldwin_api" {
-  name                = "baldwin-api"
-  zone_name           = var.zone_name
-  resource_group_name = var.resource_group_name
-  ttl                 = 300
-  record              = azurerm_linux_function_app.baldwin_function.default_hostname
-}
-
-resource "azurerm_static_web_app_custom_domain" "baldwin_api_domain" {
-  static_web_app_id = azurerm_linux_function_app.baldwin_function.id
-  validation_type   = "cname-delegation"
-  domain_name       = "${azurerm_cname_dns_record.baldwin_api.name}.${var.zone_name}"
+resource "azurerm_static_web_app_function_app_registration" "baldwin_registration" {
+  static_web_app_id = azurerm_static_web_app.baldwin_web.id
+  function_app_id   = azurerm_linux_function_app.baldwin_function.id
 }
