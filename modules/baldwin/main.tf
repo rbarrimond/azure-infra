@@ -17,7 +17,7 @@ resource "azurerm_dns_cname_record" "baldwin_web" {
 resource "azurerm_static_web_app_custom_domain" "baldwin_domain" {
   static_web_app_id = azurerm_static_web_app.baldwin_web.id
   validation_type   = "cname-delegation"
-  domain_name       = "${azurerm_cname_dns_record.baldwin_web.name}.${var.zone_name}"
+  domain_name       = "${azurerm_dns_cname_record.baldwin_web.name}.${var.zone_name}"
 }
 
 resource "azurerm_storage_account" "baldwin_storage" {
