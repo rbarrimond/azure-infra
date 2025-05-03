@@ -8,7 +8,7 @@ resource "azurerm_static_web_app" "baldwin_web" {
 
 resource "azurerm_static_site_custom_domain" "baldwin_domain" {
   static_site_id = azurerm_static_site.baldwin_site.id
-  domain_name    = var.custom_domain
+  domain_name    = var.zone_name
 }
 
 resource "azurerm_storage_account" "baldwin_storage" {
@@ -19,6 +19,7 @@ resource "azurerm_storage_account" "baldwin_storage" {
   account_replication_type = "LRS"
   tags                     = var.default_tags
 }
+
 resource "azurerm_linux_function_app" "baldwin_function" {
   name                       = "lfa-${var.suffix}"
   location                   = var.location

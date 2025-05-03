@@ -1,8 +1,3 @@
-variable "dns_rg" {
-  description = "The name of the resource group containing the DNS zone."
-  type        = string
-}
-
 variable "resource_group_name" {
   description = "The name of the resource group where resources will be created."
   type        = string
@@ -18,11 +13,6 @@ variable "zone_name" {
   type        = string
 }
 
-variable "service_plan_id" {
-  description = "The ID of the service plan to be used for the function app."
-  type        = string
-}
-
 variable "suffix" {
   description = "A suffix to be appended to resource names."
   type        = string
@@ -34,7 +24,7 @@ variable "default_tags" {
   default     = {}
 }
 
-variable "custom_domain" {
-  description = "The custom domain to be used for the static site."
+variable "service_plan_id" {
+  description = "The ID of the service plan to be used for the function app."
   type        = string
 }
