@@ -16,12 +16,25 @@ terraform {
 
   required_version = ">= 1.3.0"
 }
+resource "random_string" "module_suffix" {
+  length  = 4
+  upper   = false
+  special = false
+}
+
+locals {
+  env            = var.environment
+  core_suffix    = "core-${local.env}-${random_string.module_suffix.result}"
+  baldwin_suffix = "baldwin-${local.env}-${random_string.module_suffix.result}"
+}
 
 module "core" {
-  source = "./modules/core"
-
-  suffix        = local.suffix
-  tenant_id     = var.tenant_id
-  region        = local.region
-  default_tags  = local.default_tags
+  source    = "./modules/core"
+  suffix    = local.core_suffix
+  tenant_id = var.tenant_id
+  region    = var.region
+  default_tags = {
+    environment = local.env
+    project     = "core"
+  }
 }
