@@ -16,6 +16,7 @@ terraform {
 
   required_version = ">= 1.3.0"
 }
+
 resource "random_string" "module_suffix" {
   length  = 4
   upper   = false
@@ -36,5 +37,18 @@ module "core" {
   default_tags = {
     environment = local.env
     project     = "core"
+  }
+}
+
+module "baldwin" {
+  source              = "./modules/baldwin"
+  suffix              = local.baldwin_suffix
+  location            = module.core.location
+  resource_group_name = module.core.resource_group_name
+  zone_name           = module.core.dns_zone_name
+  service_plan_id     = module.core.service_plan_id
+  default_tags = {
+    environment = local.env
+    project     = "baldwin"
   }
 }
