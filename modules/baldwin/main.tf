@@ -6,9 +6,10 @@ resource "azurerm_static_web_app" "baldwin_web" {
   tags                = var.default_tags
 }
 
-resource "azurerm_static_site_custom_domain" "baldwin_domain" {
-  static_site_id = azurerm_static_site.baldwin_site.id
-  domain_name    = var.zone_name
+resource "azurerm_static_web_app_custom_domain" "baldwin_domain" {
+  static_web_app_id = azurerm_static_web_app.baldwin_web.id
+  validation_type   = "cname-delegation"
+  domain_name       = var.zone_name
 }
 
 resource "azurerm_storage_account" "baldwin_storage" {
@@ -32,9 +33,9 @@ resource "azurerm_linux_function_app" "baldwin_function" {
 
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE"                 = "1"
-    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING" = azurerm_storage_account.core.primary_blob_connection_string
-    "WEBSITE_CONTENTSHARE"                     = azurerm_storage_account.core.name
-    "AzureWebJobsStorage"                      = azurerm_storage_account.core.primary_blob_connection_string
+    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING" = azurerm_storage_account.baldwin_storage.primary_blob_connection_string
+    "WEBSITE_CONTENTSHARE"                     = azurerm_storage_account.baldwin_storage.name
+    "AzureWebJobsStorage"                      = azurerm_storage_account.baldwin_storage.primary_blob_connection_string
     "FUNCTIONS_WORKER_RUNTIME"                 = "python"
     "FUNCTIONS_EXTENSION_VERSION"              = "~4"
   }
@@ -61,7 +62,7 @@ resource "azurerm_dns_cname_record" "baldwin_web" {
   zone_name           = var.zone_name
   resource_group_name = var.resource_group_name
   ttl                 = 300
-  record              = azurerm_static_web_app.baldwin_web.default_hostname
+  record              = azurerm_static_web_app.baldwin_web.default_host_name
 }
 
 resource "azurerm_dns_cname_record" "baldwin_api" {
