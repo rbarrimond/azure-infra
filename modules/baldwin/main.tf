@@ -45,11 +45,11 @@ resource "azurerm_linux_function_app" "baldwin_function" {
     "WEBSITE_CONTENTSHARE"                     = azurerm_storage_account.baldwin_storage.name
     "AzureWebJobsStorage"                      = azurerm_storage_account.baldwin_storage.primary_blob_connection_string
     "FUNCTIONS_EXTENSION_VERSION"              = "~4"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"           = var.application_insights_key
   }
 
   site_config {
     always_on = true
+    application_insights_key = var.application_insights_key
     application_stack {
       python_version = "3.11"
     }
