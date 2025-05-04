@@ -31,25 +31,23 @@ resource "azurerm_storage_account" "baldwin_storage" {
 }
 
 resource "azurerm_linux_function_app" "baldwin_function" {
-  name                       = "lfa-${var.suffix}"
-  location                   = var.location
-  resource_group_name        = var.resource_group_name
-  service_plan_id            = var.service_plan_id
-  storage_account_name       = azurerm_storage_account.baldwin_storage.name
-  storage_account_access_key = azurerm_storage_account.baldwin_storage.primary_access_key
-  tags                       = var.default_tags
+  name                        = "lfa-${var.suffix}"
+  location                    = var.location
+  resource_group_name         = var.resource_group_name
+  service_plan_id             = var.service_plan_id
+  storage_account_name        = azurerm_storage_account.baldwin_storage.name
+  storage_account_access_key  = azurerm_storage_account.baldwin_storage.primary_access_key
+  functions_extension_version = "~4"
+  tags                        = var.default_tags
 
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE"                 = "1"
-    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING" = azurerm_storage_account.baldwin_storage.primary_blob_connection_string
-    "WEBSITE_CONTENTSHARE"                     = azurerm_storage_account.baldwin_storage.name
-    "AzureWebJobsStorage"                      = azurerm_storage_account.baldwin_storage.primary_blob_connection_string
-    "FUNCTIONS_EXTENSION_VERSION"              = "~4"
+    "WEBSITE_RUN_FROM_PACKAGE" = "1"
   }
 
   site_config {
-    always_on = true
+    always_on                = true
     application_insights_key = var.application_insights_key
+
     application_stack {
       python_version = "3.11"
     }
