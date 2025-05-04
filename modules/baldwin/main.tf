@@ -2,7 +2,8 @@ resource "azurerm_static_web_app" "baldwin_web" {
   name                = "swa-${var.suffix}"
   location            = var.location
   resource_group_name = var.resource_group_name
-  sku_tier            = "Free"
+  sku_tier            = "Standard"
+  sku_size            = "Standard"
   tags                = var.default_tags
 }
 
