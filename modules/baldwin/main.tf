@@ -46,6 +46,7 @@ resource "azurerm_linux_function_app" "baldwin_function" {
     "WEBSITE_CONTENTSHARE"                     = azurerm_storage_account.baldwin_storage.name
     "AzureWebJobsStorage"                      = azurerm_storage_account.baldwin_storage.primary_blob_connection_string
     "FUNCTIONS_EXTENSION_VERSION"              = "~4"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"           = var.application_insights_key
   }
   site_config {
     always_on = true
@@ -69,3 +70,4 @@ resource "azurerm_static_web_app_function_app_registration" "baldwin_registratio
   static_web_app_id = azurerm_static_web_app.baldwin_web.id
   function_app_id   = azurerm_linux_function_app.baldwin_function.id
 }
+

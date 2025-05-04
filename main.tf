@@ -41,12 +41,13 @@ module "core" {
 }
 
 module "baldwin" {
-  source              = "./modules/baldwin"
-  suffix              = local.baldwin_suffix
-  location            = var.region
-  resource_group_name = module.core.resource_group_name
-  zone_name           = module.core.dns_zone_name
-  service_plan_id     = module.core.app_service_plan_id
+  source                   = "./modules/baldwin"
+  suffix                   = local.baldwin_suffix
+  location                 = var.region
+  resource_group_name      = module.core.resource_group_name
+  zone_name                = module.core.dns_zone_name
+  service_plan_id          = module.core.app_service_plan_id
+  application_insights_key = module.core.application_insights_key # Ensure the core module outputs this value
   default_tags = {
     environment = local.env
     project     = "baldwin"

@@ -71,6 +71,6 @@ output "app_service_plan_id" {
   value = azurerm_service_plan.core.id
 }
 
-output "application_insights_connection_string" {
-  value = azurerm_application_insights.core.connection_string
+output "application_insights_key" {
+  value = azurerm_application_insights.core.instrumentation_key
 }

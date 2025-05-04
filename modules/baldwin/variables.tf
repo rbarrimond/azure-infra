@@ -28,3 +28,8 @@ variable "service_plan_id" {
   description = "The ID of the service plan to be used for the function app."
   type        = string
 }
+
+variable "application_insights_key" {
+  description = "The instrumentation key for Application Insights."
+  type        = string
+}
