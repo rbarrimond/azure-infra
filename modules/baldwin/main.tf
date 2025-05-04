@@ -37,7 +37,6 @@ resource "azurerm_linux_function_app" "baldwin_function" {
   service_plan_id            = var.service_plan_id
   storage_account_name       = azurerm_storage_account.baldwin_storage.name
   storage_account_access_key = azurerm_storage_account.baldwin_storage.primary_access_key
-  https_only                 = true
   tags                       = var.default_tags
 
   app_settings = {
@@ -48,6 +47,7 @@ resource "azurerm_linux_function_app" "baldwin_function" {
     "FUNCTIONS_EXTENSION_VERSION"              = "~4"
     "APPINSIGHTS_INSTRUMENTATIONKEY"           = var.application_insights_key
   }
+
   site_config {
     always_on = true
     application_stack {
