@@ -1,22 +1,25 @@
 # azure-infra
 
 ```plaintext
-azure-infra/
-├── main.tf                  # Core + use case orchestration
-├── backend.tf               # Optional: Remote state config (e.g. Azure Storage)
-├── locals.tf                # Naming suffixes, region, tags
-├── tags.tf                  # Standard tag definitions
-├── variables.tf             # Global config vars
-├── outputs.tf               # Shared outputs (DNS, vault URI, etc.)
-
-├── modules/
-│   ├── core/                # DNS zone, KV, Function App Plan, App Insights
-│   ├── feeds/               # Project-specific queue/table/blob/function
-│   ├── poster/
-│   ├── analytics/
-│   └── shared_ai/           # Optional: reusable AI pipeline module
-
-├── environments/
+azure-infra
+├── backend.tf
+├── environments
 │   ├── dev.tfvars
-│   └── prod.tfvars
+│   ├── dev.tfvars.sample
+│   ├── prod.tfvars
+│   └── prod.tfvars.sample
+├── main.tf
+├── modules
+│   ├── baldwin
+│   │   ├── main.tf
+│   │   └── variables.tf
+│   ├── core
+│   │   ├── main.tf
+│   │   └── variables.tf
+│   └── shared_ai
+│       └── main.tf
+├── outputs.tf
+├── README.md
+├── terraform.tfvars
+└── variables.tf
 ```
