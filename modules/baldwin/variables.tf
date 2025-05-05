@@ -43,3 +43,9 @@ variable "repository_branch" {
   type        = string
   default     = "main"
 }
+
+variable "repository_token" {
+  description = "The GitHub token for accessing the repository."
+  type        = string
+  sensitive   = true
+}

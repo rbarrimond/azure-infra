@@ -48,6 +48,8 @@ module "baldwin" {
   zone_name                = module.core.dns_zone_name
   service_plan_id          = module.core.app_service_plan_id
   application_insights_key = module.core.application_insights_key # Ensure the core module outputs this value
+  repository_url           = "https://github.com/rbarrimond/baldwin-static.git"
+  repository_token         = var.github_token
   default_tags = {
     environment = local.env
     project     = "baldwin"
