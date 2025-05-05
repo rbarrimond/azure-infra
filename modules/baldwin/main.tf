@@ -4,6 +4,8 @@ resource "azurerm_static_web_app" "baldwin_web" {
   resource_group_name = var.resource_group_name
   sku_tier            = "Standard"
   sku_size            = "Standard"
+  repository_url      = var.repository_url
+  repository_branch   = var.repository_branch
   tags                = var.default_tags
 }
 

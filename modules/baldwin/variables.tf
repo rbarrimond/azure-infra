@@ -33,3 +33,13 @@ variable "application_insights_key" {
   description = "The instrumentation key for Application Insights."
   type        = string
 }
+
+variable "repository_url" {
+  description = "The URL of the GitHub repository for the static web app."
+  type        = string
+}
+variable "repository_branch" {
+  description = "The branch of the GitHub repository to be used for the static web app."
+  type        = string
+  default     = "main"
+}
