@@ -20,13 +20,13 @@ resource "azurerm_dns_zone" "core" {
 }
 
 resource "azurerm_key_vault" "core" {
-  name                       = "kv-${var.suffix}"
-  location                   = azurerm_resource_group.core.location
-  resource_group_name        = azurerm_resource_group.core.name
-  tenant_id                  = var.tenant_id
-  sku_name                   = "standard"
-  purge_protection_enabled   = false
-  tags                       = var.default_tags
+  name                     = "kv-${var.suffix}"
+  location                 = azurerm_resource_group.core.location
+  resource_group_name      = azurerm_resource_group.core.name
+  tenant_id                = var.tenant_id
+  sku_name                 = "standard"
+  purge_protection_enabled = false
+  tags                     = var.default_tags
 }
 
 resource "azurerm_service_plan" "core" {
@@ -35,7 +35,7 @@ resource "azurerm_service_plan" "core" {
   resource_group_name = azurerm_resource_group.core.name
   os_type             = "Linux"
   sku_name            = "B1"
-  tags = var.default_tags
+  tags                = var.default_tags
 }
 
 resource "azurerm_application_insights" "core" {
@@ -44,7 +44,7 @@ resource "azurerm_application_insights" "core" {
   resource_group_name = azurerm_resource_group.core.name
   application_type    = "web"
   tags                = var.default_tags
-   lifecycle {
+  lifecycle {
     ignore_changes = [
       workspace_id
     ]
