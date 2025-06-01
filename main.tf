@@ -23,26 +23,20 @@ resource "random_string" "module_suffix" {
   special = false
 }
 
-locals {
-  env            = var.environment
-  core_suffix    = "core-${local.env}-${random_string.module_suffix.result}"
-  baldwin_suffix = "baldwin-${local.env}-${random_string.module_suffix.result}"
-}
-
 module "core" {
   source    = "./modules/core"
-  suffix    = local.core_suffix
+  suffix    = "core-${var.environment}-${random_string.module_suffix.result}"
   tenant_id = var.tenant_id
   region    = var.region
   default_tags = {
-    environment = local.env
+    environment = var.environment
     project     = "core"
   }
 }
 
 module "baldwin" {
   source                   = "./modules/baldwin"
-  suffix                   = local.baldwin_suffix
+  suffix                   = "baldwin-${var.environment}-${random_string.module_suffix.result}"
   location                 = var.region
   resource_group_name      = module.core.resource_group_name
   zone_name                = module.core.dns_zone_name
@@ -51,7 +45,24 @@ module "baldwin" {
   repository_url           = "https://github.com/rbarrimond/baldwin-static.git"
   repository_token         = var.github_token
   default_tags = {
-    environment = local.env
+    environment = var.environment
     project     = "baldwin"
+  }
+}
+
+module "the_rob_vault" {
+  source                   = "./modules/the_rob_vault"
+  suffix                   = "the-rob-vault-${var.environment}-${random_string.module_suffix.result}"
+  location                 = var.region
+  resource_group_name      = module.core.resource_group_name
+  service_plan_id          = module.core.app_service_plan_id
+  application_insights_key = module.core.application_insights_key
+  bungie_client_id         = var.bungie_client_id
+  bungie_client_secret     = var.bungie_client_secret
+  bungie_redirect_uri      = var.bungie_redirect_uri
+
+  default_tags = {
+    environment = var.environment
+    project     = "the_rob_vault"
   }
 }

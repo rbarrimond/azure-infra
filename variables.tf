@@ -23,5 +23,22 @@ variable "github_token" {
   description = "GitHub token for accessing the repository"
   type        = string
   sensitive   = true
-  
+}
+
+variable "bungie_client_id" {
+  description = "Bungie API client ID"
+  type        = string
+  sensitive   = true
+}
+
+variable "bungie_client_secret" {
+  description = "Bungie API client secret"
+  type        = string
+  sensitive   = true
+}
+
+variable "bungie_redirect_uri" {
+  description = "Bungie API redirect URI"
+  type        = string
+  sensitive   = true
 }
