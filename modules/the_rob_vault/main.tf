@@ -77,6 +77,12 @@ resource "azurerm_dns_cname_record" "the_rob_vault" {
   record              = azurerm_linux_function_app.the_rob_vault.default_hostname
 }
 
+resource "azurerm_app_service_custom_hostname_binding" "the_rob_vault" {
+  hostname            = "therobvault.${var.zone_name}"
+  app_service_name    = azurerm_linux_function_app.the_rob_vault.name
+  resource_group_name = var.resource_group_name
+}
+
 output "name" {
   value = azurerm_linux_function_app.the_rob_vault.name
 }
