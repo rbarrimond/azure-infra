@@ -51,12 +51,6 @@ resource "azurerm_dns_cname_record" "the_rob_vault" {
   record              = azurerm_linux_function_app.the_rob_vault.default_hostname
 }
 
-resource "azurerm_linux_function_app_custom_hostname_binding" "the_rob_vault_binding" {
-  hostname            = "${azurerm_dns_cname_record.the_rob_vault.name}.${azurerm_dns_zone.the_rob_vault_zone.name}"
-  resource_group_name = var.resource_group_name
-  function_app_id     = azurerm_linux_function_app.the_rob_vault.id
-}
-
 output "name" {
   value = azurerm_linux_function_app.the_rob_vault.name
 }
@@ -70,5 +64,5 @@ output "dns_zone_name" {
 }
 
 output "custom_domain" {
-  value = azurerm_linux_function_app_custom_hostname_binding.the_rob_vault_binding.hostname
+  value = azurerm_function_app_custom_hostname_binding.the_rob_vault_binding.hostname
 }
