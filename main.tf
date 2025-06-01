@@ -53,7 +53,7 @@ module "baldwin" {
 
 module "the_rob_vault" {
   source                   = "./modules/the_rob_vault"
-  suffix                   = "the-rob-vault-${var.environment}-${random_string.module_suffix.result}"
+  suffix                   = "therobvault-${var.environment}-${random_string.module_suffix.result}"
   location                 = var.region
   resource_group_name      = module.core.resource_group_name
   zone_name                = module.core.dns_zone_name
@@ -67,6 +67,6 @@ module "the_rob_vault" {
 
   default_tags = {
     environment = var.environment
-    project     = "the_rob_vault"
+    project     = "therobvault"
   }
 }

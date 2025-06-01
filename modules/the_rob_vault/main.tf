@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "the_rob_vault_storage" {
-  name                     = "trv${substr(replace(lower(var.suffix), "-", ""), 0, 19)}"
+  name                     = "sa${substr(replace(lower(var.suffix), "-", ""), 0, 19)}"
   resource_group_name      = var.resource_group_name
   location                 = var.location
   account_tier             = "Standard"
@@ -38,7 +38,7 @@ resource "azurerm_key_vault_secret" "storage_connection_string" {
 }
 
 resource "azurerm_linux_function_app" "the_rob_vault" {
-  name                       = "the-rob-vault-${var.suffix}"
+  name                       = "lfa-${var.suffix}"
   location                   = var.location
   resource_group_name        = var.resource_group_name
   service_plan_id            = var.service_plan_id
@@ -70,7 +70,7 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
 }
 
 resource "azurerm_dns_cname_record" "the_rob_vault" {
-  name                = "the-rob-vault"
+  name                = "therobvault"
   zone_name           = var.zone_name
   resource_group_name = var.resource_group_name
   ttl                 = 300
@@ -83,4 +83,8 @@ output "name" {
 
 output "fqdn" {
   value = azurerm_linux_function_app.the_rob_vault.default_hostname
+}
+
+output "custom_domain" {
+  value = azurerm_dns_cname_record.the_rob_vault.fqdn
 }
