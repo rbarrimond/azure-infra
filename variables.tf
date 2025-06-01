@@ -42,3 +42,9 @@ variable "bungie_redirect_uri" {
   type        = string
   sensitive   = true
 }
+
+variable "bungie_api_key" {
+  description = "Bungie API Key."
+  type        = string
+  sensitive   = true
+}

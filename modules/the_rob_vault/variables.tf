@@ -51,3 +51,14 @@ variable "zone_name" {
   description = "The DNS zone name in which to create the CNAME record for the Rob Vault app"
   type        = string
 }
+
+variable "key_vault_id" {
+  description = "The ID of the Azure Key Vault to store secrets."
+  type        = string
+}
+
+variable "bungie_api_key" {
+  description = "Bungie API Key."
+  type        = string
+  sensitive   = true
+}

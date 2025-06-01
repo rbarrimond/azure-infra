@@ -61,6 +61,8 @@ module "the_rob_vault" {
   bungie_client_id         = var.bungie_client_id
   bungie_client_secret     = var.bungie_client_secret
   bungie_redirect_uri      = var.bungie_redirect_uri
+  key_vault_id             = module.core.key_vault_id
+  bungie_api_key           = var.bungie_api_key
 
   default_tags = {
     environment = var.environment

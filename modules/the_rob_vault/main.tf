@@ -7,6 +7,30 @@ resource "azurerm_storage_account" "the_rob_vault_storage" {
   tags                     = var.default_tags
 }
 
+resource "azurerm_key_vault_secret" "bungie_client_id" {
+  name         = "BUNGIE-CLIENT-ID"
+  value        = var.bungie_client_id
+  key_vault_id = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "bungie_client_secret" {
+  name         = "BUNGIE-CLIENT-SECRET"
+  value        = var.bungie_client_secret
+  key_vault_id = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "bungie_redirect_uri" {
+  name         = "BUNGIE-REDIRECT-URI"
+  value        = var.bungie_redirect_uri
+  key_vault_id = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "bungie_api_key" {
+  name         = "BUNGIE-API-KEY"
+  value        = var.bungie_api_key
+  key_vault_id = var.key_vault_id
+}
+
 resource "azurerm_linux_function_app" "the_rob_vault" {
   name                       = "the-rob-vault-${var.suffix}"
   location                   = var.location
@@ -26,9 +50,10 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
   }
 
   app_settings = {
-    "BUNGIE_CLIENT_ID"               = var.bungie_client_id
-    "BUNGIE_CLIENT_SECRET"           = var.bungie_client_secret
-    "BUNGIE_REDIRECT_URI"            = var.bungie_redirect_uri
+    "BUNGIE_CLIENT_ID"     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungie_client_id.id})"
+    "BUNGIE_CLIENT_SECRET" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungie_client_secret.id})"
+    "BUNGIE_REDIRECT_URI"  = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungie_redirect_uri.id})"
+    "BUNGIE_API_KEY"       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungie_api_key.id})"
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
   }
 
