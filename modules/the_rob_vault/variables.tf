@@ -46,3 +46,8 @@ variable "bungie_redirect_uri" {
   type        = string
   sensitive   = true
 }
+
+variable "zone_name" {
+  description = "The DNS zone name for the Rob Vault app"
+  type        = string
+}

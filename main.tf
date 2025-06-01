@@ -55,6 +55,7 @@ module "the_rob_vault" {
   suffix                   = "the-rob-vault-${var.environment}-${random_string.module_suffix.result}"
   location                 = var.region
   resource_group_name      = module.core.resource_group_name
+  zone_name                = module.core.dns_zone_name
   service_plan_id          = module.core.app_service_plan_id
   application_insights_key = module.core.application_insights_key
   bungie_client_id         = var.bungie_client_id
