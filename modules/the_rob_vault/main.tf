@@ -83,6 +83,16 @@ resource "azurerm_app_service_custom_hostname_binding" "the_rob_vault" {
   resource_group_name = var.resource_group_name
 }
 
+resource "azurerm_app_service_managed_certificate" "the_rob_vault_cert" {
+  custom_hostname_binding_id = azurerm_app_service_custom_hostname_binding.the_rob_vault.id
+}
+
+resource "azurerm_app_service_certificate_binding" "the_rob_vault_tls" {
+  hostname_binding_id     = azurerm_app_service_custom_hostname_binding.the_rob_vault.id
+  certificate_id          = azurerm_app_service_managed_certificate.the_rob_vault_cert.id
+  ssl_state               = "SniEnabled"
+}
+
 output "name" {
   value = azurerm_linux_function_app.the_rob_vault.name
 }
