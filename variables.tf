@@ -48,3 +48,8 @@ variable "bungie_api_key" {
   type        = string
   sensitive   = true
 }
+
+variable "key_vault_admin_object_id" {
+  description = "The object ID of the user or service principal to be granted Key Vault admin permissions."
+  type        = string
+}
