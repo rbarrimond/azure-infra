@@ -101,15 +101,6 @@ resource "azurerm_monitor_diagnostic_setting" "the_rob_vault_function" {
   enabled_log {
     category = "FunctionAppLogs"
   }
-  enabled_log {
-    category = "AppServiceConsoleLogs"
-  }
-  enabled_log {
-    category = "AppServiceAppLogs"
-  }
-  enabled_log {
-    category = "AppServiceAuditLogs"
-  }
   metric {
     category = "AllMetrics"
     enabled  = true
