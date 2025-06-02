@@ -38,12 +38,23 @@ resource "azurerm_service_plan" "core" {
   tags                = var.default_tags
 }
 
+resource "azurerm_log_analytics_workspace" "core" {
+  name                = "log-${var.suffix}"
+  location            = azurerm_resource_group.core.location
+  resource_group_name = azurerm_resource_group.core.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+  tags                = var.default_tags
+}
+
 resource "azurerm_application_insights" "core" {
   name                = "appi-${var.suffix}"
   location            = azurerm_resource_group.core.location
   resource_group_name = azurerm_resource_group.core.name
   application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.core.id
   tags                = var.default_tags
+
   lifecycle {
     ignore_changes = [
       workspace_id
@@ -94,4 +105,8 @@ output "key_vault_id" {
 
 output "application_insights_workspace_id" {
   value = azurerm_application_insights.core.workspace_id
+}
+
+output "application_insights_connection_string" {
+  value = azurerm_application_insights.core.connection_string
 }
