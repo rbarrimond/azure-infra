@@ -67,3 +67,8 @@ variable "log_analytics_workspace_id" {
   description = "The resource ID of the Log Analytics Workspace for diagnostics."
   type        = string
 }
+
+variable "tenant_id" {
+  description = "The Azure Active Directory tenant ID."
+  type        = string
+}

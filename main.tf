@@ -55,6 +55,7 @@ module "the_rob_vault" {
   source                     = "./modules/the_rob_vault"
   suffix                     = "therobvault-${var.environment}-${random_string.module_suffix.result}"
   location                   = var.region
+  tenant_id                  = var.tenant_id
   resource_group_name        = module.core.resource_group_name
   zone_name                  = module.core.dns_zone_name
   service_plan_id            = module.core.app_service_plan_id

@@ -107,6 +107,17 @@ resource "azurerm_monitor_diagnostic_setting" "the_rob_vault_function" {
   }
 }
 
+resource "azurerm_key_vault_access_policy" "the_rob_vault_function" {
+  key_vault_id = var.key_vault_id
+  tenant_id    = var.tenant_id
+  object_id    = azurerm_linux_function_app.the_rob_vault.identity[0].principal_id
+
+  secret_permissions = [
+    "Get",
+    "List"
+  ]
+}
+
 output "name" {
   value = azurerm_linux_function_app.the_rob_vault.name
 }
