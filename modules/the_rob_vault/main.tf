@@ -93,6 +93,29 @@ resource "azurerm_app_service_certificate_binding" "the_rob_vault_tls" {
   ssl_state               = "SniEnabled"
 }
 
+resource "azurerm_monitor_diagnostic_setting" "the_rob_vault_function" {
+  name                       = "diag-${var.suffix}"
+  target_resource_id         = azurerm_linux_function_app.the_rob_vault.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  enabled_log {
+    category = "FunctionAppLogs"
+  }
+  enabled_log {
+    category = "AppServiceConsoleLogs"
+  }
+  enabled_log {
+    category = "AppServiceAppLogs"
+  }
+  enabled_log {
+    category = "AppServiceAuditLogs"
+  }
+  metric {
+    category = "AllMetrics"
+    enabled  = true
+  }
+}
+
 output "name" {
   value = azurerm_linux_function_app.the_rob_vault.name
 }

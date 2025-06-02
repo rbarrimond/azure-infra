@@ -55,11 +55,6 @@ resource "azurerm_application_insights" "core" {
   workspace_id        = azurerm_log_analytics_workspace.core.id
   tags                = var.default_tags
 
-  lifecycle {
-    ignore_changes = [
-      workspace_id
-    ]
-  }
 }
 
 resource "azurerm_key_vault_access_policy" "terraform_sp" {

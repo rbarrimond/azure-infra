@@ -67,3 +67,8 @@ variable "bungie_api_key" {
   type        = string
   sensitive   = true
 }
+
+variable "log_analytics_workspace_id" {
+  description = "The resource ID of the Log Analytics Workspace for diagnostics."
+  type        = string
+}
