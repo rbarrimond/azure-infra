@@ -59,6 +59,7 @@ module "the_rob_vault" {
   zone_name                = module.core.dns_zone_name
   service_plan_id          = module.core.app_service_plan_id
   application_insights_key = module.core.application_insights_key
+  application_insights_id  = module.core.application_insights_workspace_id
   bungie_client_id         = var.bungie_client_id
   bungie_client_secret     = var.bungie_client_secret
   bungie_redirect_uri      = var.bungie_redirect_uri

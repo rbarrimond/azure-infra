@@ -29,6 +29,11 @@ variable "application_insights_key" {
   type        = string
 }
 
+variable "application_insights_id" {
+  description = "The resource ID of the Application Insights instance for diagnostics."
+  type        = string
+}
+
 variable "bungie_client_id" {
   description = "Bungie OAuth Client ID"
   type        = string

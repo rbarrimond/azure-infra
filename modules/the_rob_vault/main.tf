@@ -69,6 +69,31 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
   }
 }
 
+resource "azurerm_monitor_diagnostic_setting" "the_rob_vault" {
+  name                       = "the-rob-vault-logs"
+  target_resource_id         = azurerm_linux_function_app.the_rob_vault.id
+  log_analytics_workspace_id = var.application_insights_id
+
+  enabled_log {
+    category = "FunctionAppLogs"
+  }
+  enabled_log {
+    category = "AppServiceConsoleLogs"
+  }
+  enabled_log {
+    category = "AppServiceAuditLogs"
+  }
+  enabled_log {
+    category = "AppServiceHTTPLogs"
+  }
+  enabled_log {
+    category = "AppServicePlatformLogs"
+  }
+  metric {
+    category = "AllMetrics"
+  }
+}
+
 resource "azurerm_dns_cname_record" "the_rob_vault" {
   name                = "therobvault"
   zone_name           = var.zone_name

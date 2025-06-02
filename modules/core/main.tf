@@ -91,3 +91,7 @@ output "application_insights_key" {
 output "key_vault_id" {
   value = azurerm_key_vault.core.id
 }
+
+output "application_insights_workspace_id" {
+  value = azurerm_application_insights.core.workspace_id
+}
