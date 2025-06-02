@@ -114,7 +114,8 @@ resource "azurerm_key_vault_access_policy" "the_rob_vault_function" {
 
   secret_permissions = [
     "Get",
-    "List"
+    "List",
+    "Purge"
   ]
 }
 
