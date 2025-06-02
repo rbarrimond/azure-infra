@@ -51,7 +51,7 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     application_insights_key = var.application_insights_key
 
     application_stack {
-      python_version = "3.11"
+      python_version = "3.10"
     }
   }
 
