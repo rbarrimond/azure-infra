@@ -66,6 +66,15 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
   identity {
     type = "SystemAssigned"
   }
+
+  lifecycle {
+    ignore_changes = [
+      app_settings["BUILD_FLAGS"],
+      app_settings["ENABLE_ORYX_BUILD"],
+      app_settings["SCM_DO_BUILD_DURING_DEPLOYMENT"],
+      app_settings["XDG_CACHE_HOME"]
+    ]
+  }
 }
 
 resource "azurerm_dns_cname_record" "the_rob_vault" {
