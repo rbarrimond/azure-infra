@@ -61,7 +61,7 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     "BUNGIE_REDIRECT_URI"             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungieRedirectUri.versionless_id})"
     "BUNGIE_API_KEY"                  = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungieApiKey.versionless_id})"
     "AZURE_STORAGE_CONNECTION_STRING" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.storageConnectionString.versionless_id})"
-    "SCM_DO_BUILD_DURING_DEPLOYMENT"  = "1"
+    "WEBSITE_RUN_FROM_PACKAGE"        = "1"
   }
 
   identity {
