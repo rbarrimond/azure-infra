@@ -14,7 +14,7 @@ steps:
   - task: AzureCLI@2
     displayName: 'Azure CLI Login'
     inputs:
-      azureSubscription: '<YOUR_AZURE_SERVICE_CONNECTION>'
+      azureSubscription: 'rbarrimond'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
@@ -30,7 +30,7 @@ steps:
   - task: AzureCLI@2
     displayName: 'Upload static website files to $web container'
     inputs:
-      azureSubscription: '<YOUR_AZURE_SERVICE_CONNECTION>'
+      azureSubscription: 'rbarrimond'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
