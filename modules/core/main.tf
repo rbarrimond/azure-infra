@@ -3,7 +3,6 @@ resource "azurerm_resource_group" "core" {
   location = var.region
   tags     = var.default_tags
 }
-
 resource "azurerm_storage_account" "core" {
   name                     = "st${replace(lower(var.suffix), "-", "")}"
   resource_group_name      = azurerm_resource_group.core.name
@@ -11,6 +10,27 @@ resource "azurerm_storage_account" "core" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   tags                     = var.default_tags
+  account_kind             = "StorageV2"
+}
+
+resource "azurerm_storage_account_static_website" "static_website" {
+  storage_account_id  = azurerm_storage_account.core.id
+  index_document      = "index.html"
+  error_404_document  = "404.html"
+}
+
+resource "azurerm_storage_container" "static_container" {
+  name                  = "$web"
+  storage_account_name  = azurerm_storage_account.core.name
+  container_access_type = "blob"
+}
+
+resource "azurerm_dns_cname_record" "static_dns" {
+  name                = "static"
+  zone_name           = azurerm_dns_zone.core.name
+  resource_group_name = azurerm_resource_group.core.name
+  ttl                 = 300
+  record              = azurerm_storage_account.core.primary_web_host
 }
 
 resource "azurerm_dns_zone" "core" {
@@ -76,6 +96,10 @@ output "resource_group_name" {
 
 output "storage_account_name" {
   value = azurerm_storage_account.core.name
+}
+
+output "static_website_url" {
+  value = azurerm_storage_account.core.primary_web_endpoint
 }
 
 output "dns_zone_name" {
