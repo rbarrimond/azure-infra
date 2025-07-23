@@ -28,4 +28,5 @@ jobs:
             --account-name stcoreprod59o7 \
             --destination '$web' \
             --source ./static \
+            --overwrite true \
             --auth-mode login
