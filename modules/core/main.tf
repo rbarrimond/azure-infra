@@ -3,6 +3,7 @@ resource "azurerm_resource_group" "core" {
   location = var.region
   tags     = var.default_tags
 }
+
 resource "azurerm_storage_account" "core" {
   name                     = "st${replace(lower(var.suffix), "-", "")}"
   resource_group_name      = azurerm_resource_group.core.name
@@ -13,10 +14,20 @@ resource "azurerm_storage_account" "core" {
   account_kind             = "StorageV2"
 }
 
+resource "azuread_service_principal" "github_actions_sp" {
+  client_id = var.github_actions_sp_client_id
+}
+
+resource "azurerm_role_assignment" "github_actions_blob_contributor" {
+  scope                = azurerm_storage_account.core.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azuread_service_principal.github_actions_sp.object_id
+}
+
 resource "azurerm_storage_account_static_website" "static_website" {
-  storage_account_id  = azurerm_storage_account.core.id
-  index_document      = "index.html"
-  error_404_document  = "404.html"
+  storage_account_id = azurerm_storage_account.core.id
+  index_document     = "index.html"
+  error_404_document = "404.html"
 }
 
 resource "azurerm_storage_container" "static_container" {
@@ -129,3 +140,4 @@ output "application_insights_workspace_id" {
 output "application_insights_connection_string" {
   value = azurerm_application_insights.core.connection_string
 }
+

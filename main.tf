@@ -24,11 +24,12 @@ resource "random_string" "module_suffix" {
 }
 
 module "core" {
-  source                    = "./modules/core"
-  suffix                    = "core-${var.environment}-${random_string.module_suffix.result}"
-  tenant_id                 = var.tenant_id
-  region                    = var.region
-  key_vault_admin_object_id = var.key_vault_admin_object_id
+  source                      = "./modules/core"
+  suffix                      = "core-${var.environment}-${random_string.module_suffix.result}"
+  tenant_id                   = var.tenant_id
+  region                      = var.region
+  key_vault_admin_object_id   = var.key_vault_admin_object_id
+  github_actions_sp_client_id = var.github_actions_sp_client_id
   default_tags = {
     environment = var.environment
     project     = "core"
