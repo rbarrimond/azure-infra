@@ -1,58 +1,42 @@
-// outputs.tf - Key outputs for CLI and automation
-
-// outputs.tf - Key outputs for CLI and automation
-
-output "function_app_name" {
-  description = "Name of the Azure Function App"
-  value       = module.the_rob_vault.linux_function_app_name
+output "core_resource_group_name" {
+  value = module.core.resource_group_name
 }
 
-output "function_app_id" {
-  description = "Resource ID of the Azure Function App"
-  value       = module.the_rob_vault.linux_function_app_id
+output "core_storage_account_name" {
+  value = module.core.storage_account_name
 }
 
-output "function_default_hostname" {
-  description = "Default hostname of the Azure Function App"
-  value       = module.the_rob_vault.function_default_hostname
+output "core_static_website_url" {
+  value = module.core.static_website_url
 }
 
-output "function_custom_fqdn" {
-  description = "Custom FQDN for the Function App (if set)"
-  value       = module.the_rob_vault.custom_fqdn
+output "core_dns_zone_name" {
+  value = module.core.dns_zone_name
 }
 
-output "resource_group_name" {
-  description = "Resource group name"
-  value       = module.the_rob_vault.resource_group_name
+output "core_key_vault_name" {
+  value = module.core.key_vault_name
 }
 
-output "storage_account_name" {
-  description = "Name of the storage account"
-  value       = module.the_rob_vault.storage_account_name
+output "core_app_service_plan_id" {
+  value = module.core.app_service_plan_id
 }
 
-output "storage_account_id" {
-  description = "Resource ID of the storage account"
-  value       = module.the_rob_vault.storage_account_id
+output "core_key_vault_id" {
+  value = module.core.key_vault_id
 }
 
-output "key_vault_id" {
-  description = "Resource ID of the Key Vault"
-  value       = module.the_rob_vault.key_vault_id
+output "core_application_insights_workspace_id" {
+  value = module.core.application_insights_workspace_id
 }
 
-output "dns_zone_name" {
-  description = "DNS zone name"
-  value       = module.the_rob_vault.zone_name
+# The Rob Vault Outputs
+output "the_rob_vault_function_app_name" {
+  value = module.the_rob_vault.function_app_name
 }
-
-output "subscription_id" {
-  description = "Azure Subscription ID"
-  value       = data.azurerm_client_config.current.subscription_id
+output "the_rob_vault_function_app_fqdn" {
+  value = module.the_rob_vault.function_app_fqdn
 }
-
-output "location" {
-  description = "Azure region/location"
-  value       = module.the_rob_vault.location
+output "the_rob_vault_custom_fqdn" {
+  value = module.the_rob_vault.custom_fqdn
 }

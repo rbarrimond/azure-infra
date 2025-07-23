@@ -1,8 +1,8 @@
-output "name" {
+output "function_app_name" {
   value = azurerm_linux_function_app.the_rob_vault.name
 }
 
-output "fqdn" {
+output "function_app_fqdn" {
   value = azurerm_linux_function_app.the_rob_vault.default_hostname
 }
 

@@ -1,3 +1,7 @@
+output "application_insights_key" {
+  value     = azurerm_application_insights.core.instrumentation_key
+  sensitive = true
+}
 output "resource_group_name" {
   value = azurerm_resource_group.core.name
 }
