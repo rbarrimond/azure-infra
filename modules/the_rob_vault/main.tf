@@ -61,6 +61,7 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     "BUNGIE_REDIRECT_URI"             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungieRedirectUri.versionless_id})"
     "BUNGIE_API_KEY"                  = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungieApiKey.versionless_id})"
     "AZURE_STORAGE_CONNECTION_STRING" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.storageConnectionString.versionless_id})"
+    "WEBSITE_RUN_FROM_PACKAGE"        = "1"
   }
 
   identity {
@@ -96,9 +97,9 @@ resource "azurerm_app_service_managed_certificate" "the_rob_vault_cert" {
 }
 
 resource "azurerm_app_service_certificate_binding" "the_rob_vault_tls" {
-  hostname_binding_id     = azurerm_app_service_custom_hostname_binding.the_rob_vault.id
-  certificate_id          = azurerm_app_service_managed_certificate.the_rob_vault_cert.id
-  ssl_state               = "SniEnabled"
+  hostname_binding_id = azurerm_app_service_custom_hostname_binding.the_rob_vault.id
+  certificate_id      = azurerm_app_service_managed_certificate.the_rob_vault_cert.id
+  ssl_state           = "SniEnabled"
 }
 
 resource "azurerm_monitor_diagnostic_setting" "the_rob_vault_function" {
