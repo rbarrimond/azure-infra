@@ -49,6 +49,7 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
   site_config {
     always_on                = true
     application_insights_key = var.application_insights_key
+    health_check_path        = "/api/health"
 
     application_stack {
       python_version = "3.10"
