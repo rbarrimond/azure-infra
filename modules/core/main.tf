@@ -102,7 +102,7 @@ resource "azurerm_key_vault_access_policy" "terraform_sp" {
 }
 resource "azurerm_key_vault_secret" "kv_sql_admin_login" {
   name         = "sqlAdminLogin"
-  value        = "username-${var.suffix}"
+  value        = "sqladmin-${var.suffix}"
   key_vault_id = azurerm_key_vault.core.id
 }
 
