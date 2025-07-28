@@ -122,8 +122,8 @@ resource "azurerm_mssql_server" "core" {
   resource_group_name          = azurerm_resource_group.core.name
   location                     = azurerm_resource_group.core.location
   version                      = "12.0"
-  administrator_login          = data.azurerm_key_vault_secret.sql_admin_login.value
-  administrator_login_password = data.azurerm_key_vault_secret.sql_admin_password.value
+  administrator_login          = azurerm_key_vault_secret.kv_sql_admin_login.value
+  administrator_login_password = azurerm_key_vault_secret.kv_sql_admin_password.value
   tags                         = var.default_tags
 }
 
