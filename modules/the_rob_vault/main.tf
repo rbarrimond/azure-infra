@@ -1,11 +1,11 @@
 resource "azurerm_mssql_database" "the_rob_vault_db" {
-  name                = "therobvault-db-${var.suffix}"
-  server_id           = var.sql_server_id
-  sku_name            = "GP_S_Gen5_1" # General Purpose, Serverless, Gen5, 1 vCore
-  min_capacity        = 0.5            # Serverless minimum vCores
-  auto_pause_delay_in_minutes = 60     # Auto-pause after 60 minutes inactivity
-  zone_redundant      = false
-  tags                = var.default_tags
+  name                        = "therobvault-db-${var.suffix}"
+  server_id                   = var.sql_server_id
+  sku_name                    = "GP_S_Gen5_1" # General Purpose, Serverless, Gen5, 1 vCore
+  min_capacity                = 0.5           # Serverless minimum vCores
+  auto_pause_delay_in_minutes = 60            # Auto-pause after 60 minutes inactivity
+  zone_redundant              = false
+  tags                        = var.default_tags
 }
 
 resource "azurerm_storage_account" "the_rob_vault_storage" {
