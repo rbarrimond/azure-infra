@@ -12,6 +12,20 @@ resource "azurerm_mssql_database" "the_rob_vault_db" {
   }
 }
 
+# Generate a random password for the agent user
+resource "random_password" "robvaultagent" {
+  length  = 32
+  special = true
+}
+
+# Store the agent user password in Key Vault
+resource "azurerm_key_vault_secret" "robvaultagent_password" {
+  name         = "robVaultAgentPassword"
+  value        = random_password.robvaultagent.result
+  key_vault_id = var.key_vault_id
+}
+
+
 resource "azurerm_storage_account" "the_rob_vault_storage" {
   name                     = "sa${substr(replace(lower(var.suffix), "-", ""), 0, 19)}"
   resource_group_name      = var.resource_group_name
