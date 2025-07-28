@@ -97,7 +97,8 @@ resource "azurerm_key_vault_access_policy" "terraform_sp" {
     "Get",
     "Set",
     "Delete",
-    "List"
+    "List",
+    "Purge",
   ]
 }
 resource "azurerm_key_vault_secret" "kv_sql_admin_login" {
