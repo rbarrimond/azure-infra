@@ -1,5 +1,5 @@
 resource "azurerm_mssql_database" "the_rob_vault_db" {
-  name                        = "therobvault-db-${var.suffix}"
+  name                        = "db-${var.suffix}"
   server_id                   = var.sql_server_id
   sku_name                    = "GP_S_Gen5_1" # General Purpose, Serverless, Gen5, 1 vCore
   min_capacity                = 0.5           # Serverless minimum vCores

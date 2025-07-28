@@ -40,3 +40,7 @@ output "the_rob_vault_function_app_fqdn" {
 output "the_rob_vault_custom_fqdn" {
   value = module.the_rob_vault.custom_fqdn
 }
+
+output "the_rob_vault_db_name" {
+  value = module.the_rob_vault.db_name
+}
