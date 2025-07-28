@@ -62,6 +62,7 @@ module "the_rob_vault" {
   service_plan_id            = module.core.app_service_plan_id
   application_insights_key   = module.core.application_insights_key
   key_vault_id               = module.core.key_vault_id
+  sql_server_id              = module.core.sql_server_id
   bungie_client_id           = var.bungie_client_id
   bungie_client_secret       = var.bungie_client_secret
   bungie_redirect_uri        = var.bungie_redirect_uri

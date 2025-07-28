@@ -1,3 +1,7 @@
+output "sql_server_id" {
+  description = "The ID of the Azure SQL Server."
+  value       = azurerm_mssql_server.core.id
+}
 output "sql_server_name" {
   description = "The name of the Azure SQL Server."
   value       = azurerm_mssql_server.core.name

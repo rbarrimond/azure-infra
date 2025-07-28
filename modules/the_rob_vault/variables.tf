@@ -1,3 +1,7 @@
+variable "sql_server_id" {
+  description = "The ID of the Azure SQL Server to host the database."
+  type        = string
+}
 variable "resource_group_name" {
   description = "The name of the resource group where resources will be created."
   type        = string
