@@ -6,6 +6,10 @@ resource "azurerm_mssql_database" "the_rob_vault_db" {
   auto_pause_delay_in_minutes = 60            # Auto-pause after 60 minutes inactivity
   zone_redundant              = false
   tags                        = var.default_tags
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_storage_account" "the_rob_vault_storage" {
