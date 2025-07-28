@@ -1,3 +1,12 @@
+output "sql_server_name" {
+  description = "The name of the Azure SQL Server."
+  value       = azurerm_mssql_server.core.name
+}
+
+output "sql_server_fqdn" {
+  description = "The fully qualified domain name of the Azure SQL Server."
+  value       = azurerm_mssql_server.core.fully_qualified_domain_name
+}
 output "application_insights_key" {
   value     = azurerm_application_insights.core.instrumentation_key
   sensitive = true

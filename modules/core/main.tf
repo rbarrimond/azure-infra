@@ -100,5 +100,43 @@ resource "azurerm_key_vault_access_policy" "terraform_sp" {
     "List"
   ]
 }
+resource "azurerm_key_vault_secret" "kv_sql_admin_login" {
+  name         = "sql-admin-login"
+  value        = "username-${var.suffix}"
+  key_vault_id = azurerm_key_vault.core.id
+}
+
+resource "random_password" "sql_admin_password" {
+  length           = 32
+  special          = true
+  override_special = "!@#%^&*()-_=+[]{}"
+}
+
+resource "azurerm_key_vault_secret" "kv_sql_admin_password" {
+  name         = "sql-admin-password"
+  value        = random_password.sql_admin_password.result
+  key_vault_id = azurerm_key_vault.core.id
+}
+resource "azurerm_mssql_server" "core" {
+  name                         = "sql-${var.suffix}"
+  resource_group_name          = azurerm_resource_group.core.name
+  location                     = azurerm_resource_group.core.location
+  version                      = "12.0"
+  administrator_login          = data.azurerm_key_vault_secret.sql_admin_login.value
+  administrator_login_password = data.azurerm_key_vault_secret.sql_admin_password.value
+  tags                         = var.default_tags
+}
+
+# resource "azurerm_mssql_database" "core" {
+#   name                = "db-${var.suffix}"
+#   server_id           = azurerm_mssql_server.core.id
+#   sku_name            = "GP_S_Gen5_1" # General Purpose, Serverless, Gen5, 1 vCore
+#   min_capacity        = 0.5            # Serverless minimum vCores
+#   # max_capacity removed; not valid for azurerm_mssql_database
+#   # Serverless scaling is managed by min_capacity and auto_pause_delay_in_minutes
+#   auto_pause_delay_in_minutes = 60     # Auto-pause after 60 minutes inactivity
+#   zone_redundant      = false
+#   tags                = var.default_tags
+# }
 
 
