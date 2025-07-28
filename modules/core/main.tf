@@ -119,13 +119,14 @@ resource "azurerm_key_vault_secret" "kv_sql_admin_password" {
   key_vault_id = azurerm_key_vault.core.id
 }
 resource "azurerm_mssql_server" "core" {
-  name                         = "sql-${var.suffix}"
-  resource_group_name          = azurerm_resource_group.core.name
-  location                     = azurerm_resource_group.core.location
-  version                      = "12.0"
-  administrator_login          = azurerm_key_vault_secret.kv_sql_admin_login.value
-  administrator_login_password = azurerm_key_vault_secret.kv_sql_admin_password.value
-  tags                         = var.default_tags
+  name                          = "sql-${var.suffix}"
+  resource_group_name           = azurerm_resource_group.core.name
+  location                      = azurerm_resource_group.core.location
+  version                       = "12.0"
+  administrator_login           = azurerm_key_vault_secret.kv_sql_admin_login.value
+  administrator_login_password  = azurerm_key_vault_secret.kv_sql_admin_password.value
+  tags                          = var.default_tags
+  public_network_access_enabled = true
 }
 
 # resource "azurerm_mssql_database" "core" {

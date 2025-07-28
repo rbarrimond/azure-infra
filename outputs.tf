@@ -30,6 +30,10 @@ output "core_application_insights_workspace_id" {
   value = module.core.application_insights_workspace_id
 }
 
+output "core_sql_server_url" {
+  value = module.core.sql_server_fqdn
+}
+
 # The Rob Vault Outputs
 output "the_rob_vault_function_app_name" {
   value = module.the_rob_vault.function_app_name
@@ -40,7 +44,6 @@ output "the_rob_vault_function_app_fqdn" {
 output "the_rob_vault_custom_fqdn" {
   value = module.the_rob_vault.custom_fqdn
 }
-
 output "the_rob_vault_db_name" {
   value = module.the_rob_vault.db_name
 }
