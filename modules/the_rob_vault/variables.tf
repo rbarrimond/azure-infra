@@ -76,3 +76,8 @@ variable "tenant_id" {
   description = "The Azure Active Directory tenant ID."
   type        = string
 }
+
+variable "cognitive_account_id" {
+  description = "The ID of the Azure Cognitive Services account."
+  type        = string
+}

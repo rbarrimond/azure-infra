@@ -48,3 +48,6 @@ output "application_insights_workspace_id" {
   value = azurerm_application_insights.core.workspace_id
 }
 
+output "cognitive_account_id" {
+  value = azurerm_cognitive_account.core.id
+}

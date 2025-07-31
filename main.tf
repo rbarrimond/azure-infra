@@ -10,7 +10,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+      version = "~> 4.0"
     }
   }
 
@@ -68,6 +68,7 @@ module "the_rob_vault" {
   bungie_redirect_uri        = var.bungie_redirect_uri
   bungie_api_key             = var.bungie_api_key
   log_analytics_workspace_id = module.core.application_insights_workspace_id
+  cognitive_account_id       = module.core.cognitive_account_id
 
   default_tags = {
     environment = var.environment

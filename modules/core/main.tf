@@ -32,7 +32,7 @@ resource "azurerm_storage_account_static_website" "static_website" {
 
 resource "azurerm_storage_container" "static_container" {
   name                  = "$web"
-  storage_account_name  = azurerm_storage_account.core.name
+  storage_account_id    = azurerm_storage_account.core.id
   container_access_type = "blob"
 }
 
@@ -141,4 +141,15 @@ resource "azurerm_mssql_server" "core" {
 #   tags                = var.default_tags
 # }
 
+resource "azurerm_cognitive_account" "core" {
+  name                = "cog-${var.suffix}"
+  resource_group_name = azurerm_resource_group.core.name
+  location            = azurerm_resource_group.core.location
+  kind                = "OpenAI"
+  sku_name            = "S0"
+  tags                = var.default_tags
 
+  identity {
+    type = "SystemAssigned"
+  }
+}

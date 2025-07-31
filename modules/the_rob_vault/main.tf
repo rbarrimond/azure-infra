@@ -75,9 +75,10 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
   tags                       = var.default_tags
 
   site_config {
-    always_on                = true
-    application_insights_key = var.application_insights_key
-    health_check_path        = "/api/health"
+    always_on                         = true
+    application_insights_key          = var.application_insights_key
+    health_check_path                 = "/api/health"
+    health_check_eviction_time_in_min = "10"
 
     application_stack {
       python_version = "3.10"
@@ -139,9 +140,8 @@ resource "azurerm_monitor_diagnostic_setting" "the_rob_vault_function" {
   enabled_log {
     category = "FunctionAppLogs"
   }
-  metric {
+  enabled_metric {
     category = "AllMetrics"
-    enabled  = true
   }
 }
 
@@ -155,5 +155,22 @@ resource "azurerm_key_vault_access_policy" "the_rob_vault_function" {
     "List",
     "Purge"
   ]
+}
+
+resource "azurerm_cognitive_deployment" "the_rob_vault_cognitive" {
+  name                 = "cog-${var.suffix}"
+  cognitive_account_id = var.cognitive_account_id
+
+  model {
+    format  = "OpenAI"
+    name    = "gpt-35-turbo"
+    version = "2023-05-15"
+  }
+
+  sku {
+    name     = "Standard"
+    capacity = 1
+  }
+
 }
 
