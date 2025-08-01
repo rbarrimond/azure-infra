@@ -91,6 +91,10 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     "BUNGIE_REDIRECT_URI"             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungieRedirectUri.versionless_id})"
     "BUNGIE_API_KEY"                  = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungieApiKey.versionless_id})"
     "AZURE_STORAGE_CONNECTION_STRING" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.storageConnectionString.versionless_id})"
+    "AZURE_SQL_SERVER"                = var.sql_server_id
+    "AZURE_SQL_DATABASE"              = azurerm_mssql_database.the_rob_vault_db.name
+    "AZURE_SQL_ADMIN_LOGIN"           = "@Microsoft.KeyVault(SecretUri=${var.kv_sql_admin_login_versionless_id})"
+    "AZURE_SQL_ADMIN_PASSWORD"        = "@Microsoft.KeyVault(SecretUri=${var.kv_sql_admin_password_versionless_id})"
     "WEBSITE_RUN_FROM_PACKAGE"        = "0"
   }
 
@@ -163,13 +167,13 @@ resource "azurerm_cognitive_deployment" "the_rob_vault_cognitive" {
 
   model {
     format  = "OpenAI"
-    name    = "gpt-35-turbo"
-    version = "2023-05-15"
+    name    = "gpt-4.1-nano"
+    version = "2025-04-14"
   }
 
   sku {
-    name     = "Standard"
-    capacity = 1
+    name     = "GlobalStandard"
+    capacity = 10
   }
 
 }

@@ -81,3 +81,15 @@ variable "cognitive_account_id" {
   description = "The ID of the Azure Cognitive Services account."
   type        = string
 }
+
+variable "kv_sql_admin_login_versionless_id" {
+  description = "The admin login for the Azure SQL database."
+  type        = string
+  sensitive   = true
+}
+
+variable "kv_sql_admin_password_versionless_id" {
+  description = "The admin password for the Azure SQL database."
+  type        = string
+  sensitive   = true
+}

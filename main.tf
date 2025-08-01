@@ -53,22 +53,24 @@ module "baldwin" {
 }
 
 module "the_rob_vault" {
-  source                     = "./modules/the_rob_vault"
-  suffix                     = "therobvault-${var.environment}-${random_string.module_suffix.result}"
-  location                   = var.region
-  tenant_id                  = var.tenant_id
-  resource_group_name        = module.core.resource_group_name
-  zone_name                  = module.core.dns_zone_name
-  service_plan_id            = module.core.app_service_plan_id
-  application_insights_key   = module.core.application_insights_key
-  key_vault_id               = module.core.key_vault_id
-  sql_server_id              = module.core.sql_server_id
-  bungie_client_id           = var.bungie_client_id
-  bungie_client_secret       = var.bungie_client_secret
-  bungie_redirect_uri        = var.bungie_redirect_uri
-  bungie_api_key             = var.bungie_api_key
-  log_analytics_workspace_id = module.core.application_insights_workspace_id
-  cognitive_account_id       = module.core.cognitive_account_id
+  source                               = "./modules/the_rob_vault"
+  suffix                               = "therobvault-${var.environment}-${random_string.module_suffix.result}"
+  location                             = var.region
+  tenant_id                            = var.tenant_id
+  resource_group_name                  = module.core.resource_group_name
+  zone_name                            = module.core.dns_zone_name
+  service_plan_id                      = module.core.app_service_plan_id
+  application_insights_key             = module.core.application_insights_key
+  key_vault_id                         = module.core.key_vault_id
+  sql_server_id                        = module.core.sql_server_id
+  bungie_client_id                     = var.bungie_client_id
+  bungie_client_secret                 = var.bungie_client_secret
+  bungie_redirect_uri                  = var.bungie_redirect_uri
+  bungie_api_key                       = var.bungie_api_key
+  log_analytics_workspace_id           = module.core.application_insights_workspace_id
+  cognitive_account_id                 = module.core.cognitive_account_id
+  kv_sql_admin_login_versionless_id    = module.core.kv_sql_admin_login_versionless_id
+  kv_sql_admin_password_versionless_id = module.core.kv_sql_admin_password_versionless_id
 
   default_tags = {
     environment = var.environment
