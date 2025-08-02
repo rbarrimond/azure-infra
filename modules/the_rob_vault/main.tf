@@ -1,6 +1,32 @@
+# ============================================================================
+# Module: the_rob_vault
+# Purpose: Provisions Destiny 2 Vault Sentinel backend resources in Azure
+# Resources:
+#   - Azure SQL Database (serverless, protected by Key Vault)
+#   - Azure Storage Account
+#   - Azure Key Vault secrets for Bungie API and storage credentials
+#   - Azure Linux Function App (Python)
+#   - DNS, TLS, and monitoring integrations
+#   - Azure Cognitive Services deployment for OpenAI (GPT-4.1-nano)
+# Key Configuration:
+#   - Managed Identity for secure access
+#   - Key Vault integration for secrets
+#   - Diagnostic settings for monitoring
+#   - Custom DNS and SSL certificate binding
+#   - Cognitive deployment for LLM-powered SQL translation
+# ============================================================================
+
+# =====================
+# SQL Database & Password
+# =====================
+data "azurerm_mssql_server" "core_sql_server" {
+  name                = var.sql_server_name
+  resource_group_name = var.resource_group_name
+}
+
 resource "azurerm_mssql_database" "the_rob_vault_db" {
   name                        = "db-${var.suffix}"
-  server_id                   = var.sql_server_id
+  server_id                   = data.azurerm_mssql_server.core_sql_server.id
   sku_name                    = "GP_S_Gen5_1" # General Purpose, Serverless, Gen5, 1 vCore
   min_capacity                = 0.5           # Serverless minimum vCores
   auto_pause_delay_in_minutes = 60            # Auto-pause after 60 minutes inactivity
@@ -25,6 +51,9 @@ resource "azurerm_key_vault_secret" "robvaultagent_password" {
   key_vault_id = var.key_vault_id
 }
 
+# =====================
+# Storage Account
+# =====================
 
 resource "azurerm_storage_account" "the_rob_vault_storage" {
   name                     = "sa${substr(replace(lower(var.suffix), "-", ""), 0, 19)}"
@@ -34,6 +63,10 @@ resource "azurerm_storage_account" "the_rob_vault_storage" {
   account_replication_type = "LRS"
   tags                     = var.default_tags
 }
+
+# =====================
+# Key Vault Secrets
+# =====================
 
 resource "azurerm_key_vault_secret" "bungieClientId" {
   name         = "bungieClientId"
@@ -65,6 +98,10 @@ resource "azurerm_key_vault_secret" "storageConnectionString" {
   key_vault_id = var.key_vault_id
 }
 
+# =====================
+# Function App
+# =====================
+
 resource "azurerm_linux_function_app" "the_rob_vault" {
   name                       = "lfa-${var.suffix}"
   location                   = var.location
@@ -91,10 +128,14 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     "BUNGIE_REDIRECT_URI"             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungieRedirectUri.versionless_id})"
     "BUNGIE_API_KEY"                  = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.bungieApiKey.versionless_id})"
     "AZURE_STORAGE_CONNECTION_STRING" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.storageConnectionString.versionless_id})"
-    "AZURE_SQL_SERVER"                = var.sql_server_id
+    "AZURE_SQL_SERVER"                = data.azurerm_mssql_server.core_sql_server.name
     "AZURE_SQL_DATABASE"              = azurerm_mssql_database.the_rob_vault_db.name
     "AZURE_SQL_ADMIN_LOGIN"           = "@Microsoft.KeyVault(SecretUri=${var.kv_sql_admin_login_versionless_id})"
     "AZURE_SQL_ADMIN_PASSWORD"        = "@Microsoft.KeyVault(SecretUri=${var.kv_sql_admin_password_versionless_id})"
+    "AZURE_OPENAI_ENDPOINT"           = data.azurerm_cognitive_account.the_rob_vault_cognitive.endpoint
+    "AZURE_OPENAI_API_KEY"            = data.azurerm_cognitive_account.the_rob_vault_cognitive.primary_access_key
+    "AZURE_OPENAI_DEPLOYMENT"         = azurerm_cognitive_deployment.the_rob_vault_cognitive.model[0].name
+    "AZURE_OPENAI_API_VERSION"        = azurerm_cognitive_deployment.the_rob_vault_cognitive.model[0].version
     "WEBSITE_RUN_FROM_PACKAGE"        = "0"
   }
 
@@ -111,6 +152,10 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     ]
   }
 }
+
+# =====================
+# DNS & TLS
+# =====================
 
 resource "azurerm_dns_cname_record" "the_rob_vault" {
   name                = "therobvault"
@@ -136,6 +181,10 @@ resource "azurerm_app_service_certificate_binding" "the_rob_vault_tls" {
   ssl_state           = "SniEnabled"
 }
 
+# =====================
+# Monitoring & Access Policies
+# =====================
+
 resource "azurerm_monitor_diagnostic_setting" "the_rob_vault_function" {
   name                       = "diag-${var.suffix}"
   target_resource_id         = azurerm_linux_function_app.the_rob_vault.id
@@ -156,19 +205,27 @@ resource "azurerm_key_vault_access_policy" "the_rob_vault_function" {
 
   secret_permissions = [
     "Get",
-    "List",
-    "Purge"
+    "List"
   ]
+}
+
+# =====================
+# Cognitive Services
+# =====================
+
+data "azurerm_cognitive_account" "the_rob_vault_cognitive" {
+  name                = var.cognitive_account_name
+  resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_cognitive_deployment" "the_rob_vault_cognitive" {
   name                 = "cog-${var.suffix}"
-  cognitive_account_id = var.cognitive_account_id
+  cognitive_account_id = data.azurerm_cognitive_account.the_rob_vault_cognitive.id
 
   model {
     format  = "OpenAI"
-    name    = "gpt-4.1-nano"
-    version = "2025-04-14"
+    name    = var.cognitive_model_name
+    version = var.cognitive_model_version
   }
 
   sku {

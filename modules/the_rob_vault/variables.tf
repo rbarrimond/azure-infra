@@ -1,7 +1,23 @@
-variable "sql_server_id" {
-  description = "The ID of the Azure SQL Server to host the database."
+# Name of the Azure SQL Server
+variable "sql_server_name" {
+  description = "Name of the Azure SQL Server to use for the database."
   type        = string
 }
+
+# Model name for Azure Cognitive Services deployment
+variable "cognitive_model_name" {
+  description = "Name of the model to deploy in Azure Cognitive Services (e.g., gpt-4.1-nano)"
+  type        = string
+  default     = "gpt-4.1-nano"
+}
+
+# Model version for Azure Cognitive Services deployment
+variable "cognitive_model_version" {
+  description = "Version of the model to deploy in Azure Cognitive Services (e.g., 2025-04-14)"
+  type        = string
+  default     = "2025-04-14"
+}
+
 variable "resource_group_name" {
   description = "The name of the resource group where resources will be created."
   type        = string
@@ -77,8 +93,8 @@ variable "tenant_id" {
   type        = string
 }
 
-variable "cognitive_account_id" {
-  description = "The ID of the Azure Cognitive Services account."
+variable "cognitive_account_name" {
+  description = "The name of the Azure Cognitive Services account."
   type        = string
 }
 

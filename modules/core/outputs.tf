@@ -1,7 +1,3 @@
-output "sql_server_id" {
-  description = "The ID of the Azure SQL Server."
-  value       = azurerm_mssql_server.core.id
-}
 output "sql_server_name" {
   description = "The name of the Azure SQL Server."
   value       = azurerm_mssql_server.core.name
@@ -68,7 +64,7 @@ output "application_insights_workspace_id" {
   value       = azurerm_application_insights.core.workspace_id
 }
 
-output "cognitive_account_id" {
-  description = "The ID of the Azure Cognitive Services account."
-  value       = azurerm_cognitive_account.core.id
+output "cognitive_account_name" {
+  description = "The name of the Azure Cognitive Services account."
+  value       = azurerm_cognitive_account.core.name
 }
