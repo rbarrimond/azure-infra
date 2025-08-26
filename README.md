@@ -3,8 +3,6 @@
 
 This repository contains my personal Infrastructure as Code (IaC) code base for managing and deploying resources for my personal projects. It includes Terraform modules, environment configurations, and supporting files used to provision and maintain cloud infrastructure.
 
-
-
 ```plaintext
 azure-infra
 ├── azure-pipelines.yml
