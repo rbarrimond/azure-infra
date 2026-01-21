@@ -76,6 +76,9 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "AzureWebJobsStorage"                       = azurerm_storage_account.health.primary_connection_string
     "AZURE_STORAGE_ACCOUNT_URL"                 = azurerm_storage_account.health.primary_blob_endpoint
     "PUBLIC_BASE_URL"                           = "https://${var.dns_subdomain}.${var.zone_name}"
+    "PLUGIN_LOGO_URL"                           = var.plugin_logo_url
+    "PLUGIN_CONTACT_EMAIL"                      = var.plugin_contact_email
+    "PLUGIN_LEGAL_URL"                          = var.plugin_legal_url
     "DEFAULT_ATHLETE_ID"                        = var.default_athlete_id
     "DEFAULT_FTP"                               = var.default_ftp
     "DEFAULT_MAX_HR"                            = var.default_max_hr

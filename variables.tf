@@ -109,3 +109,21 @@ variable "health_assistant_cors_allowed_origins" {
   type        = list(string)
   default     = ["https://chat.openai.com"]
 }
+
+variable "health_assistant_plugin_logo_url" {
+  description = "Logo URL for Health Assistant ChatGPT Actions plugin."
+  type        = string
+  default     = "https://via.placeholder.com/128.png?text=Health+Assistant"
+}
+
+variable "health_assistant_plugin_contact_email" {
+  description = "Contact email for Health Assistant ChatGPT Actions plugin."
+  type        = string
+  default     = "rbarrimond+health-assistant@users.noreply.github.com"
+}
+
+variable "health_assistant_plugin_legal_url" {
+  description = "Legal info URL for Health Assistant ChatGPT Actions plugin."
+  type        = string
+  default     = "https://github.com/rbarrimond/health_assistant/blob/main/README.md"
+}

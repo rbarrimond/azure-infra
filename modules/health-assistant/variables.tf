@@ -205,3 +205,21 @@ variable "cors_allowed_origins" {
   type        = list(string)
   default     = ["https://chat.openai.com"]
 }
+
+variable "plugin_logo_url" {
+  description = "Logo URL for ChatGPT Actions plugin manifest."
+  type        = string
+  default     = "https://via.placeholder.com/128.png?text=Health+Assistant"
+}
+
+variable "plugin_contact_email" {
+  description = "Contact email for ChatGPT Actions plugin manifest."
+  type        = string
+  default     = "rbarrimond+health-assistant@users.noreply.github.com"
+}
+
+variable "plugin_legal_url" {
+  description = "Legal info URL for ChatGPT Actions plugin manifest."
+  type        = string
+  default     = "https://github.com/rbarrimond/health_assistant/blob/main/README.md"
+}
