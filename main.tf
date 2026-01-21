@@ -93,6 +93,10 @@ module "health_assistant" {
   withings_client_id          = var.withings_client_id != null ? var.withings_client_id : ""
   withings_client_secret      = var.withings_client_secret != null ? var.withings_client_secret : ""
   withings_refresh_token      = var.withings_refresh_token != null ? var.withings_refresh_token : ""
+  default_max_hr              = var.default_max_hr
+  default_ftp                 = var.default_ftp
+  hr_zone_basis               = var.hr_zone_basis
+  hr_zone_reference_bpm       = var.hr_zone_reference_bpm
   default_tags = {
     environment = var.environment
     project     = "health-assistant"

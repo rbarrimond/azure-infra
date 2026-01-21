@@ -79,3 +79,27 @@ variable "withings_refresh_token" {
   sensitive   = true
   default     = null
 }
+
+variable "default_max_hr" {
+  description = "Default maximum heart rate (bpm) passed to health assistant module."
+  type        = string
+  default     = "190"
+}
+
+variable "default_ftp" {
+  description = "Default Functional Threshold Power (watts) passed to health assistant module."
+  type        = string
+  default     = "250"
+}
+
+variable "hr_zone_basis" {
+  description = "Basis for heart rate zone calculations passed to health assistant module."
+  type        = string
+  default     = "HRmax"
+}
+
+variable "hr_zone_reference_bpm" {
+  description = "Reference BPM (e.g., LTHR) passed to health assistant module."
+  type        = string
+  default     = "0"
+}
