@@ -58,3 +58,24 @@ variable "github_actions_sp_client_id" {
   description = "The client ID of the GitHub Actions service principal for blob contributor role assignment."
   type        = string
 }
+
+variable "withings_client_id" {
+  description = "Withings API client ID"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "withings_client_secret" {
+  description = "Withings API client secret"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "withings_refresh_token" {
+  description = "Withings API refresh token"
+  type        = string
+  sensitive   = true
+  default     = null
+}

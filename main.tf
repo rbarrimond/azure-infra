@@ -77,3 +77,24 @@ module "the_rob_vault" {
     project     = "therobvault"
   }
 }
+
+module "health_assistant" {
+  source                      = "./modules/health-assistant"
+  suffix                      = "healthassistant-${var.environment}-${random_string.module_suffix.result}"
+  location                    = var.region
+  resource_group_name         = module.core.resource_group_name
+  zone_name                   = module.core.dns_zone_name
+  service_plan_id             = module.core.app_service_plan_id
+  application_insights_key    = module.core.application_insights_key
+  log_analytics_workspace_id  = module.core.application_insights_workspace_id
+  key_vault_id                = module.core.key_vault_id
+  key_vault_url               = "https://${module.core.key_vault_name}.vault.azure.net/"
+  tenant_id                   = var.tenant_id
+  withings_client_id          = var.withings_client_id != null ? var.withings_client_id : ""
+  withings_client_secret      = var.withings_client_secret != null ? var.withings_client_secret : ""
+  withings_refresh_token      = var.withings_refresh_token != null ? var.withings_refresh_token : ""
+  default_tags = {
+    environment = var.environment
+    project     = "health-assistant"
+  }
+}
