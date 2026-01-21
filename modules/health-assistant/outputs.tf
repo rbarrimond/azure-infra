@@ -38,3 +38,13 @@ output "function_app_identity_principal_id" {
   description = "The principal ID of the Function App's managed identity."
   value       = azurerm_linux_function_app.health_assistant.identity[0].principal_id
 }
+
+output "custom_hostname" {
+  description = "The custom hostname bound to the Health Assistant Function App."
+  value       = azurerm_app_service_custom_hostname_binding.health_custom_domain.hostname
+}
+
+output "managed_certificate_id" {
+  description = "Resource ID of the managed certificate for the custom hostname."
+  value       = azurerm_app_service_managed_certificate.health_cert.id
+}

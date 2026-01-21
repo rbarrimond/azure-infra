@@ -130,6 +130,25 @@ resource "azurerm_dns_cname_record" "health_api" {
   record              = azurerm_linux_function_app.health_assistant.default_hostname
 }
 
+# Bind custom hostname to the Function App
+resource "azurerm_app_service_custom_hostname_binding" "health_custom_domain" {
+  hostname            = "${var.dns_subdomain}.${var.zone_name}"
+  app_service_name    = azurerm_linux_function_app.health_assistant.name
+  resource_group_name = var.resource_group_name
+}
+
+# Issue a free managed certificate for the custom hostname
+resource "azurerm_app_service_managed_certificate" "health_cert" {
+  custom_hostname_binding_id = azurerm_app_service_custom_hostname_binding.health_custom_domain.id
+}
+
+# Bind the managed certificate to the hostname (SNI)
+resource "azurerm_app_service_certificate_binding" "health_ssl" {
+  hostname_binding_id = azurerm_app_service_custom_hostname_binding.health_custom_domain.id
+  certificate_id      = azurerm_app_service_managed_certificate.health_cert.id
+  ssl_state           = "SniEnabled"
+}
+
 # Key Vault secret for Withings client credentials (placeholder)
 resource "azurerm_key_vault_secret" "withings_client_id" {
   name         = "withings-client-id"

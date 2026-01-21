@@ -78,3 +78,13 @@ output "health_assistant_function_app_identity_principal_id" {
   value       = module.health_assistant.function_app_identity_principal_id
   description = "The principal ID of the Health Assistant Function App's managed identity"
 } 
+
+output "health_assistant_custom_hostname" {
+  value       = module.health_assistant.custom_hostname
+  description = "Custom hostname bound to the Health Assistant Function App"
+}
+
+output "health_assistant_managed_certificate_id" {
+  value       = module.health_assistant.managed_certificate_id
+  description = "Managed certificate resource ID for the custom hostname"
+}
