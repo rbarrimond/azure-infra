@@ -75,6 +75,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "ApplicationInsightsAgent_EXTENSION_VERSION" = var.application_insights_extension_version
     "AzureWebJobsStorage"                       = azurerm_storage_account.health.primary_connection_string
     "AZURE_STORAGE_ACCOUNT_URL"                 = azurerm_storage_account.health.primary_blob_endpoint
+    "PUBLIC_BASE_URL"                           = "https://${var.dns_subdomain}.${var.zone_name}"
     "DEFAULT_ATHLETE_ID"                        = var.default_athlete_id
     "DEFAULT_FTP"                               = var.default_ftp
     "DEFAULT_MAX_HR"                            = var.default_max_hr
@@ -88,6 +89,9 @@ resource "azurerm_linux_function_app" "health_assistant" {
   site_config {
     always_on                = false # consumption plan doesn't support always_on
     application_insights_key = var.application_insights_key
+    cors {
+      allowed_origins = var.cors_allowed_origins
+    }
     application_stack {
       python_version = var.python_version
     }

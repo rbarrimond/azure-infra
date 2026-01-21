@@ -199,3 +199,9 @@ variable "dns_subdomain" {
   type        = string
   default     = "health"
 }
+
+variable "cors_allowed_origins" {
+  description = "Allowed origins for Function App CORS."
+  type        = list(string)
+  default     = ["https://chat.openai.com"]
+}

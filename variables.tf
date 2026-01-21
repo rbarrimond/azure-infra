@@ -103,3 +103,9 @@ variable "hr_zone_reference_bpm" {
   type        = string
   default     = "0"
 }
+
+variable "health_assistant_cors_allowed_origins" {
+  description = "Allowed origins for the Health Assistant Function App (CORS)."
+  type        = list(string)
+  default     = ["https://chat.openai.com"]
+}
