@@ -3,40 +3,40 @@ resource "azurerm_storage_account" "health" {
   name                     = "sthealthprod${substr(replace(var.suffix, "-", ""), -4, 4)}"
   resource_group_name      = var.resource_group_name
   location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_tier             = var.storage_account_tier
+  account_replication_type = var.storage_replication_type
   tags                     = var.default_tags
 }
 
 # Table Storage tables for workouts
 resource "azurerm_storage_table" "workouts" {
-  name                 = "Workouts"
+  name                 = var.table_names.workouts
   storage_account_name = azurerm_storage_account.health.name
 }
 
 resource "azurerm_storage_table" "weekly_rollups" {
-  name                 = "WeeklyRollups"
+  name                 = var.table_names.weekly_rollups
   storage_account_name = azurerm_storage_account.health.name
 }
 
 resource "azurerm_storage_table" "ingestion_state" {
-  name                 = "IngestionState"
+  name                 = var.table_names.ingestion_state
   storage_account_name = azurerm_storage_account.health.name
 }
 
 resource "azurerm_storage_table" "physiometrics" {
-  name                 = "Physiometrics"
+  name                 = var.table_names.physiometrics
   storage_account_name = azurerm_storage_account.health.name
 }
 
 # Blob container for backups (read-only)
 resource "azurerm_storage_container" "backups" {
-  name                  = "backups"
+  name                  = var.backup_container_name
   storage_account_id    = azurerm_storage_account.health.id
-  container_access_type = "private"
+  container_access_type = var.backup_container_access_type
 }
 
-# Lifecycle policy: move backups to cool tier after 30 days, delete after 90 days
+# Lifecycle policy: move backups to cool tier after configured days, delete after configured days
 resource "azurerm_storage_management_policy" "backup_lifecycle" {
   storage_account_id = azurerm_storage_account.health.id
 
@@ -45,12 +45,12 @@ resource "azurerm_storage_management_policy" "backup_lifecycle" {
     enabled = true
     filters {
       blob_types   = ["blockBlob"]
-      prefix_match = ["backups/"]
+      prefix_match = ["${var.backup_container_name}/"]
     }
     actions {
       base_blob {
-        tier_to_cool_after_days_since_modification_greater_than = 30
-        delete_after_days_since_modification_greater_than       = 90
+        tier_to_cool_after_days_since_modification_greater_than = var.backup_lifecycle_cool_tier_days
+        delete_after_days_since_modification_greater_than       = var.backup_lifecycle_delete_days
       }
     }
   }
@@ -64,7 +64,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
   service_plan_id             = var.service_plan_id
   storage_account_name        = azurerm_storage_account.health.name
   storage_account_access_key  = azurerm_storage_account.health.primary_access_key
-  functions_extension_version = "~4"
+  functions_extension_version = var.function_extension_version
   https_only                  = true
   tags                        = var.default_tags
 
@@ -72,16 +72,16 @@ resource "azurerm_linux_function_app" "health_assistant" {
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE"                  = "1"
     "APPINSIGHTS_INSTRUMENTATIONKEY"            = var.application_insights_key
-    "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
+    "ApplicationInsightsAgent_EXTENSION_VERSION" = var.application_insights_extension_version
     "AzureWebJobsStorage"                       = azurerm_storage_account.health.primary_connection_string
     "AZURE_STORAGE_ACCOUNT_URL"                 = azurerm_storage_account.health.primary_blob_endpoint
-    "DEFAULT_ATHLETE_ID"                        = "rob"
-    "DEFAULT_FTP"                               = "250"
-    "DEFAULT_MAX_HR"                            = "190"
-    "HR_ZONE_BASIS"                             = "HRmax"
-    "HR_ZONE_REFERENCE_BPM"                     = "0"
-    "HR_RESTING_BPM"                            = "60"
-    "ONEDRIVE_FOLDER_PATH"                      = "/Apps/HealthFit"
+    "DEFAULT_ATHLETE_ID"                        = var.default_athlete_id
+    "DEFAULT_FTP"                               = var.default_ftp
+    "DEFAULT_MAX_HR"                            = var.default_max_hr
+    "HR_ZONE_BASIS"                             = var.hr_zone_basis
+    "HR_ZONE_REFERENCE_BPM"                     = var.hr_zone_reference_bpm
+    "HR_RESTING_BPM"                            = var.hr_resting_bpm
+    "ONEDRIVE_FOLDER_PATH"                      = var.onedrive_folder_path
     "KEYVAULT_URL"                              = var.key_vault_url
   }
 
@@ -89,7 +89,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
     always_on                = false # consumption plan doesn't support always_on
     application_insights_key = var.application_insights_key
     application_stack {
-      python_version = "3.12"
+      python_version = var.python_version
     }
   }
 
@@ -119,10 +119,10 @@ resource "azurerm_key_vault_access_policy" "function_identity" {
 
 # DNS CNAME for health assistant API
 resource "azurerm_dns_cname_record" "health_api" {
-  name                = "health"
+  name                = var.dns_subdomain
   zone_name           = var.zone_name
   resource_group_name = var.resource_group_name
-  ttl                 = 300
+  ttl                 = var.dns_ttl
   record              = azurerm_linux_function_app.health_assistant.default_hostname
 }
 

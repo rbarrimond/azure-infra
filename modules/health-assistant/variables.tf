@@ -75,3 +75,127 @@ variable "withings_refresh_token" {
   sensitive   = true
   default     = ""
 }
+
+variable "storage_account_tier" {
+  description = "Performance tier for storage account."
+  type        = string
+  default     = "Standard"
+}
+
+variable "storage_replication_type" {
+  description = "Replication type for storage account."
+  type        = string
+  default     = "LRS"
+}
+
+variable "table_names" {
+  description = "Names of the storage tables to create."
+  type = object({
+    workouts        = string
+    weekly_rollups  = string
+    ingestion_state = string
+    physiometrics   = string
+  })
+  default = {
+    workouts        = "Workouts"
+    weekly_rollups  = "WeeklyRollups"
+    ingestion_state = "IngestionState"
+    physiometrics   = "Physiometrics"
+  }
+}
+
+variable "backup_container_name" {
+  description = "Name of the blob container for backups."
+  type        = string
+  default     = "backups"
+}
+
+variable "backup_container_access_type" {
+  description = "Access type for backup container."
+  type        = string
+  default     = "private"
+}
+
+variable "backup_lifecycle_cool_tier_days" {
+  description = "Days after modification before moving backups to cool tier."
+  type        = number
+  default     = 30
+}
+
+variable "backup_lifecycle_delete_days" {
+  description = "Days after modification before deleting backups."
+  type        = number
+  default     = 90
+}
+
+variable "function_extension_version" {
+  description = "Azure Functions runtime version."
+  type        = string
+  default     = "~4"
+}
+
+variable "python_version" {
+  description = "Python runtime version for Function App."
+  type        = string
+  default     = "3.12"
+}
+
+variable "application_insights_extension_version" {
+  description = "Application Insights extension version."
+  type        = string
+  default     = "~3"
+}
+
+variable "default_athlete_id" {
+  description = "Default athlete ID for workouts."
+  type        = string
+  default     = "rob"
+}
+
+variable "default_ftp" {
+  description = "Default Functional Threshold Power (watts)."
+  type        = string
+  default     = "250"
+}
+
+variable "default_max_hr" {
+  description = "Default maximum heart rate (bpm)."
+  type        = string
+  default     = "190"
+}
+
+variable "hr_zone_basis" {
+  description = "Basis for heart rate zone calculations."
+  type        = string
+  default     = "HRmax"
+}
+
+variable "hr_zone_reference_bpm" {
+  description = "Reference BPM for heart rate zones."
+  type        = string
+  default     = "0"
+}
+
+variable "hr_resting_bpm" {
+  description = "Resting heart rate (bpm)."
+  type        = string
+  default     = "60"
+}
+
+variable "onedrive_folder_path" {
+  description = "OneDrive folder path for health data."
+  type        = string
+  default     = "/Apps/HealthFit"
+}
+
+variable "dns_ttl" {
+  description = "TTL for DNS CNAME record (seconds)."
+  type        = number
+  default     = 300
+}
+
+variable "dns_subdomain" {
+  description = "Subdomain for health assistant API."
+  type        = string
+  default     = "health"
+}
