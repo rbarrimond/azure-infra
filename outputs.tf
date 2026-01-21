@@ -47,3 +47,34 @@ output "the_rob_vault_custom_fqdn" {
 output "the_rob_vault_db_name" {
   value = module.the_rob_vault.db_name
 }
+
+# Health Assistant Outputs
+output "health_assistant_function_app_name" {
+  value       = module.health_assistant.function_app_name
+  description = "The name of the Health Assistant Function App"
+}
+
+output "health_assistant_function_app_default_hostname" {
+  value       = module.health_assistant.function_app_default_hostname
+  description = "The default hostname of the Health Assistant Function App"
+}
+
+output "health_assistant_api_endpoint" {
+  value       = module.health_assistant.api_endpoint
+  description = "The public API endpoint for the Health Assistant"
+}
+
+output "health_assistant_storage_account_name" {
+  value       = module.health_assistant.storage_account_name
+  description = "The name of the Health Assistant storage account"
+}
+
+output "health_assistant_function_app_id" {
+  value       = module.health_assistant.function_app_id
+  description = "The ID of the Health Assistant Function App"
+}
+
+output "health_assistant_function_app_identity_principal_id" {
+  value       = module.health_assistant.function_app_identity_principal_id
+  description = "The principal ID of the Health Assistant Function App's managed identity"
+} 
