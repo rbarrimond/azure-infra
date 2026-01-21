@@ -137,7 +137,7 @@ variable "function_extension_version" {
 variable "python_version" {
   description = "Python runtime version for Function App."
   type        = string
-  default     = "3.12"
+  default     = "3.13"
 }
 
 variable "application_insights_extension_version" {
