@@ -11,7 +11,7 @@ Your health assistant now has a complete Terraform infrastructure module that pr
   - Blob container for read-only backups with automatic lifecycle management
     - Moves to cool tier after 30 days
     - Deletes after 90 days
-- **Azure Functions** (Python 3.12, consumption plan)
+- **Azure Functions** (Python 3.13, consumption plan)
   - HTTP endpoint for ingesting FIT files from Power Automate
   - Daily timer trigger (2 AM UTC) for automated backups
   - Managed Identity for secure Key Vault access (no connection strings in config)

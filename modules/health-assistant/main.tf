@@ -56,7 +56,7 @@ resource "azurerm_storage_management_policy" "backup_lifecycle" {
   }
 }
 
-# Azure Functions App (consumption plan, Python 3.12)
+# Azure Functions App (consumption plan, Python 3.13)
 resource "azurerm_linux_function_app" "health_assistant" {
   name                        = "func-${var.suffix}"
   location                    = var.location
