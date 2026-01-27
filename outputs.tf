@@ -88,3 +88,8 @@ output "health_assistant_managed_certificate_id" {
   value       = module.health_assistant.managed_certificate_id
   description = "Managed certificate resource ID for the custom hostname"
 }
+
+output "health_assistant_healthcheck_url" {
+  value       = module.health_assistant.healthcheck_url
+  description = "Health check endpoint for the Health Assistant Function App"
+}

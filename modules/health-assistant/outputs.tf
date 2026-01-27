@@ -48,3 +48,7 @@ output "managed_certificate_id" {
   description = "Resource ID of the managed certificate for the custom hostname."
   value       = azurerm_app_service_managed_certificate.health_cert.id
 }
+output "healthcheck_url" {
+  description = "Health check endpoint for the Health Assistant Function App."
+  value       = "https://${var.dns_subdomain}.${var.zone_name}/api/health"
+}

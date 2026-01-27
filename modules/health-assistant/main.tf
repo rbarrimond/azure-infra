@@ -70,23 +70,24 @@ resource "azurerm_linux_function_app" "health_assistant" {
 
   # Application settings
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE"                  = "1"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"            = var.application_insights_key
+    "WEBSITE_RUN_FROM_PACKAGE"                   = "1"
+    "FUNCTIONS_WORKER_RUNTIME"                   = "python"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.application_insights_key
     "ApplicationInsightsAgent_EXTENSION_VERSION" = var.application_insights_extension_version
-    "AzureWebJobsStorage"                       = azurerm_storage_account.health.primary_connection_string
-    "AZURE_STORAGE_ACCOUNT_URL"                 = azurerm_storage_account.health.primary_blob_endpoint
-    "PUBLIC_BASE_URL"                           = "https://${var.dns_subdomain}.${var.zone_name}"
-    "PLUGIN_LOGO_URL"                           = var.plugin_logo_url
-    "PLUGIN_CONTACT_EMAIL"                      = var.plugin_contact_email
-    "PLUGIN_LEGAL_URL"                          = var.plugin_legal_url
-    "DEFAULT_ATHLETE_ID"                        = var.default_athlete_id
-    "DEFAULT_FTP"                               = var.default_ftp
-    "DEFAULT_MAX_HR"                            = var.default_max_hr
-    "HR_ZONE_BASIS"                             = var.hr_zone_basis
-    "HR_ZONE_REFERENCE_BPM"                     = var.hr_zone_reference_bpm
-    "HR_RESTING_BPM"                            = var.hr_resting_bpm
-    "ONEDRIVE_FOLDER_PATH"                      = var.onedrive_folder_path
-    "KEYVAULT_URL"                              = var.key_vault_url
+    "AzureWebJobsStorage"                        = azurerm_storage_account.health.primary_connection_string
+    "AZURE_STORAGE_ACCOUNT_URL"                  = azurerm_storage_account.health.primary_blob_endpoint
+    "PUBLIC_BASE_URL"                            = "https://${var.dns_subdomain}.${var.zone_name}"
+    "PLUGIN_LOGO_URL"                            = var.plugin_logo_url
+    "PLUGIN_CONTACT_EMAIL"                       = var.plugin_contact_email
+    "PLUGIN_LEGAL_URL"                           = var.plugin_legal_url
+    "DEFAULT_ATHLETE_ID"                         = var.default_athlete_id
+    "DEFAULT_FTP"                                = var.default_ftp
+    "DEFAULT_MAX_HR"                             = var.default_max_hr
+    "HR_ZONE_BASIS"                              = var.hr_zone_basis
+    "HR_ZONE_REFERENCE_BPM"                      = var.hr_zone_reference_bpm
+    "HR_RESTING_BPM"                             = var.hr_resting_bpm
+    "ONEDRIVE_FOLDER_PATH"                       = var.onedrive_folder_path
+    "KEYVAULT_URL"                               = var.key_vault_url
   }
 
   site_config {
