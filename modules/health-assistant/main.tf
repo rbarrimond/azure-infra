@@ -56,18 +56,19 @@ resource "azurerm_storage_management_policy" "backup_lifecycle" {
   }
 }
 
-# Dedicated Consumption plan for Health Assistant
+# Dedicated service plan for Health Assistant (Linux-based for Python support)
+# Using Basic B1 since Consumption (Y1) + Linux not available in this region/subscription
 resource "azurerm_service_plan" "health_assistant" {
   name                = "plan-${var.suffix}"
   location            = var.location
   resource_group_name = var.resource_group_name
-  os_type             = "Windows"
-  sku_name            = "Y1"  # Consumption plan tier
+  os_type             = "Linux"
+  sku_name            = "B1"  # Basic tier - simple scaling, Linux support
   tags                = var.default_tags
 }
 
-# Azure Functions App (consumption plan, Python 3.13)
-resource "azurerm_windows_function_app" "health_assistant" {
+# Azure Functions App (Python 3.13 on Linux)
+resource "azurerm_linux_function_app" "health_assistant" {
   name                        = "func-${var.suffix}"
   location                    = var.location
   resource_group_name         = var.resource_group_name
@@ -103,9 +104,11 @@ resource "azurerm_windows_function_app" "health_assistant" {
   site_config {
     always_on                = false
     application_insights_key = var.application_insights_key
-    use_32_bit_worker        = true
     cors {
       allowed_origins = var.cors_allowed_origins
+    }
+    application_stack {
+      python_version = "3.13"
     }
   }
 
@@ -125,7 +128,7 @@ resource "azurerm_windows_function_app" "health_assistant" {
 resource "azurerm_key_vault_access_policy" "function_identity" {
   key_vault_id = var.key_vault_id
   tenant_id    = var.tenant_id
-  object_id    = azurerm_windows_function_app.health_assistant.identity[0].principal_id
+  object_id    = azurerm_linux_function_app.health_assistant.identity[0].principal_id
 
   secret_permissions = [
     "Get",
@@ -139,13 +142,13 @@ resource "azurerm_dns_cname_record" "health_api" {
   zone_name           = var.zone_name
   resource_group_name = var.resource_group_name
   ttl                 = var.dns_ttl
-  record              = azurerm_windows_function_app.health_assistant.default_hostname
+  record              = azurerm_linux_function_app.health_assistant.default_hostname
 }
 
 # Bind custom hostname to the Function App
 resource "azurerm_app_service_custom_hostname_binding" "health_custom_domain" {
   hostname            = "${var.dns_subdomain}.${var.zone_name}"
-  app_service_name    = azurerm_windows_function_app.health_assistant.name
+  app_service_name    = azurerm_linux_function_app.health_assistant.name
   resource_group_name = var.resource_group_name
 }
 
