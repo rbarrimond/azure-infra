@@ -19,8 +19,9 @@ variable "suffix" {
 }
 
 variable "service_plan_id" {
-  description = "The ID of the App Service plan (must support consumption)."
+  description = "The ID of the App Service plan (for backward compatibility, no longer used)."
   type        = string
+  default     = ""
 }
 
 variable "application_insights_key" {
