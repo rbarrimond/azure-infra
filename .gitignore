@@ -24,6 +24,8 @@ terraform.rc
 
 # Ignore plan output files
 *.tfplan
+tfplan
+tfplan.*
 
 # Ignore backup files created by Terraform
 *.backup
