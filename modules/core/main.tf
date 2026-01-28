@@ -14,37 +14,6 @@ resource "azurerm_storage_account" "core" {
   account_kind             = "StorageV2"
 }
 
-data "azuread_application" "github_actions_app" {
-  client_id = var.github_actions_sp_client_id
-}
-
-resource "azuread_service_principal" "github_actions_sp" {
-  client_id = var.github_actions_sp_client_id
-}
-
-# Federated credential for health_assistant repo
-resource "azuread_application_federated_identity_credential" "health_assistant" {
-  application_id = data.azuread_application.github_actions_app.id
-  display_name   = "github-health-assistant-main"
-  description    = "GitHub Actions OIDC for health_assistant main branch"
-  audiences      = ["api://AzureADTokenExchange"]
-  issuer         = "https://token.actions.githubusercontent.com"
-  subject        = "repo:rbarrimond/health_assistant:ref:refs/heads/main"
-}
-
-resource "azurerm_role_assignment" "github_actions_blob_contributor" {
-  scope                = azurerm_storage_account.core.id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azuread_service_principal.github_actions_sp.object_id
-}
-
-# Grant GitHub Actions SP contributor access to resource group for deployments
-resource "azurerm_role_assignment" "github_actions_resource_group_contributor" {
-  scope                = azurerm_resource_group.core.id
-  role_definition_name = "Contributor"
-  principal_id         = azuread_service_principal.github_actions_sp.object_id
-}
-
 resource "azurerm_storage_account_static_website" "static_website" {
   storage_account_id = azurerm_storage_account.core.id
   index_document     = "index.html"
