@@ -67,7 +67,7 @@ resource "azurerm_service_plan" "health_assistant" {
   tags                = var.default_tags
 }
 
-# Azure Functions App (Python 3.13 on Linux)
+# Azure Functions App (Python 3.11 on Linux - isolated worker compatible)
 resource "azurerm_linux_function_app" "health_assistant" {
   name                        = "func-${var.suffix}"
   location                    = var.location
@@ -81,7 +81,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
 
   # Application settings
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE"                   = "1"
+    "WEBSITE_RUN_FROM_PACKAGE"                   = "0"
     "FUNCTIONS_WORKER_RUNTIME"                   = "python"
     "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.application_insights_key
     "ApplicationInsightsAgent_EXTENSION_VERSION" = var.application_insights_extension_version
@@ -102,13 +102,15 @@ resource "azurerm_linux_function_app" "health_assistant" {
   }
 
   site_config {
-    always_on                = false
-    application_insights_key = var.application_insights_key
+    always_on                         = true
+    application_insights_key          = var.application_insights_key
+    health_check_path                 = "/api/health"
+    health_check_eviction_time_in_min = "10"
     cors {
       allowed_origins = var.cors_allowed_origins
     }
     application_stack {
-      python_version = "3.13"
+      python_version = "3.10"
     }
   }
 
@@ -118,7 +120,10 @@ resource "azurerm_linux_function_app" "health_assistant" {
 
   lifecycle {
     ignore_changes = [
-      app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+      app_settings["BUILD_FLAGS"],
+      app_settings["ENABLE_ORYX_BUILD"],
+      app_settings["SCM_DO_BUILD_DURING_DEPLOYMENT"],
+      app_settings["XDG_CACHE_HOME"],
       app_settings["APPINSIGHTS_INSTRUMENTATIONKEY"]
     ]
   }
