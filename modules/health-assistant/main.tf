@@ -110,7 +110,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
       allowed_origins = var.cors_allowed_origins
     }
     application_stack {
-      python_version = "3.10"
+      python_version = var.python_version
     }
   }
 
