@@ -63,7 +63,7 @@ resource "azurerm_service_plan" "health_assistant" {
   location            = var.location
   resource_group_name = var.resource_group_name
   os_type             = "Linux"
-  sku_name            = "B1"  # Basic tier - simple scaling, Linux support
+  sku_name            = "B1" # Basic tier - simple scaling, Linux support
   tags                = var.default_tags
 }
 
@@ -103,7 +103,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "ICLOUD_USERNAME"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_username.versionless_id})"
     "ICLOUD_APP_PASSWORD"                        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_app_password.versionless_id})"
     "ICLOUD_FOLDER_PATH"                         = var.icloud_folder_path
-    "ICLOUD_SYNC_LOOKBACK_DAYS"                 = var.icloud_sync_lookback_days
+    "ICLOUD_SYNC_LOOKBACK_DAYS"                  = var.icloud_sync_lookback_days
   }
 
   site_config {
