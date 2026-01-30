@@ -97,6 +97,11 @@ module "health_assistant" {
   withings_client_id          = var.withings_client_id != null ? var.withings_client_id : ""
   withings_client_secret      = var.withings_client_secret != null ? var.withings_client_secret : ""
   withings_refresh_token      = var.withings_refresh_token != null ? var.withings_refresh_token : ""
+  icloud_webdav_url           = var.icloud_webdav_url != null ? var.icloud_webdav_url : ""
+  icloud_username             = var.icloud_username != null ? var.icloud_username : ""
+  icloud_app_password         = var.icloud_app_password != null ? var.icloud_app_password : ""
+  icloud_folder_path          = var.icloud_folder_path
+  icloud_sync_lookback_days   = var.icloud_sync_lookback_days
   default_max_hr              = var.default_max_hr
   default_ftp                 = var.default_ftp
   hr_zone_basis               = var.hr_zone_basis

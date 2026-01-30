@@ -99,6 +99,11 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "HR_RESTING_BPM"                             = var.hr_resting_bpm
     "ONEDRIVE_FOLDER_PATH"                       = var.onedrive_folder_path
     "KEYVAULT_URL"                               = var.key_vault_url
+    "ICLOUD_WEBDAV_URL"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_webdav_url.versionless_id})"
+    "ICLOUD_USERNAME"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_username.versionless_id})"
+    "ICLOUD_APP_PASSWORD"                        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_app_password.versionless_id})"
+    "ICLOUD_FOLDER_PATH"                         = var.icloud_folder_path
+    "ICLOUD_SYNC_LOOKBACK_DAYS"                 = var.icloud_sync_lookback_days
   }
 
   site_config {
@@ -185,5 +190,24 @@ resource "azurerm_key_vault_secret" "withings_client_secret" {
 resource "azurerm_key_vault_secret" "withings_refresh_token" {
   name         = "withings-refresh-token"
   value        = var.withings_refresh_token
+  key_vault_id = var.key_vault_id
+}
+
+# Key Vault secrets for iCloud WebDAV credentials
+resource "azurerm_key_vault_secret" "icloud_webdav_url" {
+  name         = "icloud-webdav-url"
+  value        = var.icloud_webdav_url
+  key_vault_id = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "icloud_username" {
+  name         = "icloud-username"
+  value        = var.icloud_username
+  key_vault_id = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "icloud_app_password" {
+  name         = "icloud-app-password"
+  value        = var.icloud_app_password
   key_vault_id = var.key_vault_id
 }

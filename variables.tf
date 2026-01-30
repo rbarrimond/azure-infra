@@ -80,6 +80,39 @@ variable "withings_refresh_token" {
   default     = null
 }
 
+variable "icloud_webdav_url" {
+  description = "iCloud WebDAV base URL for HealthFit sync"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "icloud_username" {
+  description = "iCloud username (Apple ID) for HealthFit sync"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "icloud_app_password" {
+  description = "iCloud app-specific password for HealthFit sync"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "icloud_folder_path" {
+  description = "iCloud Drive folder path for HealthFit files"
+  type        = string
+  default     = "/HealthFit"
+}
+
+variable "icloud_sync_lookback_days" {
+  description = "Default lookback window (days) for iCloud sync"
+  type        = string
+  default     = "30"
+}
+
 variable "default_max_hr" {
   description = "Default maximum heart rate (bpm) passed to health assistant module."
   type        = string
