@@ -1,3 +1,10 @@
+
+variable "onedrive_folder_path" {
+  description = "OneDrive folder path for health data."
+  type        = string
+  default     = "/Apps/HealthFit"
+}
+
 variable "subscription_id" {
   description = "The subscription ID for the Azure account"
   type        = string
@@ -80,38 +87,10 @@ variable "withings_refresh_token" {
   default     = null
 }
 
-variable "icloud_webdav_url" {
-  description = "iCloud WebDAV base URL for HealthFit sync"
-  type        = string
-  sensitive   = true
-  default     = null
-}
 
-variable "icloud_username" {
-  description = "iCloud username (Apple ID) for HealthFit sync"
-  type        = string
-  sensitive   = true
-  default     = null
-}
 
-variable "icloud_app_password" {
-  description = "iCloud app-specific password for HealthFit sync"
-  type        = string
-  sensitive   = true
-  default     = null
-}
 
-variable "icloud_folder_path" {
-  description = "iCloud Drive folder path for HealthFit files"
-  type        = string
-  default     = "/HealthFit"
-}
 
-variable "icloud_sync_lookback_days" {
-  description = "Default lookback window (days) for iCloud sync"
-  type        = string
-  default     = "30"
-}
 
 variable "default_max_hr" {
   description = "Default maximum heart rate (bpm) passed to health assistant module."
@@ -153,4 +132,34 @@ variable "health_assistant_plugin_legal_url" {
   description = "Legal info URL for Health Assistant ChatGPT Actions plugin."
   type        = string
   default     = "https://github.com/rbarrimond/health_assistant/blob/main/README.md"
+}
+
+variable "onedrive_client_id" {
+  description = "OneDrive (personal) OAuth client ID."
+  type        = string
+  default     = ""
+}
+
+variable "onedrive_client_secret" {
+  description = "OneDrive (personal) OAuth client secret."
+  type        = string
+  default     = ""
+}
+
+variable "onedrive_redirect_uri" {
+  description = "OneDrive OAuth redirect URI."
+  type        = string
+  default     = ""
+}
+
+variable "onedrive_scopes" {
+  description = "OneDrive OAuth scopes."
+  type        = string
+  default     = "Files.ReadWrite offline_access"
+}
+
+variable "onedrive_sync_lookback_days" {
+  description = "Default lookback window (days) for OneDrive sync."
+  type        = number
+  default     = 30
 }

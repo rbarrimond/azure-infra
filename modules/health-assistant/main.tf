@@ -29,6 +29,11 @@ resource "azurerm_storage_table" "physiometrics" {
   storage_account_name = azurerm_storage_account.health.name
 }
 
+resource "azurerm_storage_table" "onedrive_tokens" {
+  name                 = var.table_names.onedrive_tokens
+  storage_account_name = azurerm_storage_account.health.name
+}
+
 # Blob container for backups (read-only)
 resource "azurerm_storage_container" "backups" {
   name                  = var.backup_container_name
@@ -98,16 +103,16 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "HR_ZONE_REFERENCE_BPM"                      = var.hr_zone_reference_bpm
     "HR_RESTING_BPM"                             = var.hr_resting_bpm
     "ONEDRIVE_FOLDER_PATH"                       = var.onedrive_folder_path
+    "ONEDRIVE_CLIENT_ID"                         = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.onedrive_client_id.versionless_id})"
+    "ONEDRIVE_CLIENT_SECRET"                     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.onedrive_client_secret.versionless_id})"
+    "ONEDRIVE_REDIRECT_URI"                      = var.onedrive_redirect_uri
+    "ONEDRIVE_SCOPES"                            = var.onedrive_scopes
+    "ONEDRIVE_SYNC_LOOKBACK_DAYS"                = var.onedrive_sync_lookback_days
     "KEYVAULT_URL"                               = var.key_vault_url
     "WITHINGS_CLIENT_ID"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_id.versionless_id})"
     "WITHINGS_CLIENT_SECRET"                      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_secret.versionless_id})"
     "WITHINGS_REDIRECT_URI"                       = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/callback"
     "WITHINGS_WEBHOOK_URL"                        = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/webhook"
-    "ICLOUD_WEBDAV_URL"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_webdav_url.versionless_id})"
-    "ICLOUD_USERNAME"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_username.versionless_id})"
-    "ICLOUD_APP_PASSWORD"                        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_app_password.versionless_id})"
-    "ICLOUD_FOLDER_PATH"                         = var.icloud_folder_path
-    "ICLOUD_SYNC_LOOKBACK_DAYS"                  = var.icloud_sync_lookback_days
   }
 
   site_config {
@@ -194,21 +199,14 @@ resource "azurerm_key_vault_secret" "withings_refresh_token" {
   key_vault_id = var.key_vault_id
 }
 
-# Key Vault secrets for iCloud WebDAV credentials
-resource "azurerm_key_vault_secret" "icloud_webdav_url" {
-  name         = "icloud-webdav-url"
-  value        = var.icloud_webdav_url
+resource "azurerm_key_vault_secret" "onedrive_client_id" {
+  name         = "onedrive-client-id"
+  value        = var.onedrive_client_id
   key_vault_id = var.key_vault_id
 }
 
-resource "azurerm_key_vault_secret" "icloud_username" {
-  name         = "icloud-username"
-  value        = var.icloud_username
-  key_vault_id = var.key_vault_id
-}
-
-resource "azurerm_key_vault_secret" "icloud_app_password" {
-  name         = "icloud-app-password"
-  value        = var.icloud_app_password
+resource "azurerm_key_vault_secret" "onedrive_client_secret" {
+  name         = "onedrive-client-secret"
+  value        = var.onedrive_client_secret
   key_vault_id = var.key_vault_id
 }

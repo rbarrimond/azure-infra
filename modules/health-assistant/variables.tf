@@ -77,38 +77,41 @@ variable "withings_refresh_token" {
   default     = ""
 }
 
-variable "icloud_webdav_url" {
-  description = "iCloud WebDAV base URL for HealthFit sync."
+variable "onedrive_client_id" {
+  description = "OneDrive (personal) OAuth client ID."
   type        = string
   sensitive   = true
   default     = ""
 }
 
-variable "icloud_username" {
-  description = "iCloud username (Apple ID) for HealthFit sync."
+variable "onedrive_client_secret" {
+  description = "OneDrive (personal) OAuth client secret."
   type        = string
   sensitive   = true
   default     = ""
 }
 
-variable "icloud_app_password" {
-  description = "iCloud app-specific password for HealthFit sync."
+variable "onedrive_redirect_uri" {
+  description = "OneDrive OAuth redirect URI."
   type        = string
-  sensitive   = true
   default     = ""
 }
 
-variable "icloud_folder_path" {
-  description = "iCloud Drive folder path for HealthFit files."
+variable "onedrive_scopes" {
+  description = "OneDrive OAuth scopes."
   type        = string
-  default     = "/HealthFit"
+  default     = "Files.ReadWrite offline_access"
 }
 
-variable "icloud_sync_lookback_days" {
-  description = "Default lookback window (days) for iCloud sync."
-  type        = string
-  default     = "30"
+variable "onedrive_sync_lookback_days" {
+  description = "Default lookback window (days) for OneDrive sync."
+  type        = number
+  default     = 30
 }
+
+
+
+
 
 variable "storage_account_tier" {
   description = "Performance tier for storage account."
@@ -129,12 +132,14 @@ variable "table_names" {
     weekly_rollups  = string
     ingestion_state = string
     physiometrics   = string
+    onedrive_tokens = string
   })
   default = {
     workouts        = "Workouts"
     weekly_rollups  = "WeeklyRollups"
     ingestion_state = "IngestionState"
     physiometrics   = "Physiometrics"
+    onedrive_tokens = "OneDriveTokens"
   }
 }
 

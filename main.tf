@@ -97,15 +97,16 @@ module "health_assistant" {
   withings_client_id          = var.withings_client_id != null ? var.withings_client_id : ""
   withings_client_secret      = var.withings_client_secret != null ? var.withings_client_secret : ""
   withings_refresh_token      = var.withings_refresh_token != null ? var.withings_refresh_token : ""
-  icloud_webdav_url           = var.icloud_webdav_url != null ? var.icloud_webdav_url : ""
-  icloud_username             = var.icloud_username != null ? var.icloud_username : ""
-  icloud_app_password         = var.icloud_app_password != null ? var.icloud_app_password : ""
-  icloud_folder_path          = var.icloud_folder_path
-  icloud_sync_lookback_days   = var.icloud_sync_lookback_days
   default_max_hr              = var.default_max_hr
   default_ftp                 = var.default_ftp
   hr_zone_basis               = var.hr_zone_basis
   hr_zone_reference_bpm       = var.hr_zone_reference_bpm
+  onedrive_client_id          = var.onedrive_client_id
+  onedrive_client_secret      = var.onedrive_client_secret
+  onedrive_redirect_uri       = var.onedrive_redirect_uri
+  onedrive_scopes             = var.onedrive_scopes
+  onedrive_sync_lookback_days = var.onedrive_sync_lookback_days
+  onedrive_folder_path        = var.onedrive_folder_path
   plugin_logo_url             = var.health_assistant_plugin_logo_url
   plugin_contact_email        = var.health_assistant_plugin_contact_email
   plugin_legal_url            = var.health_assistant_plugin_legal_url
