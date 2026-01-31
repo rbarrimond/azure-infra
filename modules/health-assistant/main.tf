@@ -99,6 +99,10 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "HR_RESTING_BPM"                             = var.hr_resting_bpm
     "ONEDRIVE_FOLDER_PATH"                       = var.onedrive_folder_path
     "KEYVAULT_URL"                               = var.key_vault_url
+    "WITHINGS_CLIENT_ID"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_id.versionless_id})"
+    "WITHINGS_CLIENT_SECRET"                      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_secret.versionless_id})"
+    "WITHINGS_REDIRECT_URI"                       = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/callback"
+    "WITHINGS_WEBHOOK_URL"                        = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/webhook"
     "ICLOUD_WEBDAV_URL"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_webdav_url.versionless_id})"
     "ICLOUD_USERNAME"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_username.versionless_id})"
     "ICLOUD_APP_PASSWORD"                        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.icloud_app_password.versionless_id})"

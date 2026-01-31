@@ -1,1 +1,4 @@
 # dev.tfvars placeholder
+withings_client_id     = "REPLACE_WITHINGS_CLIENT_ID"
+withings_client_secret = "REPLACE_WITHINGS_CLIENT_SECRET"
+withings_refresh_token = ""
