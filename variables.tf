@@ -152,6 +152,18 @@ variable "onedrive_redirect_uri" {
   default     = ""
 }
 
+variable "create_onedrive_app_registration" {
+  description = "Whether to create the OneDrive app registration in Azure AD."
+  type        = bool
+  default     = false
+}
+
+variable "onedrive_app_display_name" {
+  description = "Display name for the OneDrive Azure AD app registration."
+  type        = string
+  default     = ""
+}
+
 variable "onedrive_scopes" {
   description = "OneDrive OAuth scopes."
   type        = string

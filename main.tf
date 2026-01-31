@@ -6,6 +6,10 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
 }
 
+provider "azuread" {
+  tenant_id = var.tenant_id
+}
+
 terraform {
   required_providers {
     azurerm = {
@@ -25,6 +29,33 @@ resource "random_string" "module_suffix" {
   length  = 4
   upper   = false
   special = false
+}
+
+locals {
+  health_assistant_suffix            = "healthassistant-${var.environment}-${random_string.module_suffix.result}"
+  health_assistant_function_app_name = "func-${local.health_assistant_suffix}"
+  onedrive_redirect_uri_effective = var.onedrive_redirect_uri != "" ? var.onedrive_redirect_uri : "https://${local.health_assistant_function_app_name}.azurewebsites.net/api/onedrive/callback"
+  onedrive_app_display_name_effective = var.onedrive_app_display_name != "" ? var.onedrive_app_display_name : "health-assistant-onedrive-${var.environment}"
+}
+
+resource "azuread_application" "onedrive" {
+  count            = var.create_onedrive_app_registration ? 1 : 0
+  display_name     = local.onedrive_app_display_name_effective
+  sign_in_audience = "AzureADandPersonalMicrosoftAccount"
+
+  web {
+    redirect_uris = [local.onedrive_redirect_uri_effective]
+  }
+}
+
+resource "azuread_application_password" "onedrive" {
+  count          = var.create_onedrive_app_registration ? 1 : 0
+  application_id = azuread_application.onedrive[0].id
+}
+
+locals {
+  onedrive_client_id_effective = var.create_onedrive_app_registration ? azuread_application.onedrive[0].client_id : var.onedrive_client_id
+  onedrive_client_secret_effective = var.create_onedrive_app_registration ? azuread_application_password.onedrive[0].value : var.onedrive_client_secret
 }
 
 module "core" {
@@ -84,7 +115,7 @@ module "the_rob_vault" {
 
 module "health_assistant" {
   source                      = "./modules/health-assistant"
-  suffix                      = "healthassistant-${var.environment}-${random_string.module_suffix.result}"
+  suffix                      = local.health_assistant_suffix
   location                    = var.region
   resource_group_name         = module.core.resource_group_name
   zone_name                   = module.core.dns_zone_name
@@ -101,9 +132,9 @@ module "health_assistant" {
   default_ftp                 = var.default_ftp
   hr_zone_basis               = var.hr_zone_basis
   hr_zone_reference_bpm       = var.hr_zone_reference_bpm
-  onedrive_client_id          = var.onedrive_client_id
-  onedrive_client_secret      = var.onedrive_client_secret
-  onedrive_redirect_uri       = var.onedrive_redirect_uri
+  onedrive_client_id          = local.onedrive_client_id_effective
+  onedrive_client_secret      = local.onedrive_client_secret_effective
+  onedrive_redirect_uri       = local.onedrive_redirect_uri_effective
   onedrive_scopes             = var.onedrive_scopes
   onedrive_sync_lookback_days = var.onedrive_sync_lookback_days
   onedrive_folder_path        = var.onedrive_folder_path

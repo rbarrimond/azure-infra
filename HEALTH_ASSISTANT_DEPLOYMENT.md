@@ -66,6 +66,8 @@ curl https://health.azure.barrimond.net/api/health
 3. Store `ONEDRIVE_CLIENT_ID` and `ONEDRIVE_CLIENT_SECRET` in app settings
 4. Authorize via: `https://health.azure.barrimond.net/api/onedrive/authorize?athlete_id=rob`
 
+Note: Delegated permissions are granted by the user during the browser consent step; no pre-grant is required in Terraform for this flow.
+
 ### 4. Configure Withings Integration (Optional)
 
 If using Withings for physiometrics:
