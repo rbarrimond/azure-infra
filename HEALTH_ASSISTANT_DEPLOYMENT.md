@@ -7,12 +7,12 @@
 Your health assistant now has a complete Terraform infrastructure module that provisions:
 
 - **Azure Storage Account** (dedicated for health data - separate from core infra)
-  - 4 Table Storage tables: `Workouts`, `WeeklyRollups`, `IngestionState`, `Physiometrics`
+- 5 Table Storage tables: `Workouts`, `WeeklyRollups`, `IngestionState`, `Physiometrics`, `OneDriveTokens`
   - Blob container for read-only backups with automatic lifecycle management
     - Moves to cool tier after 30 days
     - Deletes after 90 days
 - **Azure Functions** (Python 3.13, consumption plan)
-  - HTTP endpoint for ingesting FIT files from Power Automate
+  - HTTP endpoint and timer for OneDrive Personal sync (Microsoft Graph)
   - Daily timer trigger (2 AM UTC) for automated backups
   - Managed Identity for secure Key Vault access (no connection strings in config)
   - Application Insights integration for monitoring
@@ -55,20 +55,16 @@ pip install -r requirements.txt
 func azure functionapp publish func-healthassistant-prod-xxxx --build remote
 
 # Verify deployment
-curl https://health.azure.barrimond.net/health
+curl https://health.azure.barrimond.net/api/health
 # Expected: {"status": "healthy"}
 ```
 
-### 3. Configure Power Automate
+### 3. Authorize OneDrive Personal
 
-Update your Power Automate flow to point to the new endpoint:
-
-1. Go to [Power Automate](https://flow.microsoft.com)
-2. Open your OneDrive monitoring flow
-3. Update the HTTP action to call: `https://health.azure.barrimond.net/api/ingest`
-4. Ensure the request body still includes:
-   - Base64-encoded FIT file
-   - Metadata (timestamp, filename, etc.)
+1. Create a Microsoft app registration (consumer accounts enabled)
+2. Set redirect URI to: `https://health.azure.barrimond.net/api/onedrive/callback`
+3. Store `ONEDRIVE_CLIENT_ID` and `ONEDRIVE_CLIENT_SECRET` in app settings
+4. Authorize via: `https://health.azure.barrimond.net/api/onedrive/authorize?athlete_id=rob`
 
 ### 4. Configure Withings Integration (Optional)
 
@@ -93,8 +89,7 @@ curl https://health.azure.barrimond.net/api/withings/authorize
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Power Automate Flow                          │
-│              (monitors OneDrive, triggers webhook)              │
+│          Microsoft Graph OAuth (delegated refresh token)         │
 └──────────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -102,10 +97,11 @@ curl https://health.azure.barrimond.net/api/withings/authorize
 │          Azure Functions: health.azure.barrimond.net            │
 │  ┌──────────────────────────────────────────────────────────┐  │
 │  │ HTTP Triggers:                                           │  │
-│  │ • POST /api/ingest       (FIT file upload)              │  │
+│  │ • POST /api/process_fit  (FIT file upload)              │  │
+│  │ • POST /api/onedrive/sync (OneDrive sync)               │  │
 │  │ • GET /api/workouts      (query workouts)               │  │
 │  │ • GET /api/planning/context  (planning data)            │  │
-│  │ • POST /api/withings/callback (OAuth callback)          │  │
+│  │ • GET /api/withings/callback (OAuth callback)           │  │
 │  │                                                          │  │
 │  │ Timer Triggers:                                          │  │
 │  │ • Backup Export (daily 2 AM UTC)                        │  │
@@ -203,7 +199,7 @@ curl -X POST https://health.azure.barrimond.net/api/backup/export \
    - May need Table Storage partitioning strategy
 
 2. **Real-time analytics**:
-   - Add Event Grid trigger (optional replacement for Power Automate)
+   - Add Event Grid trigger (optional replacement for timer polling)
    - Migrate Table Storage → Cosmos DB for hierarchical partition keys
 
 3. **High-frequency queries**:
@@ -243,17 +239,18 @@ az functionapp log tail -n 100 \
 - Verify `backups` container exists in storage account
 - Ensure Function App Managed Identity has Blob Contributor role
 
-### Power Automate Can't Reach Function
+### OneDrive OAuth Issues
 
-- Verify DNS CNAME is resolving: `nslookup health.azure.barrimond.net`
-- Check Function App public endpoint is enabled (no private endpoints)
+- Verify redirect URI matches `https://health.azure.barrimond.net/api/onedrive/callback`
+- Ensure app registration supports personal Microsoft accounts
+- Confirm client ID/secret are set in Function App settings
 
 ## Next Steps
 
 1. **Deploy infrastructure**: `terraform apply`
 2. **Deploy function code**: `func azure functionapp publish`
-3. **Update Power Automate**: Point to new endpoint
-4. **Test ingestion**: Upload a test FIT file
+3. **Authorize OneDrive**: Complete OAuth flow
+4. **Test ingestion**: Run `POST /api/onedrive/sync`
 5. **Monitor first backup**: Check logs at 2 AM UTC tomorrow
 6. **Add Power BI dashboards**: Query table storage for analytics
 
