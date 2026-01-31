@@ -115,8 +115,11 @@ resource "azurerm_linux_function_app" "health_assistant" {
     application_insights_key          = var.application_insights_key
     health_check_path                 = "/api/health"
     health_check_eviction_time_in_min = "10"
-    cors {
-      allowed_origins = var.cors_allowed_origins
+    dynamic "cors" {
+      for_each = length(var.cors_allowed_origins) > 0 ? [1] : []
+      content {
+        allowed_origins = var.cors_allowed_origins
+      }
     }
     application_stack {
       python_version = var.python_version
