@@ -247,7 +247,6 @@ az functionapp log tail -n 100 \
 
 - Verify DNS CNAME is resolving: `nslookup health.azure.barrimond.net`
 - Check Function App public endpoint is enabled (no private endpoints)
-- Verify CORS settings if calling from browser
 
 ## Next Steps
 

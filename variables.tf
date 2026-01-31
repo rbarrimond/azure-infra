@@ -137,12 +137,6 @@ variable "hr_zone_reference_bpm" {
   default     = "0"
 }
 
-variable "health_assistant_cors_allowed_origins" {
-  description = "Allowed origins for the Health Assistant Function App (CORS)."
-  type        = list(string)
-  default     = ["https://chat.openai.com"]
-}
-
 variable "health_assistant_plugin_logo_url" {
   description = "Logo URL for Health Assistant ChatGPT Actions plugin."
   type        = string

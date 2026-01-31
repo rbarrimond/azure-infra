@@ -106,7 +106,6 @@ module "health_assistant" {
   default_ftp                 = var.default_ftp
   hr_zone_basis               = var.hr_zone_basis
   hr_zone_reference_bpm       = var.hr_zone_reference_bpm
-  cors_allowed_origins        = var.health_assistant_cors_allowed_origins
   plugin_logo_url             = var.health_assistant_plugin_logo_url
   plugin_contact_email        = var.health_assistant_plugin_contact_email
   plugin_legal_url            = var.health_assistant_plugin_legal_url

@@ -234,12 +234,6 @@ variable "dns_subdomain" {
   default     = "health"
 }
 
-variable "cors_allowed_origins" {
-  description = "Allowed origins for Function App CORS."
-  type        = list(string)
-  default     = ["https://chat.openai.com"]
-}
-
 variable "plugin_logo_url" {
   description = "Logo URL for ChatGPT Actions plugin manifest."
   type        = string
