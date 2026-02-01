@@ -43,6 +43,10 @@ resource "azuread_application" "onedrive" {
   display_name     = local.onedrive_app_display_name_effective
   sign_in_audience = "AzureADandPersonalMicrosoftAccount"
 
+  api {
+    requested_access_token_version = 2
+  }
+
   web {
     redirect_uris = [local.onedrive_redirect_uri_effective]
   }
