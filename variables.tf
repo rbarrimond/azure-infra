@@ -152,6 +152,12 @@ variable "onedrive_redirect_uri" {
   default     = ""
 }
 
+variable "onedrive_redirect_uris" {
+  description = "Optional list of OneDrive OAuth redirect URIs for the app registration."
+  type        = list(string)
+  default     = []
+}
+
 variable "create_onedrive_app_registration" {
   description = "Whether to create the OneDrive app registration in Azure AD."
   type        = bool

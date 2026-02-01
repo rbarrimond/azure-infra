@@ -2,3 +2,8 @@
 withings_client_id     = "REPLACE_WITHINGS_CLIENT_ID"
 withings_client_secret = "REPLACE_WITHINGS_CLIENT_SECRET"
 withings_refresh_token = ""
+onedrive_redirect_uri  = "https://<FUNCTION_APP>.azurewebsites.net/api/onedrive/callback"
+onedrive_redirect_uris = [
+  "https://<FUNCTION_APP>.azurewebsites.net/api/onedrive/callback",
+  "http://localhost:7071/api/onedrive/callback",
+]

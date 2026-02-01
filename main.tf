@@ -35,6 +35,7 @@ locals {
   health_assistant_suffix            = "healthassistant-${var.environment}-${random_string.module_suffix.result}"
   health_assistant_function_app_name = "func-${local.health_assistant_suffix}"
   onedrive_redirect_uri_effective = var.onedrive_redirect_uri != "" ? var.onedrive_redirect_uri : "https://${local.health_assistant_function_app_name}.azurewebsites.net/api/onedrive/callback"
+  onedrive_redirect_uris_effective = length(var.onedrive_redirect_uris) > 0 ? var.onedrive_redirect_uris : [local.onedrive_redirect_uri_effective]
   onedrive_app_display_name_effective = var.onedrive_app_display_name != "" ? var.onedrive_app_display_name : "health-assistant-onedrive-${var.environment}"
 }
 
@@ -48,7 +49,7 @@ resource "azuread_application" "onedrive" {
   }
 
   web {
-    redirect_uris = [local.onedrive_redirect_uri_effective]
+    redirect_uris = local.onedrive_redirect_uris_effective
   }
 }
 
