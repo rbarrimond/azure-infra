@@ -7,7 +7,7 @@
 Your health assistant now has a complete Terraform infrastructure module that provisions:
 
 - **Azure Storage Account** (dedicated for health data - separate from core infra)
-- 5 Table Storage tables: `Workouts`, `WeeklyRollups`, `IngestionState`, `Physiometrics`, `OneDriveTokens`
+- 7 Table Storage tables: `Workouts`, `WeeklyRollups`, `IngestionState`, `Physiometrics`, `OneDriveTokens`, `AgentPreferences`, `AgentObservations`
   - Blob container for read-only backups with automatic lifecycle management
     - Moves to cool tier after 30 days
     - Deletes after 90 days
