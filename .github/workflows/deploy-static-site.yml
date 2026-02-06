@@ -2,8 +2,8 @@ name: Deploy Static Website to Azure Storage
 
 on:
   push:
-    tags:
-      - 'static-*'
+    branches:
+      - static
   workflow_dispatch:
     inputs:
       environment:
