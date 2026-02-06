@@ -130,6 +130,9 @@ azure-infra/
 │   ├── the_rob_vault/
 │   └── health-assistant/
 └── static/
+  ├── assets/
+  │   └── site.css
+  ├── README.md
     ├── index.html
     └── 404.html
 ```
@@ -191,6 +194,7 @@ Workflow: `.github/workflows/deploy-static-site.yml`
 
 - Uses `azure/login@v2` with OIDC
 - Uploads `static/` to the `$web` container in the core storage account
+- Triggers on pushes to the `static` branch
 - Requires GitHub secrets:
   - `AZURE_CLIENT_ID`
   - `AZURE_TENANT_ID`
