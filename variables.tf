@@ -70,7 +70,7 @@ variable "github_actions_repo" {
 variable "github_actions_branch" {
   description = "GitHub branch used by the OIDC federated credential."
   type        = string
-  default     = "main"
+  default     = "static"
 }
 
 variable "withings_client_id" {
