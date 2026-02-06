@@ -1,6 +1,6 @@
 # azure-infra
 
-Infrastructure as Code repository for managing personal Azure cloud infrastructure. This codebase provisions and maintains cloud resources for multiple interconnected projects using Terraform and Azure Pipelines.
+Infrastructure-as-code for personal Azure resources. This repo provisions shared core services plus project-specific stacks using Terraform and supports both GitHub Actions OIDC and Azure Pipelines for static site deployments.
 
 ## Table of Contents
 
@@ -10,144 +10,128 @@ Infrastructure as Code repository for managing personal Azure cloud infrastructu
 - [Project Structure](#project-structure)
 - [Setup & Deployment](#setup--deployment)
 - [Environment Configuration](#environment-configuration)
-- [CI/CD Pipeline](#cicd-pipeline)
+- [CI/CD](#cicd)
+- [Terraform State](#terraform-state)
 - [Outputs](#outputs)
+- [Troubleshooting](#troubleshooting)
+- [Related Docs](#related-docs)
 
 ## Overview
 
-This repository manages Azure infrastructure for the following projects:
+Projects managed in this repo:
 
-- **Baldwin**: Static website deployment powered by Azure Static Web Apps
-- **The Rob Vault**: Destiny 2 vault backend service with Function App and SQL Database integration
-- **Core Infrastructure**: Shared services including networking, storage, security, and monitoring
+- **Baldwin**: Static website + supporting Function App
+- **The Rob Vault**: Destiny 2 vault backend (Function App + SQL DB + Azure OpenAI deployment)
+- **Health Assistant**: Health data ingestion and analytics (Function App + Storage tables + OneDrive + Withings integrations)
+- **Core Infrastructure**: Shared services (resource group, storage, DNS, Key Vault, monitoring, OpenAI account)
 
-### Key Azure Services
+Key Azure services used:
 
-- **Azure Static Web Apps**: Hosting for Baldwin static site
-- **Azure Function Apps**: Backend APIs for The Rob Vault (Python runtime)
-- **Azure SQL Database**: Serverless SQL database for vault data
-- **Azure Storage Account**: Blob storage with static website hosting
-- **Azure Key Vault**: Secrets management for API keys and credentials
-- **Azure App Service Plan**: Hosting compute for function apps
-- **Azure DNS Zone**: Custom domain management (azure.barrimond.net)
-- **Azure Application Insights**: Monitoring and diagnostics
-- **Azure Cognitive Services**: OpenAI integration for GPT-4 deployment
+- Azure Resource Group, Storage Account (static website hosting)
+- Azure DNS Zone (`azure.barrimond.net`)
+- Azure Key Vault
+- Azure Log Analytics + Application Insights
+- Azure App Service Plans (B2 in core, B1 dedicated for Health Assistant)
+- Azure Function Apps (Linux)
+- Azure SQL Server + serverless database (The Rob Vault)
+- Azure OpenAI (Cognitive Services) account + deployment
+- Microsoft Entra ID app registrations for GitHub Actions OIDC and optional OneDrive OAuth
 
 ## Architecture
 
-### Module Structure
+### Modules
 
 ```plaintext
 modules/
-├── core/                 # Shared infrastructure foundation
-│   ├── main.tf          # Resource Group, Storage, DNS, Key Vault, SQL Server
-│   ├── autoscale.tf     # Auto-scaling configuration
-│   ├── outputs.tf       # Core module outputs
-│   └── variables.tf     # Input variables
-├── baldwin/             # Static website deployment
-│   ├── main.tf          # Static Web App, Function App, DNS records
-│   └── variables.tf     # Configuration variables
-└── the_rob_vault/       # Vault backend service
-    ├── main.tf          # SQL Database, Function App, secrets management
-    ├── outputs.tf       # Service outputs
-    └── variables.tf     # Configuration variables
+├── core/               # Shared foundation (RG, Storage, DNS, Key Vault, SQL Server, AI)
+├── baldwin/            # Static Web App + Function App + DNS
+├── the_rob_vault/      # SQL DB + Function App + DNS + AI deployment
+└── health-assistant/   # Storage tables + Function App + DNS + integrations
 ```
 
 ### Core Module
 
-Provisions the foundational infrastructure:
+Provisioned resources:
 
-- Resource Group for resource organization
-- Storage Account with static website hosting ($web container)
-- DNS Zone for custom domain management (azure.barrimond.net)
-- Key Vault for secrets and certificates
-- SQL Server (serverless architecture ready)
-- App Service Plan (B2 SKU) for hosting function apps
-- Log Analytics Workspace and Application Insights for monitoring
-- RBAC assignments for GitHub Actions service principal
+- Resource group
+- Storage account configured for static website hosting (`$web` container)
+- DNS zone (`azure.barrimond.net`) + `static` CNAME for the storage website endpoint
+- Key Vault with admin access policy and SQL admin secrets
+- Linux App Service plan (B2)
+- Log Analytics workspace + Application Insights
+- Azure SQL Server (no DB in core)
+- Azure OpenAI (Cognitive Services) account
 
 ### Baldwin Module
 
-Deploys a static website with the following components:
+Provisioned resources:
 
-- Azure Static Web Apps for fast, secure static content delivery
-- DNS CNAME record pointing to the Static Web App
-- Custom domain binding
-- Storage Account for additional blob storage needs
-- Linux Function App with Python runtime for backend APIs
-- Application Insights integration
+- Azure Static Web App (Standard)
+- CNAME + custom domain binding (`baldwin.azure.barrimond.net`)
+- Storage account for app assets
+- Linux Function App (Python 3.11)
+- Static Web App -> Function App registration
 
 ### The Rob Vault Module
 
-Provisions a serverless backend service:
+Provisioned resources:
 
-- Serverless SQL Database (auto-pause after 60 minutes of inactivity)
-- Managed database with Key Vault integration
-- Linux Function App (Python) for API endpoints
-- Bungie API integration with credentials stored in Key Vault
-- Custom DNS records for FQDN routing
-- Diagnostic logging and monitoring
-- Cognitive Services deployment for LLM-powered features (GPT-4.1-nano)
+- Serverless Azure SQL Database (GP_S_Gen5_1, auto-pause 60 mins)
+- Storage account
+- Key Vault secrets for Bungie credentials and storage connection string
+- Linux Function App (Python 3.10) with Key Vault secret references
+- CNAME + custom domain + managed TLS (`therobvault.azure.barrimond.net`)
+- Diagnostic settings to Log Analytics
+- Azure OpenAI deployment (default: `gpt-4.1-nano`, version `2025-04-14`)
+
+### Health Assistant Module
+
+Provisioned resources:
+
+- Dedicated storage account for health data
+- Storage tables: `Workouts`, `WeeklyRollups`, `IngestionState`, `Physiometrics`, `OneDriveTokens`
+- Backup blob container with lifecycle policy (cool tier after 30 days, delete after 90)
+- Dedicated Linux App Service plan (B1)
+- Linux Function App (Python 3.13)
+- Key Vault secrets for Withings and OneDrive credentials
+- CNAME + custom domain + managed TLS (`health.azure.barrimond.net`)
 
 ## Prerequisites
 
-### Required Software
-
 - **Terraform** >= 1.3.0
-- **Azure CLI** (authenticated and connected to your subscription)
-- **Azure subscription** with appropriate permissions
+- **Azure CLI** authenticated to your subscription
+- **Azure subscription** with permissions to create resources
 
-### Required Permissions
+Required permissions:
 
-- Contributor or Owner role on the subscription
-- Ability to create and manage Azure AD service principals
-- Access to Azure DNS zone administration (azure.barrimond.net)
-
-### Infrastructure Requirements
-
-- **Azure Storage Account** for Terraform state (remote backend)
-  - Container: `terraform`
-  - State file key: `core/terraform.tfstate`
-- **GitHub Actions Service Principal** configured with:
-  - Client ID: Used for CI/CD deployments
-  - Storage Blob Data Contributor role
-
-### Secrets & Credentials
-
-The following sensitive values are required as variables (defined in tfvars files):
-
-- `subscription_id`: Azure subscription ID
-- `tenant_id`: Azure AD tenant ID
-- `github_token`: GitHub personal access token for repository cloning
-- `bungie_client_id`: Bungie API client ID
-- `bungie_client_secret`: Bungie API client secret
-- `bungie_redirect_uri`: OAuth redirect URI for Bungie authentication
-- `bungie_api_key`: Bungie API key
-- `key_vault_admin_object_id`: Azure AD object ID for Key Vault admin
-- `github_actions_sp_client_id`: GitHub Actions service principal client ID
+- Contributor or Owner on the subscription
+- Access to manage the DNS zone `azure.barrimond.net`
+- Ability to create Microsoft Entra ID app registrations
 
 ## Project Structure
 
 ```plaintext
 azure-infra/
-├── main.tf                          # Root module - orchestrates child modules
-├── variables.tf                     # Root input variables
-├── outputs.tf                       # Root outputs (all module outputs)
-├── backend.tf                       # Remote state configuration (Azure Storage)
-├── terraform.tfvars                 # Production variable values
-├── azure-pipelines.yml              # CI/CD pipeline configuration
-├── modules/
-│   ├── core/                        # Core infrastructure module
-│   ├── baldwin/                     # Static website module
-│   └── the_rob_vault/              # Vault backend service module
+├── backend.tf                      # Remote state in Azure Storage
+├── main.tf                         # Root module wiring
+├── variables.tf                    # Root inputs
+├── outputs.tf                      # Root outputs
+├── terraform.tfvars                # Prod defaults (do not commit secrets)
+├── azure-pipelines.yml             # Azure Pipelines static site deploy
+├── .github/workflows/
+│   └── deploy-static-site.yml      # GitHub Actions static site deploy
 ├── environments/
-│   ├── dev.tfvars.sample           # Dev environment template
-│   ├── dev.tfvars                  # Dev environment values (not committed)
-│   ├── prod.tfvars.sample          # Prod environment template
-│   └── prod.tfvars                 # Prod environment values (not committed)
+│   ├── dev.tfvars.sample
+│   ├── prod.tfvars.sample
+│   └── *.tfvars (not committed)
+├── modules/
+│   ├── core/
+│   ├── baldwin/
+│   ├── the_rob_vault/
+│   └── health-assistant/
 └── static/
-    ├── index.html                   # Static website homepage
-    └── 404.html                     # Error page
+    ├── index.html
+    └── 404.html
 ```
 
 ## Setup & Deployment
@@ -159,210 +143,152 @@ cd /path/to/azure-infra
 terraform init
 ```
 
-This initializes Terraform and configures the remote backend (Azure Storage).
+### 2. Configure Variables
 
-### 2. Create Environment Variables File
-
-Copy the sample file and fill in your values:
+Create a tfvars file from the sample and populate values:
 
 ```bash
 cp environments/prod.tfvars.sample environments/prod.tfvars
-# Edit with your actual values
-nano environments/prod.tfvars
 ```
 
-### 3. Plan Deployment
+Required values include:
 
-Review planned changes before applying:
+- `subscription_id`, `tenant_id`, `region`
+- `key_vault_admin_object_id`
+- `github_token` (for Baldwin Static Web App repo access)
+- `bungie_client_id`, `bungie_client_secret`, `bungie_redirect_uri`, `bungie_api_key`
+- Health Assistant defaults and OAuth values (Withings, OneDrive)
+
+Optional values:
+
+- `create_onedrive_app_registration` and `onedrive_redirect_uris` if Terraform should create the OneDrive app registration
+- `github_actions_repo` and `github_actions_branch` to scope OIDC credentials
+
+### 3. Plan
 
 ```bash
-# For production
-terraform plan -var-file="terraform.tfvars"
-
-# For a specific environment
 terraform plan -var-file="environments/prod.tfvars"
 ```
 
-### 4. Apply Configuration
-
-Deploy infrastructure to Azure:
+### 4. Apply
 
 ```bash
-# For production
-terraform apply -var-file="terraform.tfvars"
-
-# For a specific environment
 terraform apply -var-file="environments/prod.tfvars"
-```
-
-### 5. Verify Deployment
-
-After successful deployment, verify outputs:
-
-```bash
-terraform output
 ```
 
 ## Environment Configuration
 
-### Development Environment
+- `environments/dev.tfvars` for dev deployments (smaller SKUs / dev tags)
+- `environments/prod.tfvars` or `terraform.tfvars` for production
 
-Use `environments/dev.tfvars` for development deployments. This typically includes:
+**Do not commit real tfvars files** with secrets. Store secrets in Key Vault or a secure secret manager.
 
-- Smaller Azure SKUs for cost optimization
-- Shorter auto-pause delays for serverless resources
-- Development-tagged resources
+## CI/CD
 
-Example:
+### GitHub Actions (OIDC)
 
-```hcl
-subscription_id             = "your-dev-subscription-id"
-tenant_id                   = "your-tenant-id"
-region                      = "eastus2"
-environment                 = "dev"
-key_vault_admin_object_id   = "your-dev-admin-object-id"
-github_actions_sp_client_id = "your-sp-client-id"
-# ... (other variables)
-```
+Workflow: `.github/workflows/deploy-static-site.yml`
 
-### Production Environment
+- Uses `azure/login@v2` with OIDC
+- Uploads `static/` to the `$web` container in the core storage account
+- Requires GitHub secrets:
+  - `AZURE_CLIENT_ID`
+  - `AZURE_TENANT_ID`
+  - `AZURE_SUBSCRIPTION_ID`
 
-Use `terraform.tfvars` (or `environments/prod.tfvars`) for production deployments. Includes:
+Terraform creates a GitHub Actions app registration and federated credential, and assigns `Storage Blob Data Contributor` to the core storage account. Outputs:
 
-- Standard/Premium SKUs for performance
-- Enhanced monitoring and diagnostics
-- Production-tagged resources
-- Longer auto-pause delays
+- `github_actions_oidc_client_id`
+- `github_actions_oidc_app_name`
 
-**Note**: Never commit actual tfvars files with secrets to version control. Use Azure Key Vault or secure configuration management.
-
-## CI/CD Pipeline
+Reference: `GITHUB_ACTIONS_OIDC.md` for setup details and naming conventions.
 
 ### Azure Pipelines
 
-The `azure-pipelines.yml` workflow:
+Pipeline: `azure-pipelines.yml`
 
-1. **Triggers**: Automatically runs on changes to the `main` branch
-2. **Authentication**: Uses Azure Service Connection (`azure-infra`)
-3. **Static File Upload**: Deploys static website files to the storage account's `$web` container
+- Logs in with an Azure service connection
+- Uploads `static/` to the `$web` container
+- Targets `stcoreprod59o7`
 
-#### Pipeline Steps
+## Terraform State
 
-```yaml
-- Azure CLI Login: Authenticate to Azure subscription
-- Set Variables: Configure storage account name and file directory
-- Upload Files: Push static files to $web container using `az storage blob upload-batch`
-```
+State is stored in Azure Storage (see `backend.tf`):
 
-#### How It Works
+- Resource Group: `base`
+- Storage Account: `sabarrimond01`
+- Container: `terraform`
+- Key: `core/terraform.tfstate`
 
-- Runs on: Ubuntu latest
-- Uploads files from `static/` directory to `$web` container
-- Storage account: `stcoreprod59o7` (production)
-- Access method: Azure CLI with managed identity
-
-### Local Deployment
-
-For local testing without CI/CD:
-
-```bash
-# Build the infrastructure
-terraform apply -var-file="terraform.tfvars"
-
-# Manually upload static files
-az storage blob upload-batch \
-  --account-name stcoreprod59o7 \
-  --destination '$web' \
-  --source ./static \
-  --auth-mode login
-```
+`errored.tfstate` is a backup of a failed deployment and should not be used directly.
 
 ## Outputs
 
-After deployment, Terraform exports the following outputs:
+Core outputs:
 
-### Core Infrastructure Outputs
+- `core_resource_group_name`
+- `core_storage_account_name`
+- `core_static_website_url`
+- `core_dns_zone_name`
+- `core_key_vault_name`
+- `core_app_service_plan_id`
+- `core_key_vault_id`
+- `core_application_insights_workspace_id`
+- `core_sql_server_url`
 
-- `core_resource_group_name`: Name of the shared resource group
-- `core_storage_account_name`: Storage account for static hosting
-- `core_static_website_url`: Primary static website endpoint
-- `core_dns_zone_name`: DNS zone for custom domains
-- `core_key_vault_name`: Key Vault for secrets management
-- `core_app_service_plan_id`: App Service Plan resource ID
-- `core_key_vault_id`: Key Vault resource ID
-- `core_application_insights_workspace_id`: Application Insights workspace
-- `core_sql_server_url`: SQL Server FQDN (serverless database host)
+OIDC outputs:
 
-### The Rob Vault Outputs
+- `github_actions_oidc_client_id`
+- `github_actions_oidc_app_name`
 
-- `the_rob_vault_function_app_name`: Function App name
-- `the_rob_vault_function_app_fqdn`: Function App fully qualified domain name
-- `the_rob_vault_custom_fqdn`: Custom domain FQDN
-- `the_rob_vault_db_name`: SQL database name
+The Rob Vault outputs:
 
-View all outputs:
+- `the_rob_vault_function_app_name`
+- `the_rob_vault_function_app_fqdn`
+- `the_rob_vault_custom_fqdn`
+- `the_rob_vault_db_name`
+
+Health Assistant outputs:
+
+- `health_assistant_function_app_name`
+- `health_assistant_function_app_default_hostname`
+- `health_assistant_api_endpoint`
+- `health_assistant_storage_account_name`
+- `health_assistant_function_app_id`
+- `health_assistant_function_app_identity_principal_id`
+- `health_assistant_custom_hostname`
+- `health_assistant_managed_certificate_id`
+- `health_assistant_healthcheck_url`
+
+View outputs:
 
 ```bash
 terraform output
+terraform output health_assistant_api_endpoint
 ```
-
-View a specific output:
-
-```bash
-terraform output core_storage_account_name
-terraform output the_rob_vault_function_app_fqdn
-```
-
-## Terraform State Management
-
-### Remote State
-
-State is stored in Azure Storage Account (`sabarrimond01`):
-
-- **Container**: `terraform`
-- **State Key**: `core/terraform.tfstate`
-- **Resource Group**: `base`
-
-This enables:
-
-- Shared state across team members
-- State locking to prevent concurrent modifications
-- Centralized backup and recovery
-
-### Local State Warning
-
-The `errored.tfstate` file is a backup of a previously failed deployment and should not be used directly.
 
 ## Troubleshooting
 
-### State Lock Issues
-
-If you encounter state locking errors:
+State lock issues:
 
 ```bash
-# View lock information
 terraform force-unlock <LOCK_ID>
 ```
 
-### Authentication Errors
-
-Ensure Azure CLI is authenticated:
+Authentication issues:
 
 ```bash
 az login
 az account set --subscription "<subscription-id>"
 ```
 
-### Resource Already Exists
-
-If Terraform reports a resource already exists:
+Resource already exists:
 
 ```bash
-# Import the resource into state
 terraform import <resource_type>.<resource_name> <azure_resource_id>
 ```
 
-## Related Projects
+## Related Docs
 
-- **baldwin-static**: Static website repository (deployed via Baldwin module)
-- **the-rob-vault-app**: Vault backend application (deployed via The Rob Vault module)
+- `GITHUB_ACTIONS_OIDC.md`
+- `HEALTH_ASSISTANT_DEPLOYMENT.md`
