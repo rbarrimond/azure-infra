@@ -2,8 +2,14 @@ name: Deploy Static Website to Azure Storage
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'static-*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Deployment environment
+        required: true
+        default: prod
 
 permissions:
   id-token: write
@@ -11,6 +17,7 @@ permissions:
 
 jobs:
   deploy:
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

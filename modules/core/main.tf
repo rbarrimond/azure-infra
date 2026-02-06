@@ -5,13 +5,14 @@ resource "azurerm_resource_group" "core" {
 }
 
 resource "azurerm_storage_account" "core" {
-  name                     = "st${replace(lower(var.suffix), "-", "")}"
-  resource_group_name      = azurerm_resource_group.core.name
-  location                 = azurerm_resource_group.core.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  tags                     = var.default_tags
-  account_kind             = "StorageV2"
+  name                       = "st${replace(lower(var.suffix), "-", "")}"
+  resource_group_name        = azurerm_resource_group.core.name
+  location                   = azurerm_resource_group.core.location
+  account_tier               = "Standard"
+  account_replication_type   = "LRS"
+  tags                       = var.default_tags
+  account_kind               = "StorageV2"
+  https_traffic_only_enabled = true
 }
 
 resource "azurerm_storage_account_static_website" "static_website" {
@@ -26,13 +27,6 @@ resource "azurerm_storage_container" "static_container" {
   container_access_type = "blob"
 }
 
-resource "azurerm_dns_cname_record" "static_dns" {
-  name                = "static"
-  zone_name           = azurerm_dns_zone.core.name
-  resource_group_name = azurerm_resource_group.core.name
-  ttl                 = 300
-  record              = azurerm_storage_account.core.primary_web_host
-}
 
 resource "azurerm_dns_zone" "core" {
   name                = "azure.barrimond.net"
