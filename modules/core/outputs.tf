@@ -33,6 +33,11 @@ output "storage_account_name" {
   value       = azurerm_storage_account.core.name
 }
 
+output "storage_account_id" {
+  description = "The ID of the storage account."
+  value       = azurerm_storage_account.core.id
+}
+
 output "static_website_url" {
   description = "The primary web endpoint URL for the static website."
   value       = azurerm_storage_account.core.primary_web_endpoint

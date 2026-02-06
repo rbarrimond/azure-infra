@@ -37,6 +37,27 @@ locals {
   onedrive_redirect_uri_effective = var.onedrive_redirect_uri != "" ? var.onedrive_redirect_uri : "https://${local.health_assistant_function_app_name}.azurewebsites.net/api/onedrive/callback"
   onedrive_redirect_uris_effective = length(var.onedrive_redirect_uris) > 0 ? var.onedrive_redirect_uris : [local.onedrive_redirect_uri_effective]
   onedrive_app_display_name_effective = var.onedrive_app_display_name != "" ? var.onedrive_app_display_name : "health-assistant-onedrive-${var.environment}"
+  github_actions_repo_slug = replace(var.github_actions_repo, "/", "-")
+  github_actions_app_name  = "gha-${local.github_actions_repo_slug}-${var.environment}-${random_string.module_suffix.result}"
+  github_actions_federated_credential_name = "gha-${local.github_actions_repo_slug}-${var.environment}-${var.github_actions_branch}-deploy"
+  github_actions_federated_credential_description = "GitHub Actions OIDC for ${var.github_actions_repo} - ${var.environment}, branch=${var.github_actions_branch}, deploy static site."
+}
+
+resource "azuread_application" "github_actions" {
+  display_name = local.github_actions_app_name
+}
+
+resource "azuread_service_principal" "github_actions" {
+  client_id = azuread_application.github_actions.client_id
+}
+
+resource "azuread_application_federated_identity_credential" "github_actions_main" {
+  application_id = azuread_application.github_actions.id
+  display_name   = local.github_actions_federated_credential_name
+  description    = local.github_actions_federated_credential_description
+  audiences      = ["api://AzureADTokenExchange"]
+  issuer         = "https://token.actions.githubusercontent.com"
+  subject        = "repo:${var.github_actions_repo}:ref:refs/heads/${var.github_actions_branch}"
 }
 
 resource "azuread_application" "onedrive" {
@@ -69,11 +90,16 @@ module "core" {
   tenant_id                   = var.tenant_id
   region                      = var.region
   key_vault_admin_object_id   = var.key_vault_admin_object_id
-  github_actions_sp_client_id = var.github_actions_sp_client_id
   default_tags = {
     environment = var.environment
     project     = "core"
   }
+}
+
+resource "azurerm_role_assignment" "github_actions_storage_blob_contributor" {
+  scope                = module.core.storage_account_id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azuread_service_principal.github_actions.object_id
 }
 
 module "baldwin" {

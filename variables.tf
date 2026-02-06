@@ -61,9 +61,16 @@ variable "key_vault_admin_object_id" {
   type        = string
 }
 
-variable "github_actions_sp_client_id" {
-  description = "The client ID of the GitHub Actions service principal for blob contributor role assignment."
+variable "github_actions_repo" {
+  description = "GitHub org/repo used by the OIDC federated credential."
   type        = string
+  default     = "rbarrimond/azure-infra"
+}
+
+variable "github_actions_branch" {
+  description = "GitHub branch used by the OIDC federated credential."
+  type        = string
+  default     = "main"
 }
 
 variable "withings_client_id" {

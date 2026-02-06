@@ -34,6 +34,16 @@ output "core_sql_server_url" {
   value = module.core.sql_server_fqdn
 }
 
+output "github_actions_oidc_client_id" {
+  value       = azuread_application.github_actions.client_id
+  description = "Client ID for the GitHub Actions OIDC app registration."
+}
+
+output "github_actions_oidc_app_name" {
+  value       = azuread_application.github_actions.display_name
+  description = "Display name for the GitHub Actions OIDC app registration."
+}
+
 # The Rob Vault Outputs
 output "the_rob_vault_function_app_name" {
   value = module.the_rob_vault.function_app_name
