@@ -3,67 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Core Static Website</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(120deg, #0078d4 0%, #005a9e 100%);
-            color: #fff;
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            background: rgba(255,255,255,0.08);
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-            padding: 48px 32px;
-            max-width: 420px;
-            text-align: center;
-        }
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5em;
-            color: #fff;
-        }
-        p {
-            font-size: 1.2rem;
-            color: #e6e6e6;
-        }
-        .azure-logo {
-            width: 64px;
-            margin-bottom: 1.5em;
-        }
-        footer {
-            margin-top: 2em;
-            font-size: 0.95em;
-            color: #b3d6f2;
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 24px 8px;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    <title>Core Site Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/site.css">
 </head>
 <body>
-    <div class="container">
-        <img src="https://azure.microsoft.com/favicon.ico" alt="Azure Logo" class="azure-logo" />
-        <h1>Welcome to the Azure Infra Core Site</h1>
-        <p>This minimal landing page confirms that your Azure infrastructure is deployed and serving static content.<br>
-        This site is managed by the <a href="https://github.com/rbarrimond/azure-infra" target="_blank" rel="noopener noreferrer"><strong>azure-infra</strong> repository</a> and is intended as a placeholder and health check for the core platform resources.<br>
-        For application content, visit the appropriate app site.</p>
-    </div>
-    <footer>
-        &copy; 2025 Your Organization &mdash; Powered by Microsoft Azure
-    </footer>
+    <main class="frame">
+        <div class="content">
+            <div class="kicker">Core static site</div>
+            <h1>Home base for the sub-sites.</h1>
+            <p>
+                This landing page is the root for the static host and points to the
+                apps that live beneath it. Use it as a quick launchpad and a health
+                check for the platform.
+            </p>
+            <div class="actions">
+                <a class="button primary" href="/therobvault/">Visit The Rob Vault</a>
+                <a class="button secondary" href="https://github.com/rbarrimond/azure-infra" target="_blank" rel="noopener noreferrer">
+                    View infrastructure repo
+                </a>
+            </div>
+            <div class="link-row">
+                <span>Other locations:</span>
+                <a href="/the-rob-vault/">/the-rob-vault/</a>
+            </div>
+            <footer>&copy; 2026 RLB Enterprises LLC</footer>
+        </div>
+    </main>
 </body>
 </html>
