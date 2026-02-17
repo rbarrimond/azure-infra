@@ -269,7 +269,7 @@ az functionapp log tail -n 100 \
 ### Application (health_assistant/)
 
 - `function_app.py`: Added backup timer trigger + import
-- `FitParser/backup_exporter.py`: New 155-line module for backup export
+- `TrainingAnalyticsPlatform/backup_exporter.py`: New 155-line module for backup export
 
 ### Total Changes
 
