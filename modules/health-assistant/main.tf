@@ -113,6 +113,9 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "WITHINGS_CLIENT_SECRET"                      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_secret.versionless_id})"
     "WITHINGS_REDIRECT_URI"                       = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/callback"
     "WITHINGS_WEBHOOK_URL"                        = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/webhook"
+    "GARMIN_EMAIL"                                = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_email.versionless_id})"
+    "GARMIN_PASSWORD"                             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_password.versionless_id})"
+    "GARMIN_SYNC_LOOKBACK_DAYS"                   = var.garmin_sync_lookback_days
   }
 
   site_config {
@@ -208,5 +211,17 @@ resource "azurerm_key_vault_secret" "onedrive_client_id" {
 resource "azurerm_key_vault_secret" "onedrive_client_secret" {
   name         = "onedrive-client-secret"
   value        = var.onedrive_client_secret
+  key_vault_id = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "garmin_email" {
+  name         = "garmin-email"
+  value        = var.garmin_email
+  key_vault_id = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "garmin_password" {
+  name         = "garmin-password"
+  value        = var.garmin_password
   key_vault_id = var.key_vault_id
 }

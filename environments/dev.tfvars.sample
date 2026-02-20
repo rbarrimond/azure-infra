@@ -7,3 +7,5 @@ onedrive_redirect_uris = [
   "https://<FUNCTION_APP>.azurewebsites.net/api/onedrive/callback",
   "http://localhost:7071/api/onedrive/callback",
 ]
+garmin_email    = "REPLACE_GARMIN_EMAIL"
+garmin_password = "REPLACE_GARMIN_PASSWORD"

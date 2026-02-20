@@ -188,3 +188,20 @@ variable "onedrive_sync_lookback_days" {
   type        = number
   default     = 30
 }
+variable "garmin_email" {
+  description = "Garmin account email address."
+  type        = string
+  sensitive   = true
+}
+
+variable "garmin_password" {
+  description = "Garmin account password."
+  type        = string
+  sensitive   = true
+}
+
+variable "garmin_sync_lookback_days" {
+  description = "Default lookback window (days) for Garmin sync."
+  type        = number
+  default     = 30
+}

@@ -169,6 +169,9 @@ module "health_assistant" {
   onedrive_scopes             = var.onedrive_scopes
   onedrive_sync_lookback_days = var.onedrive_sync_lookback_days
   onedrive_folder_path        = var.onedrive_folder_path
+  garmin_email                = var.garmin_email
+  garmin_password             = var.garmin_password
+  garmin_sync_lookback_days   = var.garmin_sync_lookback_days
   plugin_logo_url             = var.health_assistant_plugin_logo_url
   plugin_contact_email        = var.health_assistant_plugin_contact_email
   plugin_legal_url            = var.health_assistant_plugin_legal_url
