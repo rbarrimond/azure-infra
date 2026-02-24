@@ -23,6 +23,13 @@ output "application_insights_key" {
   value       = azurerm_application_insights.core.instrumentation_key
   sensitive   = true
 }
+
+output "application_insights_connection_string" {
+  description = "The connection string for Application Insights."
+  value       = azurerm_application_insights.core.connection_string
+  sensitive   = true
+}
+
 output "resource_group_name" {
   description = "The name of the resource group."
   value       = azurerm_resource_group.core.name

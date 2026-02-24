@@ -152,6 +152,7 @@ module "health_assistant" {
   zone_name                   = module.core.dns_zone_name
   service_plan_id             = module.core.app_service_plan_id
   application_insights_key    = module.core.application_insights_key
+  application_insights_connection_string = module.core.application_insights_connection_string
   log_analytics_workspace_id  = module.core.application_insights_workspace_id
   key_vault_id                = module.core.key_vault_id
   key_vault_url               = "https://${module.core.key_vault_name}.vault.azure.net/"

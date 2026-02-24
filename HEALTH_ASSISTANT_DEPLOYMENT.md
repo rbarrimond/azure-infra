@@ -7,14 +7,14 @@
 Your health assistant now has a complete Terraform infrastructure module that provisions:
 
 - **Azure Storage Account** (dedicated for health data - separate from core infra)
-- 7 Table Storage tables: `Workouts`, `WeeklyRollups`, `IngestionState`, `Physiometrics`, `OneDriveTokens`, `AgentPreferences`, `AgentObservations`
+- 5 Table Storage tables: `Workouts`, `WeeklyRollups`, `IngestionState`, `Physiometrics`, `OneDriveTokens`
   - Blob container for read-only backups with automatic lifecycle management
     - Moves to cool tier after 30 days
     - Deletes after 90 days
-- **Azure Functions** (Python 3.13, consumption plan)
+- **Azure Functions** (Python 3.13, Linux B1 dedicated plan)
   - HTTP endpoint and timer for OneDrive Personal sync (Microsoft Graph)
   - Daily timer trigger (2 AM UTC) for automated backups
-  - Managed Identity for secure Key Vault access (no connection strings in config)
+  - Managed Identity for secure Key Vault access (secrets are Key Vault references)
   - Application Insights integration for monitoring
 - **DNS CNAME** (`health.azure.barrimond.net`) pointing to Function App
 - **Key Vault Secrets** for Withings API credentials

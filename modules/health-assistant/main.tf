@@ -89,6 +89,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "WEBSITE_RUN_FROM_PACKAGE"                   = "0"
     "FUNCTIONS_WORKER_RUNTIME"                   = "python"
     "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.application_insights_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"       = var.application_insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = var.application_insights_extension_version
     "AzureWebJobsStorage"                        = azurerm_storage_account.health.primary_connection_string
     "AZURE_STORAGE_ACCOUNT_URL"                  = azurerm_storage_account.health.primary_blob_endpoint
@@ -138,8 +139,37 @@ resource "azurerm_linux_function_app" "health_assistant" {
       app_settings["ENABLE_ORYX_BUILD"],
       app_settings["SCM_DO_BUILD_DURING_DEPLOYMENT"],
       app_settings["XDG_CACHE_HOME"],
-      app_settings["APPINSIGHTS_INSTRUMENTATIONKEY"]
+      app_settings["APPINSIGHTS_INSTRUMENTATIONKEY"],
+      app_settings["APPLICATIONINSIGHTS_CONNECTION_STRING"]
     ]
+  }
+}
+
+resource "azurerm_monitor_diagnostic_setting" "health_assistant_function" {
+  name                       = "diag-func-${substr(replace(var.suffix, "-", ""), 0, 24)}"
+  target_resource_id         = azurerm_linux_function_app.health_assistant.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  enabled_log {
+    category_group = "allLogs"
+  }
+
+  enabled_metric {
+    category = "AllMetrics"
+  }
+}
+
+resource "azurerm_monitor_diagnostic_setting" "health_storage" {
+  name                       = "diag-stg-${substr(replace(var.suffix, "-", ""), 0, 25)}"
+  target_resource_id         = azurerm_storage_account.health.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  enabled_log {
+    category_group = "allLogs"
+  }
+
+  enabled_metric {
+    category = "AllMetrics"
   }
 }
 

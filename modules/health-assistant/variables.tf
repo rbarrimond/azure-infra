@@ -30,6 +30,13 @@ variable "application_insights_key" {
   sensitive   = true
 }
 
+variable "application_insights_connection_string" {
+  description = "The connection string for Application Insights."
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 variable "log_analytics_workspace_id" {
   description = "The workspace ID for Log Analytics."
   type        = string
