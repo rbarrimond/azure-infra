@@ -32,14 +32,14 @@ resource "random_string" "module_suffix" {
 }
 
 locals {
-  health_assistant_suffix            = "healthassistant-${var.environment}-${random_string.module_suffix.result}"
-  health_assistant_function_app_name = "func-${local.health_assistant_suffix}"
-  onedrive_redirect_uri_effective = var.onedrive_redirect_uri != "" ? var.onedrive_redirect_uri : "https://${local.health_assistant_function_app_name}.azurewebsites.net/api/onedrive/callback"
-  onedrive_redirect_uris_effective = length(var.onedrive_redirect_uris) > 0 ? var.onedrive_redirect_uris : [local.onedrive_redirect_uri_effective]
-  onedrive_app_display_name_effective = var.onedrive_app_display_name != "" ? var.onedrive_app_display_name : "health-assistant-onedrive-${var.environment}"
-  github_actions_repo_slug = replace(var.github_actions_repo, "/", "-")
-  github_actions_app_name  = "gha-${local.github_actions_repo_slug}-${var.environment}-${random_string.module_suffix.result}"
-  github_actions_federated_credential_name = "gha-${local.github_actions_repo_slug}-${var.environment}-${var.github_actions_branch}-deploy"
+  health_assistant_suffix                         = "healthassistant-${var.environment}-${random_string.module_suffix.result}"
+  health_assistant_function_app_name              = "func-${local.health_assistant_suffix}"
+  onedrive_redirect_uri_effective                 = var.onedrive_redirect_uri != "" ? var.onedrive_redirect_uri : "https://${local.health_assistant_function_app_name}.azurewebsites.net/api/onedrive/callback"
+  onedrive_redirect_uris_effective                = length(var.onedrive_redirect_uris) > 0 ? var.onedrive_redirect_uris : [local.onedrive_redirect_uri_effective]
+  onedrive_app_display_name_effective             = var.onedrive_app_display_name != "" ? var.onedrive_app_display_name : "health-assistant-onedrive-${var.environment}"
+  github_actions_repo_slug                        = replace(var.github_actions_repo, "/", "-")
+  github_actions_app_name                         = "gha-${local.github_actions_repo_slug}-${var.environment}-${random_string.module_suffix.result}"
+  github_actions_federated_credential_name        = "gha-${local.github_actions_repo_slug}-${var.environment}-${var.github_actions_branch}-deploy"
   github_actions_federated_credential_description = "GitHub Actions OIDC for ${var.github_actions_repo} - ${var.environment}, branch=${var.github_actions_branch}, deploy static site."
 }
 
@@ -80,16 +80,16 @@ resource "azuread_application_password" "onedrive" {
 }
 
 locals {
-  onedrive_client_id_effective = var.create_onedrive_app_registration ? azuread_application.onedrive[0].client_id : var.onedrive_client_id
+  onedrive_client_id_effective     = var.create_onedrive_app_registration ? azuread_application.onedrive[0].client_id : var.onedrive_client_id
   onedrive_client_secret_effective = var.create_onedrive_app_registration ? azuread_application_password.onedrive[0].value : var.onedrive_client_secret
 }
 
 module "core" {
-  source                      = "./modules/core"
-  suffix                      = "core-${var.environment}-${random_string.module_suffix.result}"
-  tenant_id                   = var.tenant_id
-  region                      = var.region
-  key_vault_admin_object_id   = var.key_vault_admin_object_id
+  source                    = "./modules/core"
+  suffix                    = "core-${var.environment}-${random_string.module_suffix.result}"
+  tenant_id                 = var.tenant_id
+  region                    = var.region
+  key_vault_admin_object_id = var.key_vault_admin_object_id
   default_tags = {
     environment = var.environment
     project     = "core"
@@ -145,37 +145,37 @@ module "the_rob_vault" {
 }
 
 module "health_assistant" {
-  source                      = "./modules/health-assistant"
-  suffix                      = local.health_assistant_suffix
-  location                    = var.region
-  resource_group_name         = module.core.resource_group_name
-  zone_name                   = module.core.dns_zone_name
-  service_plan_id             = module.core.app_service_plan_id
-  application_insights_key    = module.core.application_insights_key
+  source                                 = "./modules/health-assistant"
+  suffix                                 = local.health_assistant_suffix
+  location                               = var.region
+  resource_group_name                    = module.core.resource_group_name
+  zone_name                              = module.core.dns_zone_name
+  service_plan_id                        = module.core.app_service_plan_id
+  application_insights_key               = module.core.application_insights_key
   application_insights_connection_string = module.core.application_insights_connection_string
-  log_analytics_workspace_id  = module.core.application_insights_workspace_id
-  key_vault_id                = module.core.key_vault_id
-  key_vault_url               = "https://${module.core.key_vault_name}.vault.azure.net/"
-  tenant_id                   = var.tenant_id
-  withings_client_id          = var.withings_client_id != null ? var.withings_client_id : ""
-  withings_client_secret      = var.withings_client_secret != null ? var.withings_client_secret : ""
-  withings_refresh_token      = var.withings_refresh_token != null ? var.withings_refresh_token : ""
-  default_max_hr              = var.default_max_hr
-  default_ftp                 = var.default_ftp
-  hr_zone_basis               = var.hr_zone_basis
-  hr_zone_reference_bpm       = var.hr_zone_reference_bpm
-  onedrive_client_id          = local.onedrive_client_id_effective
-  onedrive_client_secret      = local.onedrive_client_secret_effective
-  onedrive_redirect_uri       = local.onedrive_redirect_uri_effective
-  onedrive_scopes             = var.onedrive_scopes
-  onedrive_sync_lookback_days = var.onedrive_sync_lookback_days
-  onedrive_folder_path        = var.onedrive_folder_path
-  garmin_email                = var.garmin_email
-  garmin_password             = var.garmin_password
-  garmin_sync_lookback_days   = var.garmin_sync_lookback_days
-  plugin_logo_url             = var.health_assistant_plugin_logo_url
-  plugin_contact_email        = var.health_assistant_plugin_contact_email
-  plugin_legal_url            = var.health_assistant_plugin_legal_url
+  log_analytics_workspace_id             = module.core.application_insights_workspace_id
+  key_vault_id                           = module.core.key_vault_id
+  key_vault_url                          = "https://${module.core.key_vault_name}.vault.azure.net/"
+  tenant_id                              = var.tenant_id
+  withings_client_id                     = var.withings_client_id != null ? var.withings_client_id : ""
+  withings_client_secret                 = var.withings_client_secret != null ? var.withings_client_secret : ""
+  withings_refresh_token                 = var.withings_refresh_token != null ? var.withings_refresh_token : ""
+  default_max_hr                         = var.default_max_hr
+  default_ftp                            = var.default_ftp
+  hr_zone_basis                          = var.hr_zone_basis
+  hr_zone_reference_bpm                  = var.hr_zone_reference_bpm
+  onedrive_client_id                     = local.onedrive_client_id_effective
+  onedrive_client_secret                 = local.onedrive_client_secret_effective
+  onedrive_redirect_uri                  = local.onedrive_redirect_uri_effective
+  onedrive_scopes                        = var.onedrive_scopes
+  onedrive_sync_lookback_days            = var.onedrive_sync_lookback_days
+  onedrive_folder_path                   = var.onedrive_folder_path
+  garmin_email                           = var.garmin_email
+  garmin_password                        = var.garmin_password
+  garmin_sync_lookback_days              = var.garmin_sync_lookback_days
+  plugin_logo_url                        = var.health_assistant_plugin_logo_url
+  plugin_contact_email                   = var.health_assistant_plugin_contact_email
+  plugin_legal_url                       = var.health_assistant_plugin_legal_url
   default_tags = {
     environment = var.environment
     project     = "health-assistant"
