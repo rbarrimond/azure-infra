@@ -181,7 +181,15 @@ resource "azurerm_monitor_diagnostic_setting" "health_storage" {
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
   enabled_log {
-    category_group = "allLogs"
+    category = "StorageRead"
+  }
+
+  enabled_log {
+    category = "StorageWrite"
+  }
+
+  enabled_log {
+    category = "StorageDelete"
   }
 
   enabled_metric {
