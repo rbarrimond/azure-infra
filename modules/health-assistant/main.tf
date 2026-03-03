@@ -34,11 +34,27 @@ resource "azurerm_storage_table" "onedrive_tokens" {
   storage_account_name = azurerm_storage_account.health.name
 }
 
+resource "azurerm_storage_table" "training_state" {
+  name                 = "TrainingState"
+  storage_account_name = azurerm_storage_account.health.name
+}
+
+resource "azurerm_storage_table" "source_ingestion_state" {
+  name                 = "SourceIngestionState"
+  storage_account_name = azurerm_storage_account.health.name
+}
+
 # Blob container for backups (read-only)
 resource "azurerm_storage_container" "backups" {
   name                  = var.backup_container_name
   storage_account_id    = azurerm_storage_account.health.id
   container_access_type = var.backup_container_access_type
+}
+
+resource "azurerm_storage_container" "external_sources" {
+  name                  = "external-sources"
+  storage_account_id    = azurerm_storage_account.health.id
+  container_access_type = "private"
 }
 
 # Lifecycle policy: move backups to cool tier after configured days, delete after configured days
