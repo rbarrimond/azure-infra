@@ -177,28 +177,6 @@ resource "azurerm_monitor_diagnostic_setting" "health_assistant_function" {
   }
 }
 
-resource "azurerm_monitor_diagnostic_setting" "health_storage" {
-  name                       = "diag-stg-${substr(replace(var.suffix, "-", ""), 0, 25)}"
-  target_resource_id         = azurerm_storage_account.health.id
-  log_analytics_workspace_id = var.log_analytics_workspace_id
-
-  enabled_log {
-    category = "StorageRead"
-  }
-
-  enabled_log {
-    category = "StorageWrite"
-  }
-
-  enabled_log {
-    category = "StorageDelete"
-  }
-
-  enabled_metric {
-    category = "AllMetrics"
-  }
-}
-
 # Managed Identity access to Key Vault
 resource "azurerm_key_vault_access_policy" "function_identity" {
   key_vault_id = var.key_vault_id
