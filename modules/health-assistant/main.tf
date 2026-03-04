@@ -135,6 +135,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "GARMIN_SYNC_LOOKBACK_DAYS"                   = var.garmin_sync_lookback_days
     "INTERVALS_API_KEY"                           = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_api_key.versionless_id})"
     "INTERVALS_SYNC_LOOKBACK_DAYS"                = var.intervals_sync_lookback_days
+    "INTERVALS_ATHLETE_ID"                        = var.intervals_athlete_id
   }
 
   site_config {

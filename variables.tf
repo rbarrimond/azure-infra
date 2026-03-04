@@ -217,3 +217,9 @@ variable "intervals_sync_lookback_days" {
   type        = number
   default     = 30
 }
+
+variable "intervals_athlete_id" {
+  description = "Intervals.icu athlete ID"
+  type        = string
+  default     = ""
+}

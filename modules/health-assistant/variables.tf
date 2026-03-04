@@ -149,9 +149,11 @@ variable "intervals_sync_lookback_days" {
   default     = 30
 }
 
-
-
-
+variable "intervals_athlete_id" {
+  description = "Intervals.icu athlete ID."
+  type        = string
+  default     = ""
+}
 
 variable "storage_account_tier" {
   description = "Performance tier for storage account."
