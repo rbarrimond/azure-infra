@@ -207,7 +207,7 @@ variable "garmin_sync_lookback_days" {
 }
 
 variable "intervals_api_key" {
-  description = "Intervals.icu API key"
+  description = "Intervals.icu API key (used as HTTP Basic password with username API_KEY)."
   type        = string
   sensitive   = true
 }
