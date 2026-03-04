@@ -9,4 +9,4 @@ onedrive_redirect_uris = [
 ]
 garmin_email        = "REPLACE_GARMIN_EMAIL"
 garmin_password     = "REPLACE_GARMIN_PASSWORD"
-intervals_athlete_id = "i508584"
+intervals_athlete_id = "REPLACE_INTERVALS_ID"

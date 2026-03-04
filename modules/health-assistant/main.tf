@@ -135,7 +135,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "GARMIN_SYNC_LOOKBACK_DAYS"                   = var.garmin_sync_lookback_days
     "INTERVALS_API_KEY"                           = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_api_key.versionless_id})"
     "INTERVALS_SYNC_LOOKBACK_DAYS"                = var.intervals_sync_lookback_days
-    "INTERVALS_ATHLETE_ID"                        = var.intervals_athlete_id
+    "INTERVALS_ATHLETE_ID"                        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_athlete_id.versionless_id})"
   }
 
   site_config {
@@ -264,6 +264,12 @@ resource "azurerm_key_vault_secret" "garmin_password" {
 resource "azurerm_key_vault_secret" "intervals_api_key" {
   name         = "intervals-api-key"
   value        = var.intervals_api_key
+  key_vault_id = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "intervals_athlete_id" {
+  name         = "intervals-athlete-id"
+  value        = var.intervals_athlete_id
   key_vault_id = var.key_vault_id
 }
 
