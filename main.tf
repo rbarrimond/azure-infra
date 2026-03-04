@@ -173,6 +173,8 @@ module "health_assistant" {
   garmin_email                           = var.garmin_email
   garmin_password                        = var.garmin_password
   garmin_sync_lookback_days              = var.garmin_sync_lookback_days
+  intervals_api_key                      = var.intervals_api_key
+  intervals_sync_lookback_days           = var.intervals_sync_lookback_days
   plugin_logo_url                        = var.health_assistant_plugin_logo_url
   plugin_contact_email                   = var.health_assistant_plugin_contact_email
   plugin_legal_url                       = var.health_assistant_plugin_legal_url

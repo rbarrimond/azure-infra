@@ -136,6 +136,19 @@ variable "garmin_sync_lookback_days" {
   default     = 30
 }
 
+variable "intervals_api_key" {
+  description = "Intervals.icu API key (can be empty initially)."
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "intervals_sync_lookback_days" {
+  description = "Default lookback window (days) for Intervals sync."
+  type        = number
+  default     = 30
+}
+
 
 
 
