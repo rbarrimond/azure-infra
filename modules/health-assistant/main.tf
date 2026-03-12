@@ -190,6 +190,20 @@ resource "azurerm_key_vault_access_policy" "function_identity" {
   ]
 }
 
+# Managed Identity access to Storage Account tables
+resource "azurerm_role_assignment" "function_storage_tables" {
+  scope              = azurerm_storage_account.health.id
+  role_definition_name = "Storage Table Data Contributor"
+  principal_id       = azurerm_linux_function_app.health_assistant.identity[0].principal_id
+}
+
+# Managed Identity access to Storage Account blobs
+resource "azurerm_role_assignment" "function_storage_blobs" {
+  scope              = azurerm_storage_account.health.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id       = azurerm_linux_function_app.health_assistant.identity[0].principal_id
+}
+
 # DNS CNAME for health assistant API
 resource "azurerm_dns_cname_record" "health_api" {
   name                = var.dns_subdomain
