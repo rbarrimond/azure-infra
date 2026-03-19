@@ -105,7 +105,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "WEBSITE_RUN_FROM_PACKAGE"                   = "0"
     "FUNCTIONS_WORKER_RUNTIME"                   = "python"
     "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.application_insights_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"       = var.application_insights_connection_string
+    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.application_insights_connection_string
     "ApplicationInsightsAgent_EXTENSION_VERSION" = var.application_insights_extension_version
     "AzureWebJobsStorage"                        = azurerm_storage_account.health.primary_connection_string
     "AZURE_STORAGE_ACCOUNT_URL"                  = azurerm_storage_account.health.primary_blob_endpoint
@@ -126,16 +126,20 @@ resource "azurerm_linux_function_app" "health_assistant" {
     "ONEDRIVE_SCOPES"                            = var.onedrive_scopes
     "ONEDRIVE_SYNC_LOOKBACK_DAYS"                = var.onedrive_sync_lookback_days
     "KEYVAULT_URL"                               = var.key_vault_url
-    "WITHINGS_CLIENT_ID"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_id.versionless_id})"
-    "WITHINGS_CLIENT_SECRET"                      = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_secret.versionless_id})"
-    "WITHINGS_REDIRECT_URI"                       = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/callback"
-    "WITHINGS_WEBHOOK_URL"                        = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/webhook"
-    "GARMIN_EMAIL"                                = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_email.versionless_id})"
-    "GARMIN_PASSWORD"                             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_password.versionless_id})"
-    "GARMIN_SYNC_LOOKBACK_DAYS"                   = var.garmin_sync_lookback_days
-    "INTERVALS_API_KEY"                           = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_api_key.versionless_id})"
-    "INTERVALS_SYNC_LOOKBACK_DAYS"                = var.intervals_sync_lookback_days
-    "INTERVALS_ATHLETE_ID"                        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_athlete_id.versionless_id})"
+    "WITHINGS_CLIENT_ID"                         = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_id.versionless_id})"
+    "WITHINGS_CLIENT_SECRET"                     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_secret.versionless_id})"
+    "WITHINGS_REDIRECT_URI"                      = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/callback"
+    "WITHINGS_WEBHOOK_URL"                       = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/webhook"
+    "GARMIN_EMAIL"                               = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_email.versionless_id})"
+    "GARMIN_PASSWORD"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_password.versionless_id})"
+    "GARMIN_SYNC_LOOKBACK_DAYS"                  = var.garmin_sync_lookback_days
+    "INTERVALS_API_KEY"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_api_key.versionless_id})"
+    "INTERVALS_SYNC_LOOKBACK_DAYS"               = var.intervals_sync_lookback_days
+    "INTERVALS_ATHLETE_ID"                       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_athlete_id.versionless_id})"
+    "ONEDRIVE_ASYNC_QUEUE_ENABLED"               = var.onedrive_async_queue_enabled
+    "GARMIN_ASYNC_QUEUE_ENABLED"                 = var.garmin_async_queue_enabled
+    "ONEDRIVE_ASYNC_QUEUE_NAME"                  = var.async_ingestion_queue_name
+    "DEFERRED_RETRY_QUEUE_NAME"                  = var.deferred_retry_queue_name
   }
 
   site_config {
@@ -192,16 +196,16 @@ resource "azurerm_key_vault_access_policy" "function_identity" {
 
 # Managed Identity access to Storage Account tables
 resource "azurerm_role_assignment" "function_storage_tables" {
-  scope              = azurerm_storage_account.health.id
+  scope                = azurerm_storage_account.health.id
   role_definition_name = "Storage Table Data Contributor"
-  principal_id       = azurerm_linux_function_app.health_assistant.identity[0].principal_id
+  principal_id         = azurerm_linux_function_app.health_assistant.identity[0].principal_id
 }
 
 # Managed Identity access to Storage Account blobs
 resource "azurerm_role_assignment" "function_storage_blobs" {
-  scope              = azurerm_storage_account.health.id
+  scope                = azurerm_storage_account.health.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id       = azurerm_linux_function_app.health_assistant.identity[0].principal_id
+  principal_id         = azurerm_linux_function_app.health_assistant.identity[0].principal_id
 }
 
 # DNS CNAME for health assistant API

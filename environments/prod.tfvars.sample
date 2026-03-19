@@ -10,3 +10,8 @@ onedrive_redirect_uris = [
 garmin_email        = "REPLACE_GARMIN_EMAIL"
 garmin_password     = "REPLACE_GARMIN_PASSWORD"
 intervals_athlete_id = "REPLACE_INTERVALS_ID"
+
+# Async ingestion queue — set to "true" to enable async queue mode per source
+# Defaults to "false" (sync/thread fallback) until queues are validated in prod
+onedrive_async_queue_enabled = "false"
+garmin_async_queue_enabled   = "false"

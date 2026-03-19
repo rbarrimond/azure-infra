@@ -298,3 +298,31 @@ variable "plugin_legal_url" {
   type        = string
   default     = "https://github.com/rbarrimond/health_assistant/blob/main/README.md"
 }
+
+# ---------------------------------------------------------------------------
+# Async ingestion queue feature flags
+# ---------------------------------------------------------------------------
+
+variable "onedrive_async_queue_enabled" {
+  description = "Whether to enable async queue mode for OneDrive ingestion ('true'/'false')."
+  type        = string
+  default     = "false"
+}
+
+variable "garmin_async_queue_enabled" {
+  description = "Whether to enable async queue mode for Garmin ingestion ('true'/'false')."
+  type        = string
+  default     = "false"
+}
+
+variable "async_ingestion_queue_name" {
+  description = "Name of the Azure Storage Queue used for async ingestion work items."
+  type        = string
+  default     = "async-ingestion"
+}
+
+variable "deferred_retry_queue_name" {
+  description = "Name of the Azure Storage Queue used for deferred retry work items."
+  type        = string
+  default     = "rate-limit-deferrals"
+}
