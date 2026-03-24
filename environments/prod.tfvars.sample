@@ -15,3 +15,8 @@ intervals_athlete_id = "REPLACE_INTERVALS_ID"
 # Defaults to "false" (sync/thread fallback) until queues are validated in prod
 onedrive_async_queue_enabled = "false"
 garmin_async_queue_enabled   = "false"
+
+# Planning-context pre-sync feature flags
+# Set to "true" to allow Garmin sources to run during /api/planning/context hydration
+planning_presync_garmin_activities_enabled   = "false"
+planning_presync_garmin_physiometrics_enabled = "false"

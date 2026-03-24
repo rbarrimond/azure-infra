@@ -173,6 +173,8 @@ module "health_assistant" {
   garmin_email                           = var.garmin_email
   garmin_password                        = var.garmin_password
   garmin_sync_lookback_days              = var.garmin_sync_lookback_days
+  planning_presync_garmin_activities_enabled   = var.planning_presync_garmin_activities_enabled
+  planning_presync_garmin_physiometrics_enabled = var.planning_presync_garmin_physiometrics_enabled
   intervals_api_key                      = var.intervals_api_key
   intervals_sync_lookback_days           = var.intervals_sync_lookback_days
   intervals_athlete_id                   = var.intervals_athlete_id

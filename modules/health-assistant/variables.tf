@@ -315,6 +315,18 @@ variable "garmin_async_queue_enabled" {
   default     = "false"
 }
 
+variable "planning_presync_garmin_activities_enabled" {
+  description = "Whether planning-context pre-sync executes Garmin activity sync ('true'/'false')."
+  type        = string
+  default     = "false"
+}
+
+variable "planning_presync_garmin_physiometrics_enabled" {
+  description = "Whether planning-context pre-sync executes Garmin physiometrics sync ('true'/'false')."
+  type        = string
+  default     = "false"
+}
+
 variable "async_ingestion_queue_name" {
   description = "Name of the Azure Storage Queue used for async ingestion work items."
   type        = string

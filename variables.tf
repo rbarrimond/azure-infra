@@ -206,6 +206,18 @@ variable "garmin_sync_lookback_days" {
   default     = 30
 }
 
+variable "planning_presync_garmin_activities_enabled" {
+  description = "Whether planning-context pre-sync executes Garmin activity sync."
+  type        = string
+  default     = "false"
+}
+
+variable "planning_presync_garmin_physiometrics_enabled" {
+  description = "Whether planning-context pre-sync executes Garmin physiometrics sync."
+  type        = string
+  default     = "false"
+}
+
 variable "intervals_api_key" {
   description = "Intervals.icu API key (used as HTTP Basic password with username API_KEY)."
   type        = string
