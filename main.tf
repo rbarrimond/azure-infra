@@ -145,42 +145,42 @@ module "the_rob_vault" {
 }
 
 module "health_assistant" {
-  source                                 = "./modules/health-assistant"
-  suffix                                 = local.health_assistant_suffix
-  location                               = var.region
-  resource_group_name                    = module.core.resource_group_name
-  zone_name                              = module.core.dns_zone_name
-  service_plan_id                        = module.core.app_service_plan_id
-  application_insights_key               = module.core.application_insights_key
-  application_insights_connection_string = module.core.application_insights_connection_string
-  log_analytics_workspace_id             = module.core.application_insights_workspace_id
-  key_vault_id                           = module.core.key_vault_id
-  key_vault_url                          = "https://${module.core.key_vault_name}.vault.azure.net/"
-  tenant_id                              = var.tenant_id
-  withings_client_id                     = var.withings_client_id != null ? var.withings_client_id : ""
-  withings_client_secret                 = var.withings_client_secret != null ? var.withings_client_secret : ""
-  withings_refresh_token                 = var.withings_refresh_token != null ? var.withings_refresh_token : ""
-  default_max_hr                         = var.default_max_hr
-  default_ftp                            = var.default_ftp
-  hr_zone_basis                          = var.hr_zone_basis
-  hr_zone_reference_bpm                  = var.hr_zone_reference_bpm
-  onedrive_client_id                     = local.onedrive_client_id_effective
-  onedrive_client_secret                 = local.onedrive_client_secret_effective
-  onedrive_redirect_uri                  = local.onedrive_redirect_uri_effective
-  onedrive_scopes                        = var.onedrive_scopes
-  onedrive_sync_lookback_days            = var.onedrive_sync_lookback_days
-  onedrive_folder_path                   = var.onedrive_folder_path
-  garmin_email                           = var.garmin_email
-  garmin_password                        = var.garmin_password
-  garmin_sync_lookback_days              = var.garmin_sync_lookback_days
-  planning_presync_garmin_activities_enabled   = var.planning_presync_garmin_activities_enabled
+  source                                        = "./modules/health-assistant"
+  suffix                                        = local.health_assistant_suffix
+  location                                      = var.region
+  resource_group_name                           = module.core.resource_group_name
+  zone_name                                     = module.core.dns_zone_name
+  service_plan_id                               = module.core.app_service_plan_id
+  application_insights_key                      = module.core.application_insights_key
+  application_insights_connection_string        = module.core.application_insights_connection_string
+  log_analytics_workspace_id                    = module.core.application_insights_workspace_id
+  key_vault_id                                  = module.core.key_vault_id
+  key_vault_url                                 = "https://${module.core.key_vault_name}.vault.azure.net/"
+  tenant_id                                     = var.tenant_id
+  withings_client_id                            = var.withings_client_id != null ? var.withings_client_id : ""
+  withings_client_secret                        = var.withings_client_secret != null ? var.withings_client_secret : ""
+  withings_refresh_token                        = var.withings_refresh_token != null ? var.withings_refresh_token : ""
+  default_max_hr                                = var.default_max_hr
+  default_ftp                                   = var.default_ftp
+  hr_zone_basis                                 = var.hr_zone_basis
+  hr_zone_reference_bpm                         = var.hr_zone_reference_bpm
+  onedrive_client_id                            = local.onedrive_client_id_effective
+  onedrive_client_secret                        = local.onedrive_client_secret_effective
+  onedrive_redirect_uri                         = local.onedrive_redirect_uri_effective
+  onedrive_scopes                               = var.onedrive_scopes
+  onedrive_sync_lookback_days                   = var.onedrive_sync_lookback_days
+  onedrive_folder_path                          = var.onedrive_folder_path
+  garmin_email                                  = var.garmin_email
+  garmin_password                               = var.garmin_password
+  garmin_sync_lookback_days                     = var.garmin_sync_lookback_days
+  planning_presync_garmin_activities_enabled    = var.planning_presync_garmin_activities_enabled
   planning_presync_garmin_physiometrics_enabled = var.planning_presync_garmin_physiometrics_enabled
-  intervals_api_key                      = var.intervals_api_key
-  intervals_sync_lookback_days           = var.intervals_sync_lookback_days
-  intervals_athlete_id                   = var.intervals_athlete_id
-  plugin_logo_url                        = var.health_assistant_plugin_logo_url
-  plugin_contact_email                   = var.health_assistant_plugin_contact_email
-  plugin_legal_url                       = var.health_assistant_plugin_legal_url
+  intervals_api_key                             = var.intervals_api_key
+  intervals_sync_lookback_days                  = var.intervals_sync_lookback_days
+  intervals_athlete_id                          = var.intervals_athlete_id
+  plugin_logo_url                               = var.health_assistant_plugin_logo_url
+  plugin_contact_email                          = var.health_assistant_plugin_contact_email
+  plugin_legal_url                              = var.health_assistant_plugin_legal_url
   default_tags = {
     environment = var.environment
     project     = "health-assistant"
