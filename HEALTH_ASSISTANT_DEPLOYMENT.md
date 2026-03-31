@@ -282,6 +282,6 @@ az functionapp log tail -n 100 \
 
 **Questions?** Review the architecture docs:
 
-- [WORKOUT_INTELLIGENCE_AGENT_VISION.md](../health_assistant/WORKOUT_INTELLIGENCE_AGENT_VISION.md) - System design
-- [SEMANTIC_LAYER_API.md](../health_assistant/SEMANTIC_LAYER_API.md) - API endpoints
-- [WORKOUT_SCHEMA.md](../health_assistant/WORKOUT_SCHEMA.md) - Data model
+- [WORKOUT_INTELLIGENCE_AGENT_VISION.md](https://github.com/rbarrimond/health_assistant/blob/main/docs/gpt/WORKOUT_INTELLIGENCE_AGENT_VISION.md) - System design
+- [SEMANTIC_LAYER_API.md](https://github.com/rbarrimond/health_assistant/blob/main/docs/gpt/SEMANTIC_LAYER_API.md) - API endpoints
+- [WORKOUT_SCHEMA.md](https://github.com/rbarrimond/health_assistant/blob/main/docs/gpt/WORKOUT_SCHEMA.md) - Data model
