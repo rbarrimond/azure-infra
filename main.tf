@@ -170,9 +170,11 @@ module "health_assistant" {
   onedrive_scopes                               = var.onedrive_scopes
   onedrive_sync_lookback_days                   = var.onedrive_sync_lookback_days
   onedrive_folder_path                          = var.onedrive_folder_path
+  onedrive_async_queue_enabled                  = var.onedrive_async_queue_enabled
   garmin_email                                  = var.garmin_email
   garmin_password                               = var.garmin_password
   garmin_sync_lookback_days                     = var.garmin_sync_lookback_days
+  garmin_async_queue_enabled                    = var.garmin_async_queue_enabled
   planning_presync_garmin_activities_enabled    = var.planning_presync_garmin_activities_enabled
   planning_presync_garmin_physiometrics_enabled = var.planning_presync_garmin_physiometrics_enabled
   intervals_api_key                             = var.intervals_api_key

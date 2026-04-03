@@ -188,6 +188,13 @@ variable "onedrive_sync_lookback_days" {
   type        = number
   default     = 30
 }
+
+variable "onedrive_async_queue_enabled" {
+  description = "Whether to enable async queue mode for OneDrive ingestion ('true'/'false')."
+  type        = string
+  default     = "false"
+}
+
 variable "garmin_email" {
   description = "Garmin account email address."
   type        = string
@@ -204,6 +211,12 @@ variable "garmin_sync_lookback_days" {
   description = "Default lookback window (days) for Garmin sync."
   type        = number
   default     = 30
+}
+
+variable "garmin_async_queue_enabled" {
+  description = "Whether to enable async queue mode for Garmin ingestion ('true'/'false')."
+  type        = string
+  default     = "false"
 }
 
 variable "planning_presync_garmin_activities_enabled" {
