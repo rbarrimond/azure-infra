@@ -79,7 +79,7 @@ Provisioned resources:
 - Serverless Azure SQL Database (GP_S_Gen5_1, auto-pause 60 mins)
 - Storage account
 - Key Vault secrets for Bungie credentials and storage connection string
-- Linux Function App (Python 3.10) with Key Vault secret references
+- Linux Function App (Python 3.11) with Key Vault secret references
 - CNAME + custom domain + managed TLS (`therobvault.azure.barrimond.net`)
 - Diagnostic settings to Log Analytics
 - Azure OpenAI deployment (default: `gpt-4.1-nano`, version `2025-04-14`)

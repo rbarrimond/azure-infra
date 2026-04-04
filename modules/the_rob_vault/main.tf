@@ -118,7 +118,7 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     health_check_eviction_time_in_min = "10"
 
     application_stack {
-      python_version = "3.10"
+      python_version = "3.11"
     }
   }
 
