@@ -49,6 +49,12 @@ variable "application_insights_key" {
   type        = string
 }
 
+variable "application_insights_connection_string" {
+  description = "The connection string for Application Insights."
+  type        = string
+  sensitive   = true
+}
+
 variable "bungie_client_id" {
   description = "Bungie OAuth Client ID"
   type        = string

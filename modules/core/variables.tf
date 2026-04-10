@@ -1,10 +1,10 @@
 variable "region" {
-  type = string
+  type    = string
   default = "eastus"
 }
 
 variable "suffix" {
-  type = string
+  type    = string
   default = "rrb01"
 }
 

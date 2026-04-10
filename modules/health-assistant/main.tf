@@ -96,59 +96,58 @@ resource "azurerm_linux_function_app" "health_assistant" {
   service_plan_id             = azurerm_service_plan.health_assistant.id
   storage_account_name        = azurerm_storage_account.health.name
   storage_account_access_key  = azurerm_storage_account.health.primary_access_key
+  builtin_logging_enabled     = false
   functions_extension_version = var.function_extension_version
   https_only                  = true
   tags                        = var.default_tags
 
   # Application settings
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE"                   = "0"
-    "FUNCTIONS_WORKER_RUNTIME"                   = "python"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"             = var.application_insights_key
-    "APPLICATIONINSIGHTS_CONNECTION_STRING"      = var.application_insights_connection_string
-    "ApplicationInsightsAgent_EXTENSION_VERSION" = var.application_insights_extension_version
-    "AzureWebJobsStorage"                        = azurerm_storage_account.health.primary_connection_string
-    "AZURE_STORAGE_ACCOUNT_URL"                  = azurerm_storage_account.health.primary_blob_endpoint
-    "PUBLIC_BASE_URL"                            = "https://${var.dns_subdomain}.${var.zone_name}"
-    "PLUGIN_LOGO_URL"                            = var.plugin_logo_url
-    "PLUGIN_CONTACT_EMAIL"                       = var.plugin_contact_email
-    "PLUGIN_LEGAL_URL"                           = var.plugin_legal_url
-    "DEFAULT_ATHLETE_ID"                         = var.default_athlete_id
-    "DEFAULT_FTP"                                = var.default_ftp
-    "DEFAULT_MAX_HR"                             = var.default_max_hr
-    "HR_ZONE_BASIS"                              = var.hr_zone_basis
-    "HR_ZONE_REFERENCE_BPM"                      = var.hr_zone_reference_bpm
-    "HR_RESTING_BPM"                             = var.hr_resting_bpm
-    "ONEDRIVE_FOLDER_PATH"                       = var.onedrive_folder_path
-    "ONEDRIVE_CLIENT_ID"                         = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.onedrive_client_id.versionless_id})"
-    "ONEDRIVE_CLIENT_SECRET"                     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.onedrive_client_secret.versionless_id})"
-    "ONEDRIVE_REDIRECT_URI"                      = var.onedrive_redirect_uri
-    "ONEDRIVE_SCOPES"                            = var.onedrive_scopes
-    "ONEDRIVE_SYNC_LOOKBACK_DAYS"                = var.onedrive_sync_lookback_days
-    "KEYVAULT_URL"                               = var.key_vault_url
-    "WITHINGS_CLIENT_ID"                         = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_id.versionless_id})"
-    "WITHINGS_CLIENT_SECRET"                     = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_secret.versionless_id})"
-    "WITHINGS_REDIRECT_URI"                      = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/callback"
-    "WITHINGS_WEBHOOK_URL"                       = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/webhook"
-    "GARMIN_EMAIL"                               = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_email.versionless_id})"
-    "GARMIN_PASSWORD"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_password.versionless_id})"
-    "GARMIN_SYNC_LOOKBACK_DAYS"                  = var.garmin_sync_lookback_days
-    "PLANNING_PRESYNC_GARMIN_ACTIVITIES_ENABLED" = var.planning_presync_garmin_activities_enabled
+    "WEBSITE_RUN_FROM_PACKAGE"                      = "0"
+    "FUNCTIONS_WORKER_RUNTIME"                      = "python"
+    "ApplicationInsightsAgent_EXTENSION_VERSION"    = var.application_insights_extension_version
+    "AzureWebJobsStorage"                           = azurerm_storage_account.health.primary_connection_string
+    "AZURE_STORAGE_ACCOUNT_URL"                     = azurerm_storage_account.health.primary_blob_endpoint
+    "PUBLIC_BASE_URL"                               = "https://${var.dns_subdomain}.${var.zone_name}"
+    "PLUGIN_LOGO_URL"                               = var.plugin_logo_url
+    "PLUGIN_CONTACT_EMAIL"                          = var.plugin_contact_email
+    "PLUGIN_LEGAL_URL"                              = var.plugin_legal_url
+    "DEFAULT_ATHLETE_ID"                            = var.default_athlete_id
+    "DEFAULT_FTP"                                   = var.default_ftp
+    "DEFAULT_MAX_HR"                                = var.default_max_hr
+    "HR_ZONE_BASIS"                                 = var.hr_zone_basis
+    "HR_ZONE_REFERENCE_BPM"                         = var.hr_zone_reference_bpm
+    "HR_RESTING_BPM"                                = var.hr_resting_bpm
+    "ONEDRIVE_FOLDER_PATH"                          = var.onedrive_folder_path
+    "ONEDRIVE_CLIENT_ID"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.onedrive_client_id.versionless_id})"
+    "ONEDRIVE_CLIENT_SECRET"                        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.onedrive_client_secret.versionless_id})"
+    "ONEDRIVE_REDIRECT_URI"                         = var.onedrive_redirect_uri
+    "ONEDRIVE_SCOPES"                               = var.onedrive_scopes
+    "ONEDRIVE_SYNC_LOOKBACK_DAYS"                   = var.onedrive_sync_lookback_days
+    "KEYVAULT_URL"                                  = var.key_vault_url
+    "WITHINGS_CLIENT_ID"                            = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_id.versionless_id})"
+    "WITHINGS_CLIENT_SECRET"                        = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.withings_client_secret.versionless_id})"
+    "WITHINGS_REDIRECT_URI"                         = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/callback"
+    "WITHINGS_WEBHOOK_URL"                          = "https://${var.dns_subdomain}.${var.zone_name}/api/withings/webhook"
+    "GARMIN_EMAIL"                                  = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_email.versionless_id})"
+    "GARMIN_PASSWORD"                               = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.garmin_password.versionless_id})"
+    "GARMIN_SYNC_LOOKBACK_DAYS"                     = var.garmin_sync_lookback_days
+    "PLANNING_PRESYNC_GARMIN_ACTIVITIES_ENABLED"    = var.planning_presync_garmin_activities_enabled
     "PLANNING_PRESYNC_GARMIN_PHYSIOMETRICS_ENABLED" = var.planning_presync_garmin_physiometrics_enabled
-    "INTERVALS_API_KEY"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_api_key.versionless_id})"
-    "INTERVALS_SYNC_LOOKBACK_DAYS"               = var.intervals_sync_lookback_days
-    "INTERVALS_ATHLETE_ID"                       = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_athlete_id.versionless_id})"
-    "ONEDRIVE_ASYNC_QUEUE_ENABLED"               = var.onedrive_async_queue_enabled
-    "GARMIN_ASYNC_QUEUE_ENABLED"                 = var.garmin_async_queue_enabled
-    "ONEDRIVE_ASYNC_QUEUE_NAME"                  = var.async_ingestion_queue_name
-    "DEFERRED_RETRY_QUEUE_NAME"                  = var.deferred_retry_queue_name
+    "INTERVALS_API_KEY"                             = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_api_key.versionless_id})"
+    "INTERVALS_SYNC_LOOKBACK_DAYS"                  = var.intervals_sync_lookback_days
+    "INTERVALS_ATHLETE_ID"                          = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.intervals_athlete_id.versionless_id})"
+    "ONEDRIVE_ASYNC_QUEUE_ENABLED"                  = var.onedrive_async_queue_enabled
+    "GARMIN_ASYNC_QUEUE_ENABLED"                    = var.garmin_async_queue_enabled
+    "ONEDRIVE_ASYNC_QUEUE_NAME"                     = var.async_ingestion_queue_name
+    "DEFERRED_RETRY_QUEUE_NAME"                     = var.deferred_retry_queue_name
   }
 
   site_config {
-    always_on                         = true
-    application_insights_key          = var.application_insights_key
-    health_check_path                 = "/api/health"
-    health_check_eviction_time_in_min = "10"
+    always_on                              = true
+    application_insights_connection_string = var.application_insights_connection_string
+    health_check_path                      = "/api/health"
+    health_check_eviction_time_in_min      = "10"
     application_stack {
       python_version = var.python_version
     }
@@ -163,9 +162,7 @@ resource "azurerm_linux_function_app" "health_assistant" {
       app_settings["BUILD_FLAGS"],
       app_settings["ENABLE_ORYX_BUILD"],
       app_settings["SCM_DO_BUILD_DURING_DEPLOYMENT"],
-      app_settings["XDG_CACHE_HOME"],
-      app_settings["APPINSIGHTS_INSTRUMENTATIONKEY"],
-      app_settings["APPLICATIONINSIGHTS_CONNECTION_STRING"]
+      app_settings["XDG_CACHE_HOME"]
     ]
   }
 }

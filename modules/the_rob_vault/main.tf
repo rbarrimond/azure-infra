@@ -109,13 +109,14 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
   service_plan_id            = var.service_plan_id
   storage_account_name       = azurerm_storage_account.the_rob_vault_storage.name
   storage_account_access_key = azurerm_storage_account.the_rob_vault_storage.primary_access_key
+  builtin_logging_enabled    = false
   tags                       = var.default_tags
 
   site_config {
-    always_on                         = true
-    application_insights_key          = var.application_insights_key
-    health_check_path                 = "/api/health"
-    health_check_eviction_time_in_min = "10"
+    always_on                              = true
+    application_insights_connection_string = var.application_insights_connection_string
+    health_check_path                      = "/api/health"
+    health_check_eviction_time_in_min      = "10"
 
     application_stack {
       python_version = "3.11"

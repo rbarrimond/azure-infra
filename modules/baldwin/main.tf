@@ -43,6 +43,7 @@ resource "azurerm_linux_function_app" "baldwin_function" {
   service_plan_id             = var.service_plan_id
   storage_account_name        = azurerm_storage_account.baldwin_storage.name
   storage_account_access_key  = azurerm_storage_account.baldwin_storage.primary_access_key
+  builtin_logging_enabled     = false
   functions_extension_version = "~4"
   tags                        = var.default_tags
 
@@ -51,8 +52,8 @@ resource "azurerm_linux_function_app" "baldwin_function" {
   }
 
   site_config {
-    always_on                = true
-    application_insights_key = var.application_insights_key
+    always_on                              = true
+    application_insights_connection_string = var.application_insights_connection_string
 
     application_stack {
       python_version = "3.11"

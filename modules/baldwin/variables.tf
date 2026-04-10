@@ -34,6 +34,12 @@ variable "application_insights_key" {
   type        = string
 }
 
+variable "application_insights_connection_string" {
+  description = "The connection string for Application Insights."
+  type        = string
+  sensitive   = true
+}
+
 variable "repository_url" {
   description = "The URL of the GitHub repository for the static web app."
   type        = string
