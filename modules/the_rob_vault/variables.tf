@@ -59,7 +59,17 @@ variable "function_extension_version" {
   type        = string
   default     = "~4"
 }
+variable "python_version" {
+  description = "Python runtime version for Function App."
+  type        = string
+  default     = "3.13"
+}
 
+variable "application_insights_extension_version" {
+  description = "Application Insights extension version."
+  type        = string
+  default     = "~3"
+}
 variable "bungie_client_id" {
   description = "Bungie OAuth Client ID"
   type        = string
