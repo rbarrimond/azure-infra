@@ -103,14 +103,16 @@ resource "azurerm_key_vault_secret" "storageConnectionString" {
 # =====================
 
 resource "azurerm_linux_function_app" "the_rob_vault" {
-  name                       = "lfa-${var.suffix}"
-  location                   = var.location
-  resource_group_name        = var.resource_group_name
-  service_plan_id            = var.service_plan_id
-  storage_account_name       = azurerm_storage_account.the_rob_vault_storage.name
-  storage_account_access_key = azurerm_storage_account.the_rob_vault_storage.primary_access_key
-  builtin_logging_enabled    = false
-  tags                       = var.default_tags
+  name                        = "lfa-${var.suffix}"
+  location                    = var.location
+  resource_group_name         = var.resource_group_name
+  service_plan_id             = var.service_plan_id
+  storage_account_name        = azurerm_storage_account.the_rob_vault_storage.name
+  storage_account_access_key  = azurerm_storage_account.the_rob_vault_storage.primary_access_key
+  builtin_logging_enabled     = false
+  functions_extension_version = var.function_extension_version
+  https_only                  = true
+  tags                        = var.default_tags
 
   site_config {
     always_on                              = true

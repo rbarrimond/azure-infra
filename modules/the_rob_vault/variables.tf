@@ -54,6 +54,11 @@ variable "application_insights_connection_string" {
   type        = string
   sensitive   = true
 }
+variable "function_extension_version" {
+  description = "Azure Functions runtime version."
+  type        = string
+  default     = "~4"
+}
 
 variable "bungie_client_id" {
   description = "Bungie OAuth Client ID"
