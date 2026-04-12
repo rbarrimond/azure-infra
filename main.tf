@@ -144,6 +144,8 @@ module "the_rob_vault" {
     environment = var.environment
     project     = "therobvault"
   }
+
+  depends_on = [module.core]
 }
 
 module "health_assistant" {
@@ -189,4 +191,6 @@ module "health_assistant" {
     environment = var.environment
     project     = "health-assistant"
   }
+
+  depends_on = [module.core, module.the_rob_vault]
 }
