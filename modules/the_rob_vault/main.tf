@@ -141,7 +141,7 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     "AZURE_OPENAI_API_VERSION"        = azurerm_cognitive_deployment.the_rob_vault_cognitive.model[0].version
     "SCM_DO_BUILD_DURING_DEPLOYMENT"  = "0"
     "ENABLE_ORYX_BUILD"               = "false"
-    "WEBSITE_RUN_FROM_PACKAGE"        = "0"
+    "WEBSITE_RUN_FROM_PACKAGE"        = "1"
   }
 
   identity {
