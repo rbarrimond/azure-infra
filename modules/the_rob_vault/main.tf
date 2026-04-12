@@ -139,6 +139,8 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
     "AZURE_OPENAI_API_KEY"            = data.azurerm_cognitive_account.the_rob_vault_cognitive.primary_access_key
     "AZURE_OPENAI_DEPLOYMENT"         = azurerm_cognitive_deployment.the_rob_vault_cognitive.model[0].name
     "AZURE_OPENAI_API_VERSION"        = azurerm_cognitive_deployment.the_rob_vault_cognitive.model[0].version
+    "SCM_DO_BUILD_DURING_DEPLOYMENT"  = "0"
+    "ENABLE_ORYX_BUILD"               = "false"
     "WEBSITE_RUN_FROM_PACKAGE"        = "0"
   }
 
@@ -149,9 +151,8 @@ resource "azurerm_linux_function_app" "the_rob_vault" {
   lifecycle {
     ignore_changes = [
       app_settings["BUILD_FLAGS"],
-      app_settings["ENABLE_ORYX_BUILD"],
-      app_settings["SCM_DO_BUILD_DURING_DEPLOYMENT"],
-      app_settings["XDG_CACHE_HOME"]
+      app_settings["XDG_CACHE_HOME"],
+      tags["hidden-link: /app-insights-resource-id"]
     ]
   }
 }
