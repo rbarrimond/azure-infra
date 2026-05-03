@@ -116,7 +116,6 @@ azure-infra/
 ├── main.tf                         # Root module wiring
 ├── variables.tf                    # Root inputs
 ├── outputs.tf                      # Root outputs
-├── terraform.tfvars                # Local-only convenience (avoid for team/prod workflows)
 ├── azure-pipelines.yml             # Azure Pipelines static site deploy
 ├── .github/workflows/
 │   └── deploy-static-site.yml      # GitHub Actions static site deploy
@@ -181,10 +180,21 @@ terraform apply -var-file="environments/prod.tfvars"
 
 ## Environment Configuration
 
-- `environments/dev.tfvars` for dev deployments (smaller SKUs / dev tags)
-- `environments/prod.tfvars` for production (always pass explicit `-var-file`)
+- `environments/prod.tfvars` is the active deployment configuration in this workspace.
+- `environments/dev.tfvars` can remain as a template, but is currently not used for active deployments.
 
 **Do not commit real tfvars files** with secrets. Store secrets in Key Vault or a secure secret manager.
+
+## Security Follow-Up
+
+If secrets were ever committed in a tracked tfvars file, rotate them after migration:
+
+- Rotate `github_token`
+- Rotate Bungie credentials (`bungie_client_secret`, `bungie_api_key`)
+- Rotate Garmin password and any other plaintext credentials
+- Rotate `intervals_api_key`
+- Re-save updated values in `environments/prod.tfvars`
+- Run `terraform plan -var-file="environments/prod.tfvars"` and confirm expected changes only
 
 ## CI/CD
 

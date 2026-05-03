@@ -27,11 +27,11 @@ Your health assistant now has a complete Terraform infrastructure module that pr
 cd /Users/robertbarrimond/Developer/azure-infra
 
 # Review the plan
-terraform plan -var-file=terraform.tfvars
+terraform plan -var-file=environments/prod.tfvars
 
 # Deploy (requires Azure login)
 az login
-terraform apply -var-file=terraform.tfvars
+terraform apply -var-file=environments/prod.tfvars
 ```
 
 Expected resources:

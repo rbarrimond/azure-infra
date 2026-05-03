@@ -1,14 +1,39 @@
-# prod.tfvars placeholder
+# prod.tfvars placeholder (copy to prod.tfvars and populate real values)
+subscription_id           = "REPLACE_SUBSCRIPTION_ID"
+tenant_id                 = "REPLACE_TENANT_ID"
+region                    = "eastus2"
+github_token              = "REPLACE_GITHUB_TOKEN"
+bungie_client_id          = "REPLACE_BUNGIE_CLIENT_ID"
+bungie_client_secret      = "REPLACE_BUNGIE_CLIENT_SECRET"
+bungie_redirect_uri       = "REPLACE_BUNGIE_REDIRECT_URI"
+bungie_api_key            = "REPLACE_BUNGIE_API_KEY"
+key_vault_admin_object_id = "REPLACE_KEY_VAULT_ADMIN_OBJECT_ID"
+
 withings_client_id     = "REPLACE_WITHINGS_CLIENT_ID"
 withings_client_secret = "REPLACE_WITHINGS_CLIENT_SECRET"
 withings_refresh_token = ""
-onedrive_redirect_uri  = "https://<FUNCTION_APP>.azurewebsites.net/api/onedrive/callback"
+
+onedrive_client_id                = "REPLACE_ONEDRIVE_CLIENT_ID"
+onedrive_client_secret            = "REPLACE_ONEDRIVE_CLIENT_SECRET"
+onedrive_redirect_uri             = "https://<FUNCTION_APP>.azurewebsites.net/api/onedrive/callback"
+onedrive_scopes                   = "Files.ReadWrite offline_access"
+onedrive_sync_lookback_days       = 30
+onedrive_folder_path              = "/Apps/HealthFit"
+create_onedrive_app_registration  = false
 onedrive_redirect_uris = [
   "https://<FUNCTION_APP>.azurewebsites.net/api/onedrive/callback",
   "http://localhost:7071/api/onedrive/callback",
 ]
-garmin_email        = "REPLACE_GARMIN_EMAIL"
-garmin_password     = "REPLACE_GARMIN_PASSWORD"
+
+default_max_hr                        = "190"
+default_ftp                           = "250"
+hr_zone_basis                         = "HRmax"
+hr_zone_reference_bpm                 = "0"
+health_assistant_plugin_contact_email = "REPLACE_CONTACT_EMAIL"
+
+garmin_email       = "REPLACE_GARMIN_EMAIL"
+garmin_password    = "REPLACE_GARMIN_PASSWORD"
+intervals_api_key  = "REPLACE_INTERVALS_API_KEY"
 intervals_athlete_id = "REPLACE_INTERVALS_ID"
 
 # Async ingestion queue — set to "true" to enable async queue mode per source
