@@ -55,3 +55,20 @@ variable "repository_token" {
   type        = string
   sensitive   = true
 }
+
+variable "cognitive_account_name" {
+  description = "The name of the shared Azure Cognitive Services (OpenAI) account from the core module."
+  type        = string
+}
+
+variable "cognitive_embedding_model_name" {
+  description = "The Azure OpenAI embedding model to deploy (e.g. text-embedding-3-small)."
+  type        = string
+  default     = "text-embedding-3-small"
+}
+
+variable "cognitive_embedding_model_version" {
+  description = "The version of the Azure OpenAI embedding model to deploy."
+  type        = string
+  default     = "1"
+}

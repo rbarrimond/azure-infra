@@ -248,3 +248,15 @@ variable "intervals_athlete_id" {
   type        = string
   default     = ""
 }
+
+variable "cognitive_embedding_model_name" {
+  description = "The Azure OpenAI embedding model to deploy in the Baldwin module (e.g. text-embedding-3-small)."
+  type        = string
+  default     = "text-embedding-3-small"
+}
+
+variable "cognitive_embedding_model_version" {
+  description = "The version of the Azure OpenAI embedding model to deploy in the Baldwin module."
+  type        = string
+  default     = "1"
+}

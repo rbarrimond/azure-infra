@@ -76,3 +76,28 @@ resource "azurerm_static_web_app_function_app_registration" "baldwin_registratio
   function_app_id   = azurerm_linux_function_app.baldwin_function.id
 }
 
+# =====================
+# Cognitive Services
+# =====================
+
+data "azurerm_cognitive_account" "core" {
+  name                = var.cognitive_account_name
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_cognitive_deployment" "baldwin_embedding" {
+  name                 = "emb-${var.suffix}"
+  cognitive_account_id = data.azurerm_cognitive_account.core.id
+
+  model {
+    format  = "OpenAI"
+    name    = var.cognitive_embedding_model_name
+    version = var.cognitive_embedding_model_version
+  }
+
+  sku {
+    name     = "GlobalStandard"
+    capacity = 10
+  }
+}
+

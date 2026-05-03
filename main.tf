@@ -113,6 +113,9 @@ module "baldwin" {
   application_insights_connection_string = module.core.application_insights_connection_string
   repository_url                         = "https://github.com/rbarrimond/baldwin-static.git"
   repository_token                       = var.github_token
+  cognitive_account_name                 = module.core.cognitive_account_name
+  cognitive_embedding_model_name         = var.cognitive_embedding_model_name
+  cognitive_embedding_model_version      = var.cognitive_embedding_model_version
   default_tags = {
     environment = var.environment
     project     = "baldwin"

@@ -45,3 +45,7 @@ garmin_async_queue_enabled   = "false"
 # Set to "true" to allow Garmin sources to run during /api/planning/context hydration
 planning_presync_garmin_activities_enabled   = "false"
 planning_presync_garmin_physiometrics_enabled = "false"
+
+# Azure OpenAI embedding deployment (Baldwin module)
+cognitive_embedding_model_name    = "text-embedding-3-small"
+cognitive_embedding_model_version = "1"
