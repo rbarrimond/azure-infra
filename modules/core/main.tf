@@ -133,6 +133,48 @@ resource "azurerm_mssql_server" "core" {
 #   tags                = var.default_tags
 # }
 
+resource "azurerm_key_vault_secret" "kv_postgres_admin_login" {
+  name         = "postgresAdminLogin"
+  value        = "pgadmin"
+  key_vault_id = azurerm_key_vault.core.id
+  depends_on   = [azurerm_key_vault_access_policy.terraform_sp]
+}
+
+resource "random_password" "postgres_admin_password" {
+  length           = 32
+  special          = true
+  override_special = "!@#%^&*()-_=+[]{}"
+}
+
+resource "azurerm_key_vault_secret" "kv_postgres_admin_password" {
+  name         = "postgresAdminPassword"
+  value        = random_password.postgres_admin_password.result
+  key_vault_id = azurerm_key_vault.core.id
+  depends_on   = [azurerm_key_vault_access_policy.terraform_sp]
+}
+
+resource "azurerm_postgresql_flexible_server" "core" {
+  name                          = "psql-${var.suffix}"
+  resource_group_name           = azurerm_resource_group.core.name
+  location                      = azurerm_resource_group.core.location
+  version                       = var.postgres_version
+  sku_name                      = var.postgres_sku_name
+  storage_mb                    = var.postgres_storage_mb
+  administrator_login           = azurerm_key_vault_secret.kv_postgres_admin_login.value
+  administrator_password        = azurerm_key_vault_secret.kv_postgres_admin_password.value
+  backup_retention_days         = var.postgres_backup_retention_days
+  public_network_access_enabled = var.postgres_public_network_access_enabled
+  tags                          = var.default_tags
+}
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "allow_azure_services" {
+  count             = var.postgres_allow_azure_services ? 1 : 0
+  name              = "allow-azure-services"
+  server_id         = azurerm_postgresql_flexible_server.core.id
+  start_ip_address  = "0.0.0.0"
+  end_ip_address    = "0.0.0.0"
+}
+
 resource "azurerm_cognitive_account" "core" {
   name                = "cog-${var.suffix}"
   resource_group_name = azurerm_resource_group.core.name

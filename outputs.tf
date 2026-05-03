@@ -38,6 +38,22 @@ output "core_sql_server_url" {
   value = module.core.sql_server_fqdn
 }
 
+output "core_postgres_server_name" {
+  value = module.core.postgres_server_name
+}
+
+output "core_postgres_server_fqdn" {
+  value = module.core.postgres_server_fqdn
+}
+
+output "core_kv_postgres_admin_login_secret_id" {
+  value = module.core.kv_postgres_admin_login_versionless_id
+}
+
+output "core_kv_postgres_admin_password_secret_id" {
+  value = module.core.kv_postgres_admin_password_versionless_id
+}
+
 output "github_actions_oidc_client_id" {
   value       = azuread_application.github_actions.client_id
   description = "Client ID for the GitHub Actions OIDC app registration."

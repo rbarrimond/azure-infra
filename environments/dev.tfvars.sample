@@ -43,3 +43,11 @@ garmin_async_queue_enabled   = "false"
 # Planning-context pre-sync feature flags
 planning_presync_garmin_activities_enabled    = "false"
 planning_presync_garmin_physiometrics_enabled = "false"
+
+# Azure PostgreSQL Flexible Server (core module)
+postgres_version                       = "16"
+postgres_sku_name                      = "B_Standard_B1ms"
+postgres_storage_mb                    = 32768
+postgres_backup_retention_days         = 7
+postgres_public_network_access_enabled = true
+postgres_allow_azure_services          = true

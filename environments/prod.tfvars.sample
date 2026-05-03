@@ -49,3 +49,11 @@ planning_presync_garmin_physiometrics_enabled = "false"
 # Azure OpenAI embedding deployment (Baldwin module)
 cognitive_embedding_model_name    = "text-embedding-3-small"
 cognitive_embedding_model_version = "1"
+
+# Azure PostgreSQL Flexible Server (core module)
+postgres_version                       = "16"
+postgres_sku_name                      = "B_Standard_B1ms"
+postgres_storage_mb                    = 32768
+postgres_backup_retention_days         = 7
+postgres_public_network_access_enabled = true
+postgres_allow_azure_services          = true

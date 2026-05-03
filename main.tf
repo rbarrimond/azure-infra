@@ -85,11 +85,17 @@ locals {
 }
 
 module "core" {
-  source                    = "./modules/core"
-  suffix                    = "core-${var.environment}-${random_string.module_suffix.result}"
-  tenant_id                 = var.tenant_id
-  region                    = var.region
-  key_vault_admin_object_id = var.key_vault_admin_object_id
+  source                                 = "./modules/core"
+  suffix                                 = "core-${var.environment}-${random_string.module_suffix.result}"
+  tenant_id                              = var.tenant_id
+  region                                 = var.region
+  key_vault_admin_object_id              = var.key_vault_admin_object_id
+  postgres_version                       = var.postgres_version
+  postgres_sku_name                      = var.postgres_sku_name
+  postgres_storage_mb                    = var.postgres_storage_mb
+  postgres_backup_retention_days         = var.postgres_backup_retention_days
+  postgres_public_network_access_enabled = var.postgres_public_network_access_enabled
+  postgres_allow_azure_services          = var.postgres_allow_azure_services
   default_tags = {
     environment = var.environment
     project     = "core"

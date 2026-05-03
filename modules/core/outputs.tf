@@ -8,6 +8,26 @@ output "sql_server_fqdn" {
   value       = azurerm_mssql_server.core.fully_qualified_domain_name
 }
 
+output "postgres_server_name" {
+  description = "The name of the Azure PostgreSQL Flexible Server."
+  value       = azurerm_postgresql_flexible_server.core.name
+}
+
+output "postgres_server_fqdn" {
+  description = "The fully qualified domain name of the Azure PostgreSQL Flexible Server."
+  value       = azurerm_postgresql_flexible_server.core.fqdn
+}
+
+output "kv_postgres_admin_login_versionless_id" {
+  description = "The versionless ID of the Key Vault secret for the PostgreSQL admin login."
+  value       = azurerm_key_vault_secret.kv_postgres_admin_login.versionless_id
+}
+
+output "kv_postgres_admin_password_versionless_id" {
+  description = "The versionless ID of the Key Vault secret for the PostgreSQL admin password."
+  value       = azurerm_key_vault_secret.kv_postgres_admin_password.versionless_id
+}
+
 output "kv_sql_admin_login_versionless_id" {
   description = "The versionless ID of the Key Vault secret for the SQL admin login."
   value       = azurerm_key_vault_secret.kv_sql_admin_login.versionless_id
