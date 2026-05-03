@@ -34,6 +34,14 @@ resource "azurerm_dns_zone" "core" {
   tags                = var.default_tags
 }
 
+resource "azurerm_dns_cname_record" "openai" {
+  name                = "openai"
+  zone_name           = azurerm_dns_zone.core.name
+  resource_group_name = azurerm_resource_group.core.name
+  ttl                 = 300
+  record              = trimsuffix(trimprefix(azurerm_cognitive_account.core.endpoint, "https://"), "/")
+}
+
 resource "azurerm_key_vault" "core" {
   name                     = "kv-${var.suffix}"
   location                 = azurerm_resource_group.core.location

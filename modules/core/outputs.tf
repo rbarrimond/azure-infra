@@ -55,6 +55,11 @@ output "dns_zone_name" {
   value       = azurerm_dns_zone.core.name
 }
 
+output "openai_custom_domain_fqdn" {
+  description = "Custom DNS hostname for the Azure OpenAI endpoint."
+  value       = "${azurerm_dns_cname_record.openai.name}.${azurerm_dns_zone.core.name}"
+}
+
 output "key_vault_name" {
   description = "The name of the Key Vault."
   value       = azurerm_key_vault.core.name

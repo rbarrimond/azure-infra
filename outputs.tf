@@ -14,6 +14,10 @@ output "core_dns_zone_name" {
   value = module.core.dns_zone_name
 }
 
+output "core_openai_custom_domain_fqdn" {
+  value = module.core.openai_custom_domain_fqdn
+}
+
 output "core_key_vault_name" {
   value = module.core.key_vault_name
 }
