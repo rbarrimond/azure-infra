@@ -36,6 +36,11 @@ resource "azurerm_storage_account" "baldwin_storage" {
   tags                     = var.default_tags
 }
 
+resource "azurerm_storage_queue" "scan_mail_jobs" {
+  name               = "scan-mail-jobs"
+  storage_account_id = azurerm_storage_account.baldwin_storage.id
+}
+
 resource "azurerm_linux_function_app" "baldwin_function" {
   name                        = "lfa-${var.suffix}"
   location                    = var.location
@@ -49,6 +54,8 @@ resource "azurerm_linux_function_app" "baldwin_function" {
 
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE" = "1"
+    "SCAN_MAIL_QUEUE_NAME"     = "scan-mail-jobs"
+    "SCAN_JOB_RETENTION_DAYS"  = "30"
   }
 
   site_config {
