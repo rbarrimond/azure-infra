@@ -11,7 +11,7 @@ Your health assistant now has a complete Terraform infrastructure module that pr
   - Blob container for read-only backups with automatic lifecycle management
     - Moves to cool tier after 30 days
     - Deletes after 90 days
-- **Azure Functions** (Python 3.13, Linux B1 dedicated plan)
+- **Azure Functions** (Python 3.13, Linux on the shared core App Service Plan)
   - HTTP endpoint and timer for OneDrive Personal sync (Microsoft Graph)
   - Daily timer trigger (2 AM UTC) for automated backups
   - Managed Identity for secure Key Vault access (secrets are Key Vault references)
@@ -36,8 +36,9 @@ terraform apply -var-file=environments/prod.tfvars
 
 Expected resources:
 
-- 13 new resources (storage account, tables, function app, etc.)
-- 1 modification (tag cleanup on therobvault function)
+- Health Assistant Function App rebinds to the shared core App Service Plan
+- The dedicated Health Assistant App Service Plan is removed
+- Existing storage, tables, DNS, and Key Vault resources remain in place
 
 **Deployment time**: ~3-5 minutes
 

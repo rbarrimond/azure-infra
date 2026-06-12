@@ -31,7 +31,7 @@ Key Azure services used:
 - Azure DNS Zone (`azure.barrimond.net`)
 - Azure Key Vault
 - Azure Log Analytics + Application Insights
-- Azure App Service Plans (B2 in core, B1 dedicated for Health Assistant)
+- Azure App Service Plans (B2 shared in core)
 - Azure Function Apps (Linux)
 - Azure SQL Server + serverless database (The Rob Vault)
 - Azure OpenAI (Cognitive Services) account + deployment
@@ -91,7 +91,7 @@ Provisioned resources:
 - Dedicated storage account for health data
 - Storage tables: `Workouts`, `WeeklyRollups`, `IngestionState`, `Physiometrics`, `OneDriveTokens`
 - Backup blob container with lifecycle policy (cool tier after 30 days, delete after 90)
-- Dedicated Linux App Service plan (B1)
+- Linux Function App running on the shared core App Service Plan
 - Linux Function App (Python 3.13)
 - Key Vault secrets for Withings and OneDrive credentials
 - CNAME + custom domain + managed TLS (`health.azure.barrimond.net`)

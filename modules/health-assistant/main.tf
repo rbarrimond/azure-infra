@@ -77,23 +77,12 @@ resource "azurerm_storage_management_policy" "backup_lifecycle" {
   }
 }
 
-# Dedicated service plan for Health Assistant (Linux-based for Python support)
-# Using Basic B1 since Consumption (Y1) + Linux not available in this region/subscription
-resource "azurerm_service_plan" "health_assistant" {
-  name                = "plan-${var.suffix}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  os_type             = "Linux"
-  sku_name            = "B1" # Basic tier - simple scaling, Linux support
-  tags                = var.default_tags
-}
-
 # Azure Functions App (Python 3.11 on Linux - isolated worker compatible)
 resource "azurerm_linux_function_app" "health_assistant" {
   name                        = "func-${var.suffix}"
   location                    = var.location
   resource_group_name         = var.resource_group_name
-  service_plan_id             = azurerm_service_plan.health_assistant.id
+  service_plan_id             = var.service_plan_id
   storage_account_name        = azurerm_storage_account.health.name
   storage_account_access_key  = azurerm_storage_account.health.primary_access_key
   builtin_logging_enabled     = false
